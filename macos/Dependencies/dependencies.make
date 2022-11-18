@@ -1,26 +1,26 @@
 SDKROOT := $(shell xcrun -sdk $(SDK) --show-sdk-path)
 TARGETFLAGS := $(TARGETFLAGS) -m$(SDK)-version-min=$(MINIMUM_REQUIRED)
 DEPLOYMENT_TARGET_ENV := $(shell ruby -e 'puts "$(SDK)".upcase')_DEPLOYMENT_TARGET=$(MINIMUM_REQUIRED)
-BUILD_PREFIX := ${PWD}/build-$(SDK)-$(ARCH)
-LIBDIR := $(BUILD_PREFIX)/lib
-INCLUDEDIR := $(BUILD_PREFIX)/include
-DOWNLOADS := ${PWD}/downloads/$(HOST)
-NPROC := $(shell sysctl -n hw.ncpu)
-CFLAGS := -I$(INCLUDEDIR) $(TARGETFLAGS) $(DEFINES) -O3
-LDFLAGS := -L$(LIBDIR)
-CC      := xcrun -sdk $(SDK) clang -arch $(ARCH) -isysroot $(SDKROOT)
-PKG_CONFIG_LIBDIR := $(BUILD_PREFIX)/lib/pkgconfig
-GIT := git
-CLONE := $(GIT) clone -q
-GITHUB := https://github.com
 
-# need to set the build variable because Ruby is picky
+BUILD_PREFIX := ${PWD}/build-$(SDK)-$(ARCH)
+LIBDIR       := $(BUILD_PREFIX)/lib
+INCDIR       := $(BUILD_PREFIX)/include
+DLDIR        := ${PWD}/downloads/$(HOST)
+NPROC        := $(shell sysctl -n hw.ncpu)
+CFLAGS       := -I$(INCDIR) $(TARGETFLAGS) $(DEFINES) -O3
+LDFLAGS      := -L$(LIBDIR)
+
+CC  := xcrun -sdk $(SDK) clang -arch $(ARCH) -isysroot $(SDKROOT)
+GIT := git clone -q --single-branch --depth 1
+
+PKG_CONFIG_LIBDIR := $(BUILD_PREFIX)/lib/pkgconfig
+
+# Need to set the build variable because Ruby is picky
 ifeq "$(strip $(shell uname -m))" "arm64"
 RBUILD := aarch64-apple-darwin
 else
 RBUILD := x86_64-apple-darwin
 endif
-
 
 CONFIGURE_ENV := \
 	$(DEPLOYMENT_TARGET_ENV) \
@@ -40,10 +40,8 @@ CMAKE_ARGS := \
 	-DCMAKE_C_FLAGS="$(CFLAGS)" \
 	-DCMAKE_BUILD_TYPE=Release
 
-
-# Ruby won't think it's cross-compiling unless
-# the BUILD variable is set now for whatever reason,
-# but 
+# Ruby won't think it's cross-compiling unless the BUILD variable
+# is set now for whatever reason, but:
 RUBY_CONFIGURE_ARGS := \
 	--enable-install-static-library \
 	--enable-shared \
@@ -58,270 +56,253 @@ CONFIGURE := $(CONFIGURE_ENV) ./configure $(CONFIGURE_ARGS)
 AUTOGEN   := $(CONFIGURE_ENV) ./autogen.sh $(CONFIGURE_ARGS)
 CMAKE     := $(CONFIGURE_ENV) cmake .. $(CMAKE_ARGS)
 
+
 default:
 
-# Theora
-libtheora: init_dirs libvorbis libogg $(LIBDIR)/libtheora.a
 
-$(LIBDIR)/libtheora.a: $(LIBDIR)/libogg.a $(DOWNLOADS)/theora/Makefile
-	cd $(DOWNLOADS)/theora; \
-	make -j$(NPROC); make install
+# ==================== Xiph audio libraries ====================
 
-$(DOWNLOADS)/theora/Makefile: $(DOWNLOADS)/theora/configure
-	cd $(DOWNLOADS)/theora; \
-	$(CONFIGURE) --with-ogg=$(BUILD_PREFIX) --enable-shared=false --enable-static=true --disable-examples
+# -------------------- Ogg --------------------
+libogg: init $(LIBDIR)/libogg.a
 
-$(DOWNLOADS)/theora/configure: $(DOWNLOADS)/theora/autogen.sh
-	cd $(DOWNLOADS)/theora; \
-	./autogen.sh
+$(LIBDIR)/libogg.a: $(DLDIR)/ogg/Makefile
+	cd $(DLDIR)/ogg; make -j$(NPROC); make install
 
-$(DOWNLOADS)/theora/autogen.sh:
-	$(CLONE) $(GITHUB)/xiph/theora $(DOWNLOADS)/theora
+$(DLDIR)/ogg/Makefile: $(DLDIR)/ogg/configure
+	cd $(DLDIR)/ogg; $(CONFIGURE) --enable-static=true --enable-shared=false
 
-# Vorbis
-libvorbis: init_dirs libogg $(LIBDIR)/libvorbis.a
+$(DLDIR)/ogg/configure: $(DLDIR)/ogg/autogen.sh
+	cd $(DLDIR)/ogg; ./autogen.sh
 
-$(LIBDIR)/libvorbis.a: $(LIBDIR)/libogg.a $(DOWNLOADS)/vorbis/Makefile
-	cd $(DOWNLOADS)/vorbis; \
-	make -j$(NPROC); make install
+$(DLDIR)/ogg/autogen.sh:
+	$(GIT) https://github.com/xiph/ogg $(DLDIR)/ogg
 
-$(DOWNLOADS)/vorbis/Makefile: $(DOWNLOADS)/vorbis/configure
-	cd $(DOWNLOADS)/vorbis; \
-	$(CONFIGURE) --with-ogg=$(BUILD_PREFIX) --enable-shared=false --enable-static=true
+# -------------------- Vorbis --------------------
+libvorbis: init libogg $(LIBDIR)/libvorbis.a
 
-$(DOWNLOADS)/vorbis/configure: $(DOWNLOADS)/vorbis/autogen.sh
-	cd $(DOWNLOADS)/vorbis; \
-	./autogen.sh
+$(LIBDIR)/libvorbis.a: $(LIBDIR)/libogg.a $(DLDIR)/vorbis/Makefile
+	cd $(DLDIR)/vorbis; make -j$(NPROC); make install
 
-$(DOWNLOADS)/vorbis/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/vorbis $(DOWNLOADS)/vorbis
+$(DLDIR)/vorbis/Makefile: $(DLDIR)/vorbis/configure
+	cd $(DLDIR)/vorbis; $(CONFIGURE) --with-ogg=$(BUILD_PREFIX) \
+	--enable-static=true --enable-shared=false
 
+$(DLDIR)/vorbis/configure: $(DLDIR)/vorbis/autogen.sh
+	cd $(DLDIR)/vorbis; ./autogen.sh
 
-# Ogg, dependency of Vorbis
-libogg: init_dirs $(LIBDIR)/libogg.a
+$(DLDIR)/vorbis/autogen.sh:
+	$(GIT) https://github.com/xiph/vorbis $(DLDIR)/vorbis
 
-$(LIBDIR)/libogg.a: $(DOWNLOADS)/ogg/Makefile
-	cd $(DOWNLOADS)/ogg; \
-	make -j$(NPROC); make install
+# -------------------- Theora --------------------
+libtheora: init libvorbis libogg $(LIBDIR)/libtheora.a
 
-$(DOWNLOADS)/ogg/Makefile: $(DOWNLOADS)/ogg/configure
-	cd $(DOWNLOADS)/ogg; \
-	$(CONFIGURE) --enable-static=true --enable-shared=false
+$(LIBDIR)/libtheora.a: $(LIBDIR)/libogg.a $(DLDIR)/theora/Makefile
+	cd $(DLDIR)/theora; make -j$(NPROC); make install
 
-$(DOWNLOADS)/ogg/configure: $(DOWNLOADS)/ogg/autogen.sh
-	cd $(DOWNLOADS)/ogg; ./autogen.sh
+$(DLDIR)/theora/Makefile: $(DLDIR)/theora/configure
+	cd $(DLDIR)/theora; $(CONFIGURE) --with-ogg=$(BUILD_PREFIX) \
+	--enable-static=true --enable-shared=false --disable-examples
 
-$(DOWNLOADS)/ogg/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/ogg $(DOWNLOADS)/ogg
-	
-# uchardet
-uchardet: init_dirs $(LIBDIR)/libuchardet.a
+$(DLDIR)/theora/configure: $(DLDIR)/theora/autogen.sh
+	cd $(DLDIR)/theora; ./autogen.sh
 
-$(LIBDIR)/libuchardet.a: $(DOWNLOADS)/uchardet/cmakebuild/Makefile
-	cd $(DOWNLOADS)/uchardet/cmakebuild; \
-	make -j$(NPROC); make install
-
-$(DOWNLOADS)/uchardet/cmakebuild/Makefile: $(DOWNLOADS)/uchardet/CMakeLists.txt
-	cd $(DOWNLOADS)/uchardet; \
-	mkdir cmakebuild; cd cmakebuild; \
-	$(CMAKE) -DBUILD_SHARED_LIBS=no
-
-$(DOWNLOADS)/uchardet/CMakeLists.txt:
-	$(CLONE) $(GITHUB)/freedesktop/uchardet $(DOWNLOADS)/uchardet
+$(DLDIR)/theora/autogen.sh:
+	$(GIT) https://github.com/xiph/theora $(DLDIR)/theora
 
 
-# Pixman
-pixman: init_dirs libpng $(LIBDIR)/libpixman-1.a
+# ==================== Image libraries ====================
 
-$(LIBDIR)/libpixman-1.a: $(DOWNLOADS)/pixman/Makefile
-	cd $(DOWNLOADS)/pixman
-	make -C $(DOWNLOADS)/pixman -j$(NPROC)
-	make -C $(DOWNLOADS)/pixman install
+# -------------------- libpng --------------------
+libpng: init $(LIBDIR)/libpng.a
 
-$(DOWNLOADS)/pixman/Makefile: $(DOWNLOADS)/pixman/autogen.sh
-	cd $(DOWNLOADS)/pixman; \
-	$(AUTOGEN) --enable-static=yes --enable-shared=no \
+$(LIBDIR)/libpng.a: $(DLDIR)/libpng/Makefile
+	cd $(DLDIR)/libpng; make -j$(NPROC); make install
+
+$(DLDIR)/libpng/Makefile: $(DLDIR)/libpng/configure
+	cd $(DLDIR)/libpng; $(CONFIGURE) --enable-static=yes --enable-shared=no
+
+$(DLDIR)/libpng/configure:
+	$(GIT) https://github.com/glennrp/libpng $(DLDIR)/libpng
+
+# -------------------- Pixman --------------------
+pixman: init libpng $(LIBDIR)/libpixman-1.a
+
+$(LIBDIR)/libpixman-1.a: $(DLDIR)/pixman/Makefile
+	cd $(DLDIR)/pixman; make -j$(NPROC); make install
+
+$(DLDIR)/pixman/Makefile: $(DLDIR)/pixman/autogen.sh
+	cd $(DLDIR)/pixman; $(AUTOGEN) --enable-static=yes --enable-shared=no \
 	--disable-arm-a64-neon
 
-$(DOWNLOADS)/pixman/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/pixman $(DOWNLOADS)/pixman
+$(DLDIR)/pixman/autogen.sh:
+	$(GIT) https://github.com/freedesktop/pixman $(DLDIR)/pixman
 
 
-# PhysFS
+# ==================== Misc libraries ====================
 
-physfs: init_dirs $(LIBDIR)/libphysfs.a
+# -------------------- PhysFS --------------------
+physfs: init $(LIBDIR)/libphysfs.a
 
-$(LIBDIR)/libphysfs.a: $(DOWNLOADS)/physfs/cmakebuild/Makefile
-	cd $(DOWNLOADS)/physfs/cmakebuild; \
-	make -j$(NPROC); make install
+$(LIBDIR)/libphysfs.a: $(DLDIR)/physfs/cmakebuild/Makefile
+	cd $(DLDIR)/physfs/cmakebuild; make -j$(NPROC); make install
 
-$(DOWNLOADS)/physfs/cmakebuild/Makefile: $(DOWNLOADS)/physfs/CMakeLists.txt
-	cd $(DOWNLOADS)/physfs; \
-	mkdir cmakebuild; cd cmakebuild; \
+$(DLDIR)/physfs/cmakebuild/Makefile: $(DLDIR)/physfs/CMakeLists.txt
+	cd $(DLDIR)/physfs; mkdir cmakebuild; cd cmakebuild; \
 	$(CMAKE) -DPHYSFS_BUILD_STATIC=true -DPHYSFS_BUILD_SHARED=false
 
-$(DOWNLOADS)/physfs/CMakeLists.txt:
-	$(CLONE) $(GITHUB)/mkxp-z/physfs $(DOWNLOADS)/physfs
+$(DLDIR)/physfs/CMakeLists.txt:
+	$(GIT) https://github.com/icculus/physfs $(DLDIR)/physfs
 
-# libpng
-libpng: init_dirs $(LIBDIR)/libpng.a
+# -------------------- uchardet --------------------
+uchardet: init $(LIBDIR)/libuchardet.a
 
-$(LIBDIR)/libpng.a: $(DOWNLOADS)/libpng/Makefile
-	cd $(DOWNLOADS)/libpng; \
-	make -j$(NPROC); make install
+$(LIBDIR)/libuchardet.a: $(DLDIR)/uchardet/cmakebuild/Makefile
+	cd $(DLDIR)/uchardet/cmakebuild; make -j$(NPROC); make install
 
-$(DOWNLOADS)/libpng/Makefile: $(DOWNLOADS)/libpng/configure
-	cd $(DOWNLOADS)/libpng; \
-	$(CONFIGURE) \
-	--enable-shared=no --enable-static=yes
+$(DLDIR)/uchardet/cmakebuild/Makefile: $(DLDIR)/uchardet/CMakeLists.txt
+	cd $(DLDIR)/uchardet; mkdir cmakebuild; cd cmakebuild; \
+	$(CMAKE) -DBUILD_SHARED_LIBS=no
 
-$(DOWNLOADS)/libpng/configure:
-	$(CLONE) $(GITHUB)/mkxp-z/libpng $(DOWNLOADS)/libpng
+$(DLDIR)/uchardet/CMakeLists.txt:
+	$(GIT) https://github.com/freedesktop/uchardet $(DLDIR)/uchardet
 
-# SDL2
-sdl2: init_dirs $(LIBDIR)/libSDL2.a
+# -------------------- Freetype2 --------------------
+freetype: init $(LIBDIR)/libfreetype.a
 
-$(LIBDIR)/libSDL2.a: $(DOWNLOADS)/sdl2/Makefile
-	cd $(DOWNLOADS)/sdl2; \
-	make -j$(NPROC); make install;
+$(LIBDIR)/libfreetype.a: $(DLDIR)/freetype/Makefile
+	cd $(DLDIR)/freetype; make -j$(NPROC); make install
 
-$(DOWNLOADS)/sdl2/Makefile: $(DOWNLOADS)/sdl2/configure
-	cd $(DOWNLOADS)/sdl2; \
-	$(CONFIGURE) --enable-static=true --enable-shared=false \
-	--enable-video-x11=false $(SDL_FLAGS)
+$(DLDIR)/freetype/Makefile: $(DLDIR)/freetype/configure
+	cd $(DLDIR)/freetype; $(CONFIGURE) --enable-static=true --enable-shared=false
 
-$(DOWNLOADS)/sdl2/configure: $(DOWNLOADS)/sdl2/autogen.sh
-	cd $(DOWNLOADS)/sdl2; ./autogen.sh
+$(DLDIR)/freetype/configure: $(DLDIR)/freetype/autogen.sh
+	cd $(DLDIR)/freetype; ./autogen.sh
 
-$(DOWNLOADS)/sdl2/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/SDL $(DOWNLOADS)/sdl2 -b mkxp-z; cd $(DOWNLOADS)/sdl2
-	
-# SDL_image
-sdl2image: init_dirs sdl2 $(LIBDIR)/libSDL2_image.a
+$(DLDIR)/freetype/autogen.sh:
+	$(GIT) https://github.com/freetype/freetype $(DLDIR)/freetype
 
-$(LIBDIR)/libSDL2_image.a: $(DOWNLOADS)/sdl2_image/cmakebuild/Makefile
-	cd $(DOWNLOADS)/sdl2_image/cmakebuild; \
-	make -j$(NPROC); make install
 
-$(DOWNLOADS)/sdl2_image/cmakebuild/Makefile: $(DOWNLOADS)/sdl2_image/CMakeLists.txt
-	cd $(DOWNLOADS)/sdl2_image; mkdir -p cmakebuild; cd cmakebuild; \
-	$(CMAKE) \
-	-DBUILD_SHARED_LIBS=no \
+# ==================== SDL2 and addons ====================
+
+# -------------------- SDL2 --------------------
+sdl2: init $(LIBDIR)/libSDL2.a
+
+$(LIBDIR)/libSDL2.a: $(DLDIR)/sdl2/Makefile
+	cd $(DLDIR)/sdl2; make -j$(NPROC); make install
+
+$(DLDIR)/sdl2/Makefile: $(DLDIR)/sdl2/configure
+	cd $(DLDIR)/sdl2; $(CONFIGURE) --enable-static=true --enable-shared=false \
+	--enable-video-x11=false
+
+$(DLDIR)/sdl2/configure: $(DLDIR)/sdl2/autogen.sh
+	cd $(DLDIR)/sdl2; ./autogen.sh
+
+$(DLDIR)/sdl2/autogen.sh:
+	$(GIT) https://github.com/mkxp-z/SDL $(DLDIR)/sdl2 -b mkxp-z
+
+# -------------------- SDL2_image --------------------
+sdl2image: init sdl2 $(LIBDIR)/libSDL2_image.a
+
+$(LIBDIR)/libSDL2_image.a: $(DLDIR)/sdl2_image/cmakebuild/Makefile
+	cd $(DLDIR)/sdl2_image/cmakebuild; make -j$(NPROC); make install
+
+$(DLDIR)/sdl2_image/cmakebuild/Makefile: $(DLDIR)/sdl2_image/CMakeLists.txt
+	cd $(DLDIR)/sdl2_image; mkdir -p cmakebuild; cd cmakebuild; \
+	$(CMAKE) -DBUILD_SHARED_LIBS=no \
 	-DSDL2IMAGE_JPG_SAVE=yes \
 	-DSDL2IMAGE_PNG_SAVE=yes \
 	-DSDL2IMAGE_PNG_SHARED=no \
 	-DSDL2IMAGE_JPG_SHARED=no \
 	-DSDL2IMAGE_BACKEND_IMAGEIO=no
-	
 
-$(DOWNLOADS)/sdl2_image/CMakeLists.txt:
-	$(CLONE) $(GITHUB)/mkxp-z/SDL_image $(DOWNLOADS)/sdl2_image -b mkxp-z
+$(DLDIR)/sdl2_image/CMakeLists.txt:
+	$(GIT) https://github.com/mkxp-z/SDL_image $(DLDIR)/sdl2_image -b mkxp-z
 
+# -------------------- SDL2_sound --------------------
+sdl2sound: init sdl2 libogg libvorbis $(LIBDIR)/libSDL2_sound.a
 
-# SDL_sound
-sdlsound: init_dirs sdl2 libogg libvorbis $(LIBDIR)/libSDL2_sound.a
+$(LIBDIR)/libSDL2_sound.a: $(DLDIR)/sdl2_sound/cmakebuild/Makefile
+	cd $(DLDIR)/sdl2_sound/cmakebuild; make -j$(NPROC); make install
 
-$(LIBDIR)/libSDL2_sound.a: $(DOWNLOADS)/sdl_sound/cmakebuild/Makefile
-	cd $(DOWNLOADS)/sdl_sound/cmakebuild; \
-	make -j$(NPROC); make install
-
-$(DOWNLOADS)/sdl_sound/cmakebuild/Makefile: $(DOWNLOADS)/sdl_sound/CMakeLists.txt
-	cd $(DOWNLOADS)/sdl_sound; mkdir -p cmakebuild; cd cmakebuild; \
+$(DLDIR)/sdl2_sound/cmakebuild/Makefile: $(DLDIR)/sdl2_sound/CMakeLists.txt
+	cd $(DLDIR)/sdl2_sound; mkdir -p cmakebuild; cd cmakebuild; \
 	$(CMAKE) \
 	-DSDLSOUND_BUILD_SHARED=false \
 	-DSDLSOUND_BUILD_TEST=false \
 	-DSDLSOUND_DECODER_COREAUDIO=false
 
-$(DOWNLOADS)/sdl_sound/CMakeLists.txt:
-	$(CLONE) $(GITHUB)/mkxp-z/SDL_sound $(DOWNLOADS)/sdl_sound -b git
+$(DLDIR)/sdl2_sound/CMakeLists.txt:
+	$(GIT) https://github.com/icculus/SDL_sound $(DLDIR)/sdl2_sound
 
-	
-# SDL2 (ttf)
-sdl2ttf: init_dirs sdl2 freetype $(LIBDIR)/libSDL2_ttf.a
+# -------------------- SDL2_ttf --------------------
+sdl2ttf: init sdl2 freetype $(LIBDIR)/libSDL2_ttf.a
 
-$(LIBDIR)/libSDL2_ttf.a: $(DOWNLOADS)/sdl2_ttf/Makefile
-	cd $(DOWNLOADS)/sdl2_ttf; \
-	make -j$(NPROC); make install
+$(LIBDIR)/libSDL2_ttf.a: $(DLDIR)/sdl2_ttf/Makefile
+	cd $(DLDIR)/sdl2_ttf; make -j$(NPROC); make install
 
-$(DOWNLOADS)/sdl2_ttf/Makefile: $(DOWNLOADS)/sdl2_ttf/configure
-	cd $(DOWNLOADS)/sdl2_ttf; \
+$(DLDIR)/sdl2_ttf/Makefile: $(DLDIR)/sdl2_ttf/configure
+	cd $(DLDIR)/sdl2_ttf; \
 	$(CONFIGURE) --enable-static=true --enable-shared=false $(SDL2_TTF_FLAGS)
 
-$(DOWNLOADS)/sdl2_ttf/configure: $(DOWNLOADS)/sdl2_ttf/autogen.sh
-	cd $(DOWNLOADS)/sdl2_ttf; ./autogen.sh
+$(DLDIR)/sdl2_ttf/configure: $(DLDIR)/sdl2_ttf/autogen.sh
+	cd $(DLDIR)/sdl2_ttf; ./autogen.sh
 
-$(DOWNLOADS)/sdl2_ttf/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/SDL_ttf $(DOWNLOADS)/sdl2_ttf -b mkxp-z
+$(DLDIR)/sdl2_ttf/autogen.sh:
+	$(GIT) https://github.com/mkxp-z/SDL_ttf $(DLDIR)/sdl2_ttf -b mkxp-z
 
-# Freetype (dependency of SDL2_ttf)
-freetype: init_dirs $(LIBDIR)/libfreetype.a
 
-$(LIBDIR)/libfreetype.a: $(DOWNLOADS)/freetype/Makefile
-	cd $(DOWNLOADS)/freetype; \
-	make -j$(NPROC); make install
+# ==================== Audio backends ====================
 
-$(DOWNLOADS)/freetype/Makefile: $(DOWNLOADS)/freetype/configure
-	cd $(DOWNLOADS)/freetype; \
-	$(CONFIGURE) --enable-static=true --enable-shared=false
+# -------------------- OpenAL --------------------
+openal: init libogg $(LIBDIR)/libopenal.a
 
-$(DOWNLOADS)/freetype/configure: $(DOWNLOADS)/freetype/autogen.sh
-	cd $(DOWNLOADS)/freetype; ./autogen.sh
+$(LIBDIR)/libopenal.a: $(DLDIR)/openal/cmakebuild/Makefile
+	cd $(DLDIR)/openal/cmakebuild; make -j$(NPROC); make install
 
-$(DOWNLOADS)/freetype/autogen.sh:
-	$(CLONE) $(GITHUB)/mkxp-z/freetype2 $(DOWNLOADS)/freetype
+$(DLDIR)/openal/cmakebuild/Makefile: $(DLDIR)/openal/CMakeLists.txt
+	cd $(DLDIR)/openal; mkdir cmakebuild; cd cmakebuild; \
+	$(CMAKE) -DLIBTYPE=STATIC -DALSOFT_EXAMPLES=no -DALSOFT_UTILS=no \
+	$(OPENAL_FLAGS)
 
-# OpenAL
-openal: init_dirs libogg $(LIBDIR)/libopenal.a
+$(DLDIR)/openal/CMakeLists.txt:
+	$(GIT) https://github.com/kcat/openal-soft $(DLDIR)/openal
 
-$(LIBDIR)/libopenal.a: $(DOWNLOADS)/openal/cmakebuild/Makefile
-	cd $(DOWNLOADS)/openal/cmakebuild; \
-	make -j$(NPROC); make install
 
-$(DOWNLOADS)/openal/cmakebuild/Makefile: $(DOWNLOADS)/openal/CMakeLists.txt
-	cd $(DOWNLOADS)/openal; mkdir cmakebuild; cd cmakebuild; \
-	$(CMAKE) -DLIBTYPE=STATIC -DALSOFT_EXAMPLES=no -DALSOFT_UTILS=no $(OPENAL_FLAGS)
+# ==================== Ruby 3.1 and OpenSSL ====================
 
-$(DOWNLOADS)/openal/CMakeLists.txt:
-	$(CLONE) $(GITHUB)/mkxp-z/openal-soft $(DOWNLOADS)/openal
+# -------------------- OpenSSL --------------------
+openssl: init $(LIBDIR)/libssl.a
 
-# OpenSSL
-openssl: init_dirs $(LIBDIR)/libssl.a
-$(LIBDIR)/libssl.a: $(DOWNLOADS)/openssl/Makefile
-	cd $(DOWNLOADS)/openssl; \
-	$(CONFIGURE_ENV) make -j$(NPROC); make install_sw
+$(LIBDIR)/libssl.a: $(DLDIR)/openssl/Makefile
+	cd $(DLDIR)/openssl; $(CONFIGURE_ENV) make -j$(NPROC); make install_sw
 
-$(DOWNLOADS)/openssl/Makefile: $(DOWNLOADS)/openssl/Configure
-	cd $(DOWNLOADS)/openssl; \
-	$(CONFIGURE_ENV) ./Configure $(OPENSSL_FLAGS) \
-	no-shared \
-	--prefix="$(BUILD_PREFIX)" \
-	--openssldir="$(BUILD_PREFIX)"
+$(DLDIR)/openssl/Makefile: $(DLDIR)/openssl/Configure
+	cd $(DLDIR)/openssl; \
+	$(CONFIGURE_ENV) ./Configure $(OPENSSL_FLAGS) no-shared \
+	--prefix="$(BUILD_PREFIX)" --openssldir="$(BUILD_PREFIX)"
 
-$(DOWNLOADS)/openssl/Configure:
-	$(CLONE) $(GITHUB)/openssl/openssl $(DOWNLOADS)/openssl; \
-	cd $(DOWNLOADS)/openssl --single-branch --branch OpenSSL_1_1_1i --depth 1
+$(DLDIR)/openssl/Configure:
+	$(GIT) https://github.com/openssl/openssl $(DLDIR)/openssl -b OpenSSL_1_1_1i
 
-# Standard ruby
-ruby: init_dirs openssl $(LIBDIR)/libruby.3.1.dylib
+# -------------------- Ruby 3.1 --------------------
+ruby: init openssl $(LIBDIR)/libruby.3.1.dylib
 
-$(LIBDIR)/libruby.3.1.dylib: $(DOWNLOADS)/ruby/Makefile
-	cd $(DOWNLOADS)/ruby; \
-	$(CONFIGURE_ENV) make -j$(NPROC); $(CONFIGURE_ENV) make install
+$(LIBDIR)/libruby.3.1.dylib: $(DLDIR)/ruby/Makefile
+	cd $(DLDIR)/ruby; $(CONFIGURE_ENV) make -j$(NPROC); $(CONFIGURE_ENV) make install
 	install_name_tool -id @rpath/libruby.3.1.dylib $(LIBDIR)/libruby.3.1.dylib
 
-$(DOWNLOADS)/ruby/Makefile: $(DOWNLOADS)/ruby/configure
-	cd $(DOWNLOADS)/ruby; \
-	$(CONFIGURE) $(RUBY_CONFIGURE_ARGS) $(RUBY_FLAGS)
+$(DLDIR)/ruby/Makefile: $(DLDIR)/ruby/configure
+	cd $(DLDIR)/ruby; $(CONFIGURE) $(RUBY_CONFIGURE_ARGS) $(RUBY_FLAGS)
 
-$(DOWNLOADS)/ruby/configure: $(DOWNLOADS)/ruby/*.c
-	cd $(DOWNLOADS)/ruby; autoreconf -i
+$(DLDIR)/ruby/configure: $(DLDIR)/ruby/*.c
+	cd $(DLDIR)/ruby; autoreconf -i
 
-$(DOWNLOADS)/ruby/*.c:
-	$(CLONE) $(GITHUB)/mkxp-z/ruby $(DOWNLOADS)/ruby --single-branch -b mkxp-z-3.1 --depth 1;
+$(DLDIR)/ruby/*.c:
+	$(GIT) https://github.com/mkxp-z/ruby $(DLDIR)/ruby -b mkxp-z-3.1
 
-# ====
-init_dirs:
-	@mkdir -p $(LIBDIR) $(INCLUDEDIR)
+
+init:
+	@mkdir -p $(LIBDIR) $(INCDIR)
 
 clean: clean-compiled
 
@@ -333,5 +314,5 @@ clean-downloads:
 clean-compiled:
 	-rm -rf build-$(SDK)-$(ARCH)
 
-deps-core: libtheora libvorbis pixman libpng physfs uchardet sdl2 sdl2image sdlsound sdl2ttf openal openssl
+deps-core: libvorbis libtheora libpng pixman physfs uchardet sdl2 sdl2image sdl2sound sdl2ttf openal openssl
 everything: deps-core ruby
