@@ -136,8 +136,7 @@ SharedFontState::~SharedFontState()
 	delete p;
 }
 
-void SharedFontState::initFontSetCB(SDL_RWops &ops,
-                                    const std::string &filename)
+void SharedFontState::initFontSetCB(SDL_RWops &ops, const std::string &filename)
 {
 	TTF_Font *font = TTF_OpenFontRW(&ops, 0, 0);
 
@@ -157,13 +156,11 @@ void SharedFontState::initFontSetCB(SDL_RWops &ops,
 		set.other = filename;
 }
 
-_TTF_Font *SharedFontState::getFont(std::string family,
-                                    int size)
+_TTF_Font *SharedFontState::getFont(std::string family, int size)
 {
-    
-    if (family.empty())
-        family = p->defaultFamily;
-    
+	if (family.empty())
+		family = p->defaultFamily;
+
 	/* Check for substitutions */
 	if (p->subs.contains(family))
 		family = p->subs[family];
@@ -293,30 +290,30 @@ struct FontPrivate
 	TTF_Font *sdlFont;
 
 	FontPrivate(int size)
-	    : size(size),
-	      bold(defaultBold),
-	      italic(defaultItalic),
-	      outline(defaultOutline),
-	      shadow(defaultShadow),
-	      color(&colorTmp),
-	      outColor(&outColorTmp),
-	      colorTmp(*defaultColor),
-	      outColorTmp(*defaultOutColor),
-	      sdlFont(0)
+		: size(size),
+		  bold(defaultBold),
+		  italic(defaultItalic),
+		  outline(defaultOutline),
+		  shadow(defaultShadow),
+		  color(&colorTmp),
+		  outColor(&outColorTmp),
+		  colorTmp(*defaultColor),
+		  outColorTmp(*defaultOutColor),
+		  sdlFont(0)
 	{}
 
 	FontPrivate(const FontPrivate &other)
-	    : name(other.name),
-	      size(other.size),
-	      bold(other.bold),
-	      italic(other.italic),
-	      outline(other.outline),
-	      shadow(other.shadow),
-	      color(&colorTmp),
-	      outColor(&outColorTmp),
-	      colorTmp(*other.color),
-	      outColorTmp(*other.outColor),
-	      sdlFont(other.sdlFont)
+		: name(other.name),
+		  size(other.size),
+		  bold(other.bold),
+		  italic(other.italic),
+		  outline(other.outline),
+		  shadow(other.shadow),
+		  color(&colorTmp),
+		  outColor(&outColorTmp),
+		  colorTmp(*other.color),
+		  outColorTmp(*other.outColor),
+		  sdlFont(other.sdlFont)
 	{}
 
 	void operator=(const FontPrivate &o)
