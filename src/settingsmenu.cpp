@@ -29,52 +29,55 @@
 
 #include "keybindings.h"
 #include "eventthread.h"
-#include "sharedstate.h"
 #include "font.h"
 #include "input.h"
 #include "etc-internal.h"
 #include "util.h"
+#include "sharedstate.h"
+#include "i18n.h"
 
 #include <algorithm>
 #include <assert.h>
 
-const Vec2i winSize(840, 356);
+const Vec2i winSize(700, 500);
 
 const uint8_t cBgNorm = 50;
 const uint8_t cBgDark = 20;
 const uint8_t cLine = 0;
 const uint8_t cText = 255;
 
-const uint8_t frameWidth = 4;
+//const uint8_t frameWidth = 4;
 const uint8_t fontSize = 15;
 
 static bool pointInRect(const SDL_Rect &r, int x, int y)
 {
-	return (x >= r.x && x <= r.x+r.w && y >= r.y && y <= r.y+r.h);
+	return (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h);
 }
 
 typedef SettingsMenuPrivate SMP;
 
-#define BTN_STRING_CUSTOM(btn, name) { Input:: btn, name }
-#define BTN_STRING(btn) BTN_STRING_CUSTOM(btn, #btn)
+#define BTN_STRING(btn, id) { Input:: btn, id, #btn }
+
 struct VButton
 {
 	Input::ButtonCode code;
+	int trstrId;
 	const char *str;
-} static vButtons[] =
+} static const vButtons[] =
 {
-	BTN_STRING(Up),
-	BTN_STRING(Down),
-	BTN_STRING(L),
-	BTN_STRING(Left),
-	BTN_STRING(Right),
-	BTN_STRING(R),
-	BTN_STRING(A),
-	BTN_STRING(B),
-  BTN_STRING(C),
-	BTN_STRING(X),
-	BTN_STRING(Y),
-  BTN_STRING(Z)
+	BTN_STRING(Up, TRSTR_KEYBIND_UP),
+	BTN_STRING(Left, TRSTR_KEYBIND_LEFT),
+	BTN_STRING(Action, TRSTR_KEYBIND_ACTION),
+	BTN_STRING(Cancel, TRSTR_KEYBIND_CANCEL),
+	BTN_STRING(Menu, TRSTR_KEYBIND_MENU),
+	BTN_STRING(L, TRSTR_KEYBIND_L),
+
+	BTN_STRING(Down, TRSTR_KEYBIND_DOWN),
+	BTN_STRING(Right, TRSTR_KEYBIND_RIGHT),
+	BTN_STRING(Run, TRSTR_KEYBIND_RUN),
+	BTN_STRING(Deactivate, TRSTR_KEYBIND_DEACTIVATE),
+	BTN_STRING(Items, TRSTR_KEYBIND_ITEMS),
+	BTN_STRING(R, TRSTR_KEYBIND_R)
 };
 
 static elementsN(vButtons);
@@ -83,34 +86,72 @@ static elementsN(vButtons);
 std::string sourceDescString(const SourceDesc &src)
 {
 	char buf[128];
-	//char pos;
 
 	switch (src.type)
 	{
-	case Invalid:
-		return std::string();
+		case Invalid:
+			return std::string();
 
-	case Key:
-	{
-		if (src.d.scan == SDL_SCANCODE_LSHIFT)
-			return "Shift";
+		case Key:
+		{
+			if (src.d.scan == SDL_SCANCODE_LSHIFT)
+				return findtext(TRSTR_KEYBIND_SHIFT, "Shift");
 
-		SDL_Keycode key = SDL_GetKeyFromScancode(src.d.scan);
-		const char *str = SDL_GetKeyName(key);
+			SDL_Keycode key = SDL_GetKeyFromScancode(src.d.scan);
+			const char *str = SDL_GetKeyName(key);
 
-		if (*str == '\0')
-			return "Unknown key";
-		else
-			return str;
-	}
-	case CButton:
-		snprintf(buf, sizeof(buf), "%s", shState->input().getButtonName(src.d.cb));
-		return buf;
+			if (*str == '\0') {
+				return findtext(TRSTR_KEYBIND_UNK, "Unknown key");
+			} else {
+				snprintf(buf, sizeof(buf), findtext(TRSTR_KEYBIND_KEYFMT, "%s Key"), str);
+				return buf;
+			}
+		}
 
-	case CAxis:
-		snprintf(buf, sizeof(buf), "%s%c",
-		         shState->input().getAxisName(src.d.ca.axis), src.d.ca.dir == Negative ? '-' : '+');
-		return buf;
+		case CButton:
+			snprintf(buf, sizeof(buf), "%s", shState->input().getButtonName(src.d.cb));
+			return buf;
+
+		case CAxis:
+			switch (src.d.ca.axis)
+			{
+				case SDL_CONTROLLER_AXIS_LEFTX:
+					if (src.d.ca.dir == Negative)
+						return findtext(TRSTR_KEYBIND_LSTICKL, "Left Stick (Left)");
+					else
+						return findtext(TRSTR_KEYBIND_LSTICKR, "Left Stick (Right)");
+
+				case SDL_CONTROLLER_AXIS_LEFTY:
+					if (src.d.ca.dir == Negative)
+						return findtext(TRSTR_KEYBIND_LSTICKU, "Left Stick (Up)");
+					else
+						return findtext(TRSTR_KEYBIND_LSTICKD, "Left Stick (Down)");
+
+				case SDL_CONTROLLER_AXIS_RIGHTX:
+					if (src.d.ca.dir == Negative)
+						return findtext(TRSTR_KEYBIND_RSTICKL, "Right Stick (Left)");
+					else
+						return findtext(TRSTR_KEYBIND_RSTICKR, "Right Stick (Right)");
+
+				case SDL_CONTROLLER_AXIS_RIGHTY:
+					if (src.d.ca.dir == Negative)
+						return findtext(TRSTR_KEYBIND_RSTICKU, "Right Stick (Up)");
+					else
+						return findtext(TRSTR_KEYBIND_RSTICKD, "Right Stick (Down)");
+
+				case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+					return findtext(TRSTR_KEYBIND_LTRIGGER, "Left Trigger");
+
+				case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+					return findtext(TRSTR_KEYBIND_RTRIGGER, "Right Trigger");
+
+				case SDL_CONTROLLER_AXIS_INVALID:
+					return "Invalid Axis";
+
+				case SDL_CONTROLLER_AXIS_MAX:
+					return "";
+			}
+			return "";
 	}
 
 	assert(!"unreachable");
@@ -156,9 +197,7 @@ struct BindingWidget : Widget
 	    : Widget(p, rect),
 	      vb(vButtons[vbIndex]),
 	      hoveredCell(-1)
-	{
-        
-    }
+	{}
 
 	void appendBindings(BDescVec &d) const;
 
@@ -410,8 +449,14 @@ struct SettingsMenuPrivate
 		else
 		{
 			dstRect.w = alignW;
-			dstRect.x = x;
-			SDL_BlitScaled(txtSurf, 0, surf, &dstRect);
+			dstRect.x = drawOff.x + x;
+
+			SDL_Rect srcRect;
+			srcRect.x = 0;
+			srcRect.y = 0;
+			srcRect.w = dstRect.w;
+			srcRect.h = txtSurf->h;
+			SDL_BlitSurface(txtSurf, &srcRect, surf, &dstRect);
 		}
 	}
 
@@ -420,8 +465,10 @@ struct SettingsMenuPrivate
 	              Justification just, SDL_Color c, bool bold = false)
 	{
 		SDL_Surface *txt = createTextSurface(str, c, bold);
-		blitTextSurf(surf, x, y, alignW, txt, just);
-		SDL_FreeSurface(txt);
+		if (txt) {
+			blitTextSurf(surf, x, y, alignW, txt, just);
+			SDL_FreeSurface(txt);
+		}
 	}
 
 	void drawText(SDL_Surface *surf, const char *str,
@@ -510,7 +557,11 @@ struct SettingsMenuPrivate
 		if (state == AwaitingInput)
 		{
 			char buf[64];
-			snprintf(buf, sizeof(buf), "Press key or joystick button for \"%s\"", captureName);
+			snprintf(
+				buf, sizeof(buf),
+				findtext(TRSTR_KEYBIND_KEYPROMPT, "Press key or joystick button for \"%s\""),
+				captureName
+			);
 
 			drawOff = Vec2i();
 
@@ -602,39 +653,40 @@ struct SettingsMenuPrivate
 
 		switch (event.type)
 		{
-		case SDL_KEYDOWN:
-			desc.type = Key;
-			desc.d.scan = event.key.keysym.scancode;
+			case SDL_KEYDOWN:
+				desc.type = Key;
+				desc.d.scan = event.key.keysym.scancode;
 
-			/* Special case aliases */
-			if (desc.d.scan == SDL_SCANCODE_RSHIFT)
-				desc.d.scan = SDL_SCANCODE_LSHIFT;
+				/* Special case aliases */
+				if (desc.d.scan == SDL_SCANCODE_RSHIFT)
+					desc.d.scan = SDL_SCANCODE_LSHIFT;
 
-			if (desc.d.scan == SDL_SCANCODE_KP_ENTER)
-				desc.d.scan = SDL_SCANCODE_RETURN;
+				if (desc.d.scan == SDL_SCANCODE_KP_ENTER)
+					desc.d.scan = SDL_SCANCODE_RETURN;
 
-			break;
+				break;
 
-		case SDL_CONTROLLERBUTTONDOWN:
-			desc.type = CButton;
-			desc.d.cb = (SDL_GameControllerButton)event.cbutton.button;
-			break;
+			case SDL_CONTROLLERBUTTONDOWN:
+				desc.type = CButton;
+				desc.d.cb = (SDL_GameControllerButton)event.cbutton.button;
+				break;
 
-		case SDL_CONTROLLERAXISMOTION:
-		{
-			int v = event.caxis.value;
+			case SDL_CONTROLLERAXISMOTION:
+			{
+				int v = event.caxis.value;
 
-			/* Only register if pushed halfway through */
-			if (v > -JAXIS_THRESHOLD && v < JAXIS_THRESHOLD)
-				return true;
+				/* Only register if pushed halfway through */
+				if (v > -JAXIS_THRESHOLD && v < JAXIS_THRESHOLD)
+					return true;
 
-			desc.type = CAxis;
-			desc.d.ca.axis = (SDL_GameControllerAxis)event.caxis.axis;
-			desc.d.ca.dir = v < 0 ? Negative : Positive;
-			break;
-		}
-		default:
-			return false;
+				desc.type = CAxis;
+				desc.d.ca.axis = (SDL_GameControllerAxis)event.caxis.axis;
+				desc.d.ca.dir = v < 0 ? Negative : Positive;
+				break;
+			}
+
+			default:
+				return false;
 		}
 
 		captureDesc = 0;
@@ -727,57 +779,60 @@ void Widget::click(int x, int y, uint8_t button)
 }
 
 /* Ratio of cell area to total widget width */
-#define BW_CELL_R 0.55f
+#define BW_CELL_R 0.75f
 
 void BindingWidget::drawHandler(SDL_Surface *surf)
 {
-	const int cellW = (rect.w*BW_CELL_R) / 2;
+	const int cellW = (rect.w * BW_CELL_R) / 2;
 	const int cellH = rect.h / 2;
-	const int cellOffX = (1.0f-BW_CELL_R) * rect.w;
+	const int cellOffX = (1.0f - BW_CELL_R) * rect.w;
 
 	const int cellOff[] =
 	{
-	    cellOffX, 1,
-	    cellOffX+cellW, 1,
-	    cellOffX, cellH,
-	    cellOffX+cellW, cellH
+		cellOffX, 1,
+		cellOffX + cellW, 1,
+		cellOffX, cellH,
+		cellOffX + cellW, cellH
 	};
 
 	const int lbOff[] =
 	{
-	    0, cellH / 2,
-	    cellW, cellH / 2,
-	    0, cellH + cellH / 2,
-	    cellW, cellH + cellH / 2
+		0, cellH / 2,
+		cellW, cellH / 2,
+		0, cellH + cellH / 2,
+		cellW, cellH + cellH / 2
 	};
 
 	/* Hovered cell background */
 	if (hoveredCell != -1)
-		p->fillRect(surf, cBgDark,
-		            cellOff[hoveredCell*2], cellOff[hoveredCell*2+1],
-		            cellW, cellH);
+		p->fillRect(
+			surf, cBgDark,
+			cellOff[hoveredCell * 2], cellOff[hoveredCell * 2 + 1],
+			cellW, cellH
+		);
 
 	/* Frame */
 	p->strokeRectInner(surf, cLine, 0, 0, rect.w, rect.h, 2);
 
 	/* Virtual button name */
-	p->drawText(surf, vb.str, 1, rect.h/2, cellOffX, Center, true);
+	p->drawText(surf, findtext(vb.trstrId, vb.str), 1, rect.h / 2, cellOffX, Center, true);
 
 	/* Cell frames */
 	p->strokeLineV(surf, cLine, cellOffX, 0, rect.h, 2);
 	p->strokeLineV(surf, cLine, cellOffX+cellW, 0, rect.h, 2);
-	p->strokeLineH(surf, cLine, cellOffX, cellH, cellW*2, 2);
+	p->strokeLineH(surf, cLine, cellOffX, cellH, cellW * 2, 2);
 
 	/* Draw binding labels */
 	for (size_t i = 0; i < 4; ++i)
 	{
 		std::string lb = sourceDescString(src[i]);
+
 		if (lb.empty())
 			continue;
 
-		const int x = lbOff[i*2+0];
-		const int y = lbOff[i*2+1];
-		p->drawText(surf, lb.c_str(), cellOffX+x+1, y, cellW-2, Center);
+		const int x = lbOff[i * 2 + 0];
+		const int y = lbOff[i * 2 + 1];
+		p->drawText(surf, lb.c_str(), cellOffX + x + 1, y, cellW - 2, Center);
 	}
 
 	for (size_t i = 0; i < 4; ++i)
@@ -785,8 +840,12 @@ void BindingWidget::drawHandler(SDL_Surface *surf)
 		if (!dupFlag[i])
 			continue;
 
-		p->strokeRectInner(surf, cellOff[i*2]+1, cellOff[i*2+1]+1,
-		        cellW-2, cellH-3, 1, 255, 0, 0);
+		p->strokeRectInner(
+			surf,
+			cellOff[i * 2] + 1, cellOff[i * 2 + 1] + 1,
+			cellW - 2, cellH - 3, 1,
+			255, 0, 0
+		);
 	}
 }
 
@@ -816,14 +875,14 @@ void BindingWidget::clickHandler(int x, int y, uint8_t button)
 	if (cell == -1)
 		return;
 
-	p->onBWidgetCellClicked(src[cell], vb.str, button);
+	p->onBWidgetCellClicked(src[cell], findtext(vb.trstrId, vb.str), button);
 }
 
 int BindingWidget::cellIndex(int x, int y) const
 {
-	const int cellW = (rect.w*BW_CELL_R) / 2;
+	const int cellW = (rect.w * BW_CELL_R) / 2;
 	const int cellH = rect.h / 2;
-	const int cellOff = (1.0f-BW_CELL_R) * rect.w;
+	const int cellOff = (1.0f - BW_CELL_R) * rect.w;
 
 	if (x < cellOff)
 		return -1;
@@ -873,7 +932,7 @@ void Button::drawHandler(SDL_Surface *surf)
 		p->fillRect(surf, cBgDark, 0, 0, rect.w, rect.h);
 
 	p->strokeRectInner(surf, cLine, 0, 0, rect.w, rect.h, 2);
-	p->drawText(surf, str, 0, rect.h/2, rect.w, Center);
+	p->drawText(surf, str, 0, rect.h / 2, rect.w, Center);
 }
 
 void Button::motionHandler(int, int)
@@ -906,59 +965,47 @@ void Label::setVisible(bool val)
 void Label::drawHandler(SDL_Surface *surf)
 {
 	if (visible)
-		p->drawText(surf, str, 0, rect.h/2, rect.w, Left, c);
+		p->drawText(surf, str, 0, rect.h / 2, rect.w, Left, c);
 }
 
 SettingsMenu::SettingsMenu(RGSSThreadData &rtData)
 {
-    // Set names to be shown in the menu
-    {
-#define SET_BUTTON_NAME(n, b) vButtons[n].str = rtData.config.kbActionNames.b.c_str();
-        SET_BUTTON_NAME(2, l);
-        SET_BUTTON_NAME(5, r);
-        SET_BUTTON_NAME(6, a);
-        SET_BUTTON_NAME(7, b);
-        SET_BUTTON_NAME(8, c);
-        SET_BUTTON_NAME(9, x);
-        SET_BUTTON_NAME(10, y);
-        SET_BUTTON_NAME(11, z);
-#undef SET_BUTTON_NAME
-    }
-    
 	p = new SettingsMenuPrivate(rtData);
 	p->state = Idle;
 
 	p->hasFocus = false;
 	p->destroyReq = false;
 
-	p->window = SDL_CreateWindow("Key bindings",
-	                             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-	                             winSize.x, winSize.y, SDL_WINDOW_INPUT_FOCUS);
+	p->window = SDL_CreateWindow(
+		findtext(TRSTR_KEYBIND_TITLE, "Key bindings"),
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		winSize.x, winSize.y, SDL_WINDOW_INPUT_FOCUS
+	);
 	p->winSurf = SDL_GetWindowSurface(p->window);
 	p->winID = SDL_GetWindowID(p->window);
 
-	p->font = SharedFontState::openBundled(fontSize);
+	//p->font = SharedFontState::openBundled(fontSize);
+	p->font = shState->fontState().getFont(getFontName(), getFontSize());
 
 	p->rgb = p->winSurf->format;
 
-	const size_t layoutW = 4;
-	const size_t layoutH = 3;
-	assert(layoutW*layoutH == vButtonsN);
+	const size_t layoutW = 2;
+	const size_t layoutH = 6;
+	assert(layoutW * layoutH == vButtonsN);
 
-	const int bWidgetW = winSize.x / layoutH;
+	const int bWidgetW = winSize.x / layoutW;
 	const int bWidgetH = 64;
-	const int bWidgetY = winSize.y - layoutW*bWidgetH - 48;
+	const int bWidgetY = winSize.y - layoutH * bWidgetH - 48;
 
-	for (int y = 0; y < 4; ++y)
-		for (int x = 0; x < 3; ++x)
+	for (int y = 0; y < (int)(layoutH); ++y)
+		for (int x = 0; x < (int)(layoutW); ++x)
 		{
-			int i = y*3+x;
-			BindingWidget w(i, p, IntRect(x*bWidgetW, bWidgetY+y*bWidgetH,
-			                              bWidgetW, bWidgetH));
+			int i = x * layoutH + y;
+			BindingWidget w(i, p, IntRect(x * bWidgetW, bWidgetY + y * bWidgetH, bWidgetW, bWidgetH));
 			p->bWidgets.push_back(w);
 		}
 
-	for (size_t i = 0; i< p->bWidgets.size(); ++i)
+	for (size_t i = 0; i < p->bWidgets.size(); ++i)
 		p->widgets.push_back(&p->bWidgets[i]);
 
 	BDescVec binds;
@@ -969,26 +1016,25 @@ SettingsMenu::SettingsMenu(RGSSThreadData &rtData)
 	const int buttonH = 32;
 	const int buttonY = winSize.y - buttonH - 8;
 
-	IntRect btRects[] =
-	{
-	    IntRect(16, buttonY, 112, buttonH),
-	    IntRect(winSize.x-16-64*2-8, buttonY, 64, buttonH),
-	    IntRect(winSize.x-16-64, buttonY, 64, buttonH)
+	IntRect btRects[] = {
+		IntRect(16, buttonY, 220, buttonH),
+		IntRect(winSize.x - 16 - 80 * 2 - 8, buttonY, 80, buttonH),
+		IntRect(winSize.x - 16 - 80, buttonY, 80, buttonH)
 	};
 
-	p->buttons.push_back(Button(p, btRects[0], "Reset defaults", &SMP::onResetToDefault));
-	p->buttons.push_back(Button(p, btRects[1], "Cancel", &SMP::onCancel));
-	p->buttons.push_back(Button(p, btRects[2], "Accept", &SMP::onAccept));
+	p->buttons.push_back(Button(p, btRects[0], findtext(TRSTR_KEYBIND_RESET, "Reset defaults"), &SMP::onResetToDefault));
+	p->buttons.push_back(Button(p, btRects[1], findtext(TRSTR_CANCEL, "Cancel"), &SMP::onCancel));
+	p->buttons.push_back(Button(p, btRects[2], findtext(TRSTR_ACCEPT, "Accept"), &SMP::onAccept));
 
-	for (size_t i = 0; i< p->buttons.size(); ++i)
+	for (size_t i = 0; i < p->buttons.size(); ++i)
 		p->widgets.push_back(&p->buttons[i]);
 
 	/* Labels */
-	const char *info = "Use left click to bind a slot, right click to clear its binding";
-	p->infoLabel = Label(p, IntRect(16, 6, winSize.x, 16), info, cText, cText, cText);
+	const char *info = findtext(TRSTR_KEYBIND_INSTRUCT, "Use left click to bind a slot, right click to clear its binding");
+	p->infoLabel = Label(p, IntRect(16, 16, winSize.x - 32, 16), info, cText, cText, cText);
 
-	const char *warn = "Warning: Same physical key bound to multiple slots";
-	p->dupWarnLabel = Label(p, IntRect(16, 26, winSize.x, 16), warn, 255, 0, 0);
+	const char *warn = findtext(TRSTR_KEYBIND_CONFLICT, "Warning: Same physical action bound to multiple slots");
+	p->dupWarnLabel = Label(p, IntRect(16, 40, winSize.x - 32, 16), warn, 255, 0, 0);
 
 	p->widgets.push_back(&p->infoLabel);
 	p->widgets.push_back(&p->dupWarnLabel);
@@ -1004,7 +1050,7 @@ SettingsMenu::SettingsMenu(RGSSThreadData &rtData)
 
 SettingsMenu::~SettingsMenu()
 {
-	TTF_CloseFont(p->font);
+	//TTF_CloseFont(p->font);
 	SDL_DestroyWindow(p->window);
 
 	delete p;
@@ -1015,106 +1061,107 @@ bool SettingsMenu::onEvent(const SDL_Event &event)
 	/* First, check whether this event is for us */
 	switch (event.type)
 	{
-	case SDL_WINDOWEVENT :
-	case SDL_MOUSEBUTTONDOWN :
-	case SDL_MOUSEBUTTONUP :
-	case SDL_MOUSEMOTION :
-	case SDL_KEYDOWN :
-	case SDL_KEYUP :
-		/* We can do this because windowID has the same
-		 * struct offset in all these event types */
-		if (event.window.windowID != p->winID)
-			return false;
-		break;
+		case SDL_WINDOWEVENT:
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEMOTION:
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+			/* We can do this because windowID has the same
+			 * struct offset in all these event types */
+			if (event.window.windowID != p->winID)
+				return false;
+			break;
 
-	case SDL_JOYBUTTONDOWN :
-	case SDL_CONTROLLERBUTTONUP :
-	case SDL_CONTROLLERAXISMOTION :
-		if (!p->hasFocus)
-			return false;
-		break;
+		case SDL_JOYBUTTONDOWN:
+		case SDL_CONTROLLERBUTTONUP:
+		case SDL_CONTROLLERAXISMOTION:
+			if (!p->hasFocus)
+				return false;
+			break;
 
-	/* Don't try to handle something we don't understand */
-	default:
-		return false;
+		/* Don't try to handle something we don't understand */
+		default:
+			return false;
 	}
 
 	/* Now process it.. */
 	switch (event.type)
 	{
-	/* Ignore these event */
-	case SDL_MOUSEBUTTONUP :
-	case SDL_KEYUP :
-		return true;
-
-	case SDL_WINDOWEVENT :
-		switch (event.window.event)
-		{
-		case SDL_WINDOWEVENT_SHOWN : // SDL is bugged and doesn't give us a first FOCUS_GAINED event
-		case SDL_WINDOWEVENT_FOCUS_GAINED :
-			p->hasFocus = true;
-			break;
-
-		case SDL_WINDOWEVENT_FOCUS_LOST :
-			p->hasFocus = false;
-			break;
-
-		case SDL_WINDOWEVENT_EXPOSED :
-			SDL_UpdateWindowSurface(p->window);
-			break;
-
-		case SDL_WINDOWEVENT_LEAVE:
-			if (p->hovered)
-			{
-				p->hovered->leave();
-				p->hovered = 0;
-			}
-			break;
-
-		case SDL_WINDOWEVENT_CLOSE:
-			p->onCancel();
-		}
-
-		return true;
-
-	case SDL_MOUSEMOTION:
-		p->onMotion(event.motion);
-		return true;
-
-	case SDL_KEYDOWN:
-		if (p->state != AwaitingInput)
-		{
-			if (event.key.keysym.sym == SDLK_RETURN)
-				p->onAccept();
-			else if (event.key.keysym.sym == SDLK_ESCAPE)
-				p->onCancel();
-
+		/* Ignore these event */
+		case SDL_MOUSEBUTTONUP:
+		case SDL_KEYUP:
 			return true;
-		}
+
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				case SDL_WINDOWEVENT_SHOWN: // SDL is bugged and doesn't give us a first FOCUS_GAINED event
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					p->hasFocus = true;
+					break;
+
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					p->hasFocus = false;
+					break;
+
+				case SDL_WINDOWEVENT_EXPOSED:
+					SDL_UpdateWindowSurface(p->window);
+					break;
+
+				case SDL_WINDOWEVENT_LEAVE:
+					if (p->hovered)
+					{
+						p->hovered->leave();
+						p->hovered = 0;
+					}
+					break;
+
+				case SDL_WINDOWEVENT_CLOSE:
+					p->onCancel();
+			}
+			return true;
+
+		case SDL_MOUSEMOTION:
+			p->onMotion(event.motion);
+			return true;
+
+		case SDL_KEYDOWN:
+			if (p->state != AwaitingInput)
+			{
+				if (event.key.keysym.sym == SDLK_RETURN)
+					p->onAccept();
+				else if (event.key.keysym.sym == SDLK_ESCAPE)
+					p->onCancel();
+
+				return true;
+			}
 
 		/* Don't let the user bind keys that trigger
 		 * mkxp functions */
 		switch(event.key.keysym.scancode)
 		{
-		case SDL_SCANCODE_F1:
-		case SDL_SCANCODE_F2:
-		case SDL_SCANCODE_F12:
-			return true;
-		default:
-			break;
+			case SDL_SCANCODE_F1:
+			case SDL_SCANCODE_F2:
+			case SDL_SCANCODE_F12:
+				return true;
+
+			default:
+				break;
 		}
 
-	case SDL_CONTROLLERBUTTONDOWN:
-	case SDL_CONTROLLERAXISMOTION:
-		if (p->state != AwaitingInput)
-			return true;
-		break;
+		case SDL_CONTROLLERBUTTONDOWN:
+		case SDL_CONTROLLERAXISMOTION:
+			if (p->state != AwaitingInput)
+				return true;
+			break;
 
-	case SDL_MOUSEBUTTONDOWN:
-		p->onClick(event.button);
-		return true;
-	default:
-		return true;
+		case SDL_MOUSEBUTTONDOWN:
+			p->onClick(event.button);
+			return true;
+
+		default:
+			return true;
 	}
 
 	if (p->state == AwaitingInput)

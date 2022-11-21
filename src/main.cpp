@@ -39,6 +39,7 @@
 #include "binding.h"
 #include "sharedstate.h"
 #include "eventthread.h"
+#include "i18n.h"
 #include "util/debugwriter.h"
 #include "util/exception.h"
 #include "display/gl/gl-debug.h"
@@ -234,7 +235,9 @@ int main(int argc, char *argv[]) {
     }
     mkxp_fs::setCurrentDirectory(dataDir);
 #endif
-    
+
+	loadLanguageMetadata();
+
     /* now we load the config */
     Config conf;
     conf.read(argc, argv);
@@ -467,6 +470,9 @@ int main(int argc, char *argv[]) {
     eventThread.cleanup();
 
     Debug() << "Shutting down.";
+
+	unloadLocale();
+	unloadLanguageMetadata();
 
     alcCloseDevice(alcDev);
     SDL_DestroyWindow(win);

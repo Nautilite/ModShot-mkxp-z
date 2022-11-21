@@ -295,7 +295,7 @@ struct Movie
             // Check for attempted skip
             if (skippable) {
                 shState->input().update();
-                if  (shState->input().isTriggered(Input::C) || shState->input().isTriggered(Input::B)) break;
+                if (shState->input().isTriggered(Input::Action) || shState->input().isTriggered(Input::Cancel)) break;
             }
             
             const Uint32 now = SDL_GetTicks() - baseTicks;

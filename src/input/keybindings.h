@@ -40,8 +40,8 @@ enum SourceType
 {
 	Invalid,
 	Key,
-    CButton,
-    CAxis
+	CButton,
+	CAxis
 };
 
 struct SourceDesc
@@ -70,17 +70,21 @@ struct SourceDesc
 
 		switch (type)
 		{
-		case Invalid:
-			return true;
-		case Key:
-			return d.scan == o.d.scan;
-        case CButton:
-            return d.cb == o.d.cb;
-		case CAxis:
-			return (d.ca.axis == o.d.ca.axis) && (d.ca.dir == o.d.ca.dir);
-		default:
-			assert(!"unreachable");
-			return false;
+			case Invalid:
+				return true;
+
+			case Key:
+				return d.scan == o.d.scan;
+
+			case CButton:
+				return d.cb == o.d.cb;
+
+			case CAxis:
+				return (d.ca.axis == o.d.ca.axis) && (d.ca.dir == o.d.ca.dir);
+
+			default:
+				assert(!"unreachable");
+				return false;
 		}
 	}
 

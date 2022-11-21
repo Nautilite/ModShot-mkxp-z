@@ -74,13 +74,20 @@ global_args += '-DMKXPZ_ALCDEVICE=' + alcdev_struct
 global_include_dirs += include_directories('.',
     'audio',
     'crypto',
-    'display', 'display/gl', 'display/libnsgif', 'display/libnsgif/utils',
+    'display',
+    'display/gl',
+    'display/libnsgif',
+    'display/libnsgif/utils',
     'etc',
-    'filesystem', 'filesystem/ghc',
+    'filesystem',
+    'filesystem/ghc',
     'input',
+    'oneshot',
     'net',
     'system',
-    'util', 'util/sigslot', 'util/sigslot/adapter'
+    'util',
+    'util/sigslot',
+    'util/sigslot/adapter'
 )
 
 global_dependencies += [openal, zlib, bz2, sdl2, sdl_sound, pixman, physfs, theora, vorbisfile, vorbis, ogg, sdl2_ttf, freetype, sdl2_image, png, jpeg, iconv, uchardet]
@@ -159,6 +166,8 @@ main_source = files(
     
     'input/input.cpp',
     'input/keybindings.cpp',
+
+    'oneshot/i18n.cpp',
 
     'net/LUrlParser.cpp',
     'net/net.cpp',
