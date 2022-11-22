@@ -272,26 +272,26 @@ s.d.ca.dir = (axis.value >= 0) ? AxisDir::Positive : AxisDir::Negative;
     SET_BINDING(Left);
     SET_BINDING(Right);
     SET_BINDING(Up);
-    SET_BINDING(A);
-    SET_BINDING(B);
-    SET_BINDING(C);
-    SET_BINDING(X);
-    SET_BINDING(Y);
-    SET_BINDING(Z);
+    SET_BINDING(Action);
+    SET_BINDING(Cancel);
+    SET_BINDING(Menu);
+    SET_BINDING(Items);
+    SET_BINDING(Run);
+    SET_BINDING(Deactivate);
     SET_BINDING(L);
     SET_BINDING(R);
     
 #define SET_BINDING_CONF(code, value) \
 if (!data.config.kbActionNames.value.empty()) bindingNames[@(Input::code)] = \
     @(data.config.kbActionNames.value.c_str())
-    SET_BINDING_CONF(A,a);
-    SET_BINDING_CONF(B,b);
-    SET_BINDING_CONF(C,c);
-    SET_BINDING_CONF(X,x);
-    SET_BINDING_CONF(Y,y);
-    SET_BINDING_CONF(Z,z);
-    SET_BINDING_CONF(L,l);
-    SET_BINDING_CONF(R,r);
+    SET_BINDING_CONF(Action, action);
+    SET_BINDING_CONF(Cancel, cancel);
+    SET_BINDING_CONF(Menu, menu);
+    SET_BINDING_CONF(Items, items);
+    SET_BINDING_CONF(Run, run);
+    SET_BINDING_CONF(Deactivate, deactivate);
+    SET_BINDING_CONF(L, l);
+    SET_BINDING_CONF(R, r);
     
     BDescVec oldBinds;
     data.bindingUpdateMsg.get(oldBinds);
