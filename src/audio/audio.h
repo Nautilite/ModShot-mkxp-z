@@ -22,6 +22,8 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include "util.h"
+
 /* Concerning the 'pos' parameter:
  *   RGSS3 actually doesn't specify a format for this,
  *   it's only implied that it is a numerical value
@@ -52,15 +54,11 @@ public:
 	void bgsStop();
 	void bgsFade(int time);
 
-	void mePlay(const char *filename,
-	            int volume = 100,
-	            int pitch = 100);
+	void mePlay(const char *filename, int volume = 100, int pitch = 100);
 	void meStop();
 	void meFade(int time);
 
-	void sePlay(const char *filename,
-	            int volume = 100,
-	            int pitch = 100);
+	void sePlay(const char *filename, int volume = 100, int pitch = 100);
 	void seStop();
 
 	void setupMidi();
@@ -68,6 +66,10 @@ public:
 	float bgsPos();
 
 	void reset();
+
+	/* Non-standard extension */
+	DECL_ATTR(BGM_Volume, int)
+	DECL_ATTR(SFX_Volume, int)
 
 private:
 	Audio(RGSSThreadData &rtData);

@@ -35,9 +35,16 @@
 
 struct AudioPrivate
 {
+	int bgm_volume;
+	int sfx_volume;
+
 	AudioStream bgm;
 	AudioStream bgs;
 	AudioStream me;
+
+	int current_bgm_volume;
+	int current_bgs_volume;
+	int current_me_volume;
 
 	SoundEmitter se;
 
@@ -70,6 +77,11 @@ struct AudioPrivate
 	      se(rtData.config),
 	      syncPoint(rtData.syncPoint)
 	{
+		bgm_volume = 100;
+		sfx_volume = 100;
+		current_bgm_volume = 100;
+		current_bgs_volume = 100;
+		current_me_volume = 100;
 		meWatch.state = MeNotPlaying;
 		meWatch.thread = createSDLThread
 			<AudioPrivate, &AudioPrivate::meWatchFun>(this, "audio_mewatch");
@@ -95,141 +107,123 @@ struct AudioPrivate
 
 			switch (meWatch.state)
 			{
-			case MeNotPlaying:
-			{
-				me.lockStream();
-
-				if (me.stream.queryState() == ALStream::Playing)
+				case MeNotPlaying:
 				{
-					/* ME playing detected. -> FadeOutBGM */
-					bgm.extPaused = true;
-					meWatch.state = BgmFadingOut;
-				}
-
-				me.unlockStream();
-
-				break;
-			}
-
-			case BgmFadingOut :
-			{
-				me.lockStream();
-
-				if (me.stream.queryState() != ALStream::Playing)
-				{
-					/* ME has ended while fading OUT BGM. -> FadeInBGM */
+					me.lockStream();
+					if (me.stream.queryState() == ALStream::Playing)
+					{
+						/* ME playing detected. -> FadeOutBGM */
+						bgm.extPaused = true;
+						meWatch.state = BgmFadingOut;
+					}
 					me.unlockStream();
-					meWatch.state = BgmFadingIn;
-
 					break;
 				}
 
-				bgm.lockStream();
-
-				float vol = bgm.getVolume(AudioStream::External);
-				vol -= fadeOutStep;
-
-				if (vol < 0 || bgm.stream.queryState() != ALStream::Playing)
+				case BgmFadingOut:
 				{
-					/* Either BGM has fully faded out, or stopped midway. -> MePlaying */
-					bgm.setVolume(AudioStream::External, 0);
-					bgm.stream.pause();
-					meWatch.state = MePlaying;
-					bgm.unlockStream();
-					me.unlockStream();
-
-					break;
-				}
-
-				bgm.setVolume(AudioStream::External, vol);
-				bgm.unlockStream();
-				me.unlockStream();
-
-				break;
-			}
-
-			case MePlaying :
-			{
-				me.lockStream();
-
-				if (me.stream.queryState() != ALStream::Playing)
-				{
-					/* ME has ended */
+					me.lockStream();
+					if (me.stream.queryState() != ALStream::Playing)
+					{
+						/* ME has ended while fading OUT BGM. -> FadeInBGM */
+						me.unlockStream();
+						meWatch.state = BgmFadingIn;
+						break;
+					}
 					bgm.lockStream();
 
-					bgm.extPaused = false;
+					float vol = bgm.getVolume(AudioStream::External);
+					vol -= fadeOutStep;
 
-					ALStream::State sState = bgm.stream.queryState();
-
-					if (sState == ALStream::Paused)
+					if (vol < 0 || bgm.stream.queryState() != ALStream::Playing)
 					{
-						/* BGM is paused. -> FadeInBGM */
-						bgm.stream.play();
-						meWatch.state = BgmFadingIn;
+						/* Either BGM has fully faded out, or stopped midway. -> MePlaying */
+						bgm.setVolume(AudioStream::External, 0);
+						bgm.stream.pause();
+						meWatch.state = MePlaying;
+						bgm.unlockStream();
+						me.unlockStream();
+						break;
 					}
-					else
+
+					bgm.setVolume(AudioStream::External, vol);
+					bgm.unlockStream();
+					me.unlockStream();
+					break;
+				}
+
+				case MePlaying:
+				{
+					me.lockStream();
+					if (me.stream.queryState() != ALStream::Playing)
 					{
-						/* BGM is stopped. -> MeNotPlaying */
-						bgm.setVolume(AudioStream::External, 1.0f);
+						/* ME has ended */
+						bgm.lockStream();
 
-						if (!bgm.noResumeStop)
+						bgm.extPaused = false;
+
+						ALStream::State sState = bgm.stream.queryState();
+
+						if (sState == ALStream::Paused)
+						{
+							/* BGM is paused. -> FadeInBGM */
 							bgm.stream.play();
+							meWatch.state = BgmFadingIn;
+						} else {
+							/* BGM is stopped. -> MeNotPlaying */
+							bgm.setVolume(AudioStream::External, 1.0f);
 
+							if (!bgm.noResumeStop)
+								bgm.stream.play();
+
+							meWatch.state = MeNotPlaying;
+						}
+
+						bgm.unlockStream();
+					}
+					me.unlockStream();
+					break;
+				}
+
+				case BgmFadingIn:
+				{
+					bgm.lockStream();
+					if (bgm.stream.queryState() == ALStream::Stopped)
+					{
+						/* BGM stopped midway fade in. -> MeNotPlaying */
+						bgm.setVolume(AudioStream::External, 1.0f);
+						meWatch.state = MeNotPlaying;
+						bgm.unlockStream();
+						break;
+					}
+					me.lockStream();
+
+					if (me.stream.queryState() == ALStream::Playing)
+					{
+						/* ME started playing midway BGM fade in. -> FadeOutBGM */
+						bgm.extPaused = true;
+						meWatch.state = BgmFadingOut;
+						me.unlockStream();
+						bgm.unlockStream();
+						break;
+					}
+
+					float vol = bgm.getVolume(AudioStream::External);
+					vol += fadeInStep;
+
+					if (vol >= 1)
+					{
+						/* BGM fully faded in. -> MeNotPlaying */
+						vol = 1.0f;
 						meWatch.state = MeNotPlaying;
 					}
 
-					bgm.unlockStream();
-				}
+					bgm.setVolume(AudioStream::External, vol);
 
-				me.unlockStream();
-
-				break;
-			}
-
-			case BgmFadingIn :
-			{
-				bgm.lockStream();
-
-				if (bgm.stream.queryState() == ALStream::Stopped)
-				{
-					/* BGM stopped midway fade in. -> MeNotPlaying */
-					bgm.setVolume(AudioStream::External, 1.0f);
-					meWatch.state = MeNotPlaying;
-					bgm.unlockStream();
-
-					break;
-				}
-
-				me.lockStream();
-
-				if (me.stream.queryState() == ALStream::Playing)
-				{
-					/* ME started playing midway BGM fade in. -> FadeOutBGM */
-					bgm.extPaused = true;
-					meWatch.state = BgmFadingOut;
 					me.unlockStream();
 					bgm.unlockStream();
-
 					break;
 				}
-
-				float vol = bgm.getVolume(AudioStream::External);
-				vol += fadeInStep;
-
-				if (vol >= 1)
-				{
-					/* BGM fully faded in. -> MeNotPlaying */
-					vol = 1.0f;
-					meWatch.state = MeNotPlaying;
-				}
-
-				bgm.setVolume(AudioStream::External, vol);
-
-				me.unlockStream();
-				bgm.unlockStream();
-
-				break;
-			}
 			}
 
 			SDL_Delay(AUDIO_SLEEP);
@@ -241,13 +235,10 @@ Audio::Audio(RGSSThreadData &rtData)
 	: p(new AudioPrivate(rtData))
 {}
 
-
-void Audio::bgmPlay(const char *filename,
-                    int volume,
-                    int pitch,
-                    float pos)
+void Audio::bgmPlay(const char *filename, int volume, int pitch, float pos)
 {
-	p->bgm.play(filename, volume, pitch, pos);
+	p->current_bgm_volume = volume;
+	p->bgm.play(filename, (volume * p->bgm_volume) / 100, pitch, pos);
 }
 
 void Audio::bgmStop()
@@ -260,13 +251,10 @@ void Audio::bgmFade(int time)
 	p->bgm.fadeOut(time);
 }
 
-
-void Audio::bgsPlay(const char *filename,
-                    int volume,
-                    int pitch,
-                    float pos)
+void Audio::bgsPlay(const char *filename, int volume, int pitch, float pos)
 {
-	p->bgs.play(filename, volume, pitch, pos);
+	p->current_bgs_volume = volume;
+	p->bgs.play(filename, (volume * p->sfx_volume) / 100, pitch, pos);
 }
 
 void Audio::bgsStop()
@@ -279,12 +267,10 @@ void Audio::bgsFade(int time)
 	p->bgs.fadeOut(time);
 }
 
-
-void Audio::mePlay(const char *filename,
-                   int volume,
-                   int pitch)
+void Audio::mePlay(const char *filename, int volume, int pitch)
 {
-	p->me.play(filename, volume, pitch);
+	p->current_me_volume = volume;
+	p->me.play(filename, (volume * p->bgm_volume) / 100, pitch);
 }
 
 void Audio::meStop()
@@ -298,11 +284,9 @@ void Audio::meFade(int time)
 }
 
 
-void Audio::sePlay(const char *filename,
-                   int volume,
-                   int pitch)
+void Audio::sePlay(const char *filename, int volume, int pitch)
 {
-	p->se.play(filename, volume, pitch);
+	p->se.play(filename, (volume * p->sfx_volume) / 100, pitch);
 }
 
 void Audio::seStop()
@@ -333,4 +317,46 @@ void Audio::reset()
 	p->se.stop();
 }
 
-Audio::~Audio() { delete p; }
+int Audio::getBGM_Volume() const
+{
+	return p->bgm_volume;
+}
+
+void Audio::setBGM_Volume(int value)
+{
+	if (value > 100)
+		value = 100;
+	else if (value < 0)
+		value = 0;
+
+	p->bgm_volume = value;
+	p->bgm.lockStream();
+	p->bgm.setVolume(AudioStream::Base, ((float)(p->bgm_volume * p->current_bgm_volume)) / 10000.0f);
+	p->bgm.unlockStream();
+	p->me.lockStream();
+	p->me.setVolume(AudioStream::Base, ((float)(p->bgm_volume * p->current_me_volume)) / 10000.0f);
+	p->me.unlockStream();
+}
+
+int Audio::getSFX_Volume() const
+{
+	return p->sfx_volume;
+}
+
+void Audio::setSFX_Volume(int value)
+{
+	if (value > 100)
+		value = 100;
+	else if (value < 0)
+		value = 0;
+
+	p->sfx_volume = value;
+	p->bgs.lockStream();
+	p->bgs.setVolume(AudioStream::Base, ((float)(p->sfx_volume * p->current_bgs_volume)) / 10000.0f);
+	p->bgs.unlockStream();
+}
+
+Audio::~Audio()
+{
+	delete p;
+}
