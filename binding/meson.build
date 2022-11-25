@@ -30,6 +30,7 @@ binding_source = [files(
     'tilemap-binding.cpp',
     'audio-binding.cpp',
     'module_rpg.cpp',
+    'oneshot-binding.cpp',
     'filesystem-binding.cpp',
     'windowvx-binding.cpp',
     'tilemapvx-binding.cpp',

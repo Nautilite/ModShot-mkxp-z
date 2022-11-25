@@ -47,11 +47,11 @@ union SDL_Event;
 class EventThread
 {
 public:
-    
-    struct ControllerState {
-        int axes[SDL_CONTROLLER_AXIS_MAX];
-        bool buttons[SDL_CONTROLLER_BUTTON_MAX];
-    };
+	struct ControllerState
+	{
+		int axes[SDL_CONTROLLER_AXIS_MAX];
+		bool buttons[SDL_CONTROLLER_BUTTON_MAX];
+	};
 
 	struct MouseState
 	{
@@ -72,19 +72,18 @@ public:
 	};
 
 	static uint8_t keyStates[SDL_NUM_SCANCODES];
-    static ControllerState controllerState;
+	static ControllerState controllerState;
 	static MouseState mouseState;
 	static TouchState touchState;
-    static SDL_atomic_t verticalScrollDistance;
-    
-    std::string textInputBuffer;
-    void lockText(bool lock);
-    
+	static SDL_atomic_t verticalScrollDistance;
+
+	std::string textInputBuffer;
+	void lockText(bool lock);
 
 	static bool allocUserEvents();
 
 	EventThread();
-    ~EventThread();
+	~EventThread();
 
 	void process(RGSSThreadData &rtData);
 	void cleanup();
@@ -92,22 +91,22 @@ public:
 	/* Called from RGSS thread */
 	void requestFullscreenMode(bool mode);
 	void requestWindowResize(int width, int height);
-    void requestWindowReposition(int x, int y);
-    void requestWindowCenter();
-    void requestWindowRename(const char *title);
+	void requestWindowReposition(int x, int y);
+	void requestWindowCenter();
+	void requestWindowRename(const char *title);
 	void requestShowCursor(bool mode);
-    
-    void requestTextInputMode(bool mode);
-    
-    void requestSettingsMenu();
+
+	void requestTextInputMode(bool mode);
+
+	void requestSettingsMenu();
 
 	void requestTerminate();
 
 	bool getFullscreen() const;
 	bool getShowCursor() const;
-    bool getControllerConnected() const;
-    
-    SDL_GameController *controller() const;
+	bool getControllerConnected() const;
+
+	SDL_GameController *controller() const;
 
 	void showMessageBox(const char *body, int flags = 0);
 
@@ -127,12 +126,12 @@ private:
 
 	bool fullscreen;
 	bool showCursor;
-    
-    SDL_GameController *ctrl;
-    
+
+	SDL_GameController *ctrl;
+
 	AtomicFlag msgBoxDone;
-    
-    SDL_mutex *textInputLock;
+
+	SDL_mutex *textInputLock;
 
 	struct
 	{
@@ -242,13 +241,22 @@ struct RGSSThreadData
 
 	/* Set when F12 is released */
 	AtomicFlag rqResetFinish;
-    
-    // Set when window is being adjusted (resize, reposition)
-    AtomicFlag rqWindowAdjust;
+
+	/* Set when window is being adjusted (resize, reposition) */
+	AtomicFlag rqWindowAdjust;
+
+	/* True if we're currently exiting */
+	AtomicFlag exiting;
+
+	/* True if exiting is allowed */
+	AtomicFlag allowExit;
+
+	/* Set when attempting to exit and allowExit is false */
+	AtomicFlag triedExit;
 
 	EventThread *ethread;
 	UnidirMessage<Vec2i> windowSizeMsg;
-    UnidirMessage<Vec2i> drawableSizeMsg;
+	UnidirMessage<Vec2i> drawableSizeMsg;
 	UnidirMessage<BDescVec> bindingUpdateMsg;
 	SyncPoint syncPoint;
 
@@ -256,12 +264,12 @@ struct RGSSThreadData
 
 	SDL_Window *window;
 	ALCdevice *alcDev;
-    
-    SDL_GLContext glContext;
+
+	SDL_GLContext glContext;
 
 	Vec2 sizeResoRatio;
 	Vec2i screenOffset;
-    int scale;
+	int scale;
 	const int refreshRate;
 
 	Config config;
