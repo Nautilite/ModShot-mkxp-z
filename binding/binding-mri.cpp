@@ -93,6 +93,7 @@ void graphicsBindingInit();
 
 void fileIntBindingInit();
 
+void journalBindingInit();
 void oneshotBindingInit();
 
 #ifdef MKXPZ_MINIFFI
@@ -175,6 +176,7 @@ static void mriBindingInit() {
 
 	fileIntBindingInit();
 
+	journalBindingInit();
 	oneshotBindingInit();
 
 #ifdef MKXPZ_MINIFFI
