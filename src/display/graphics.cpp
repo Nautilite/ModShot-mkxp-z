@@ -63,6 +63,15 @@
 #include <cmath>
 
 
+#if defined _WIN32
+	#define OS_W32
+#elif defined __APPLE__
+	#define OS_OSX
+#else
+	#define OS_LINUX
+#endif
+
+
 #define DEF_SCREEN_W (rgssVer == 1 ? 640 : 544)
 #define DEF_SCREEN_H (rgssVer == 1 ? 480 : 416)
 
@@ -71,6 +80,7 @@
 #define DEF_MAX_VIDEO_FRAMES 30
 #define VIDEO_DELAY 10
 #define AUDIO_DELAY 100
+
 
 typedef struct AudioQueue
 {
@@ -1206,7 +1216,13 @@ void Graphics::transition(int duration, const char *filename, int vague) {
             simpleShader.bind();
             simpleShader.setProg(prog);
         }
-        
+
+#ifndef OS_LINUX
+		if (p->threadData->exiting) {
+			SDL_SetWindowOpacity(p->threadData->window, 1.0f - prog);
+		}
+#endif
+
         /* Draw the composed frame to a buffer first
          * (we need this because we're skipping PingPong) */
         FBO::bind(transBuffer.fbo);
