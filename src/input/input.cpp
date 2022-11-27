@@ -1256,6 +1256,10 @@ void Input::update()
 	/* Fetch new cumulative scroll distance and reset counter */
 	p->vScrollDistance = SDL_AtomicSet(&EventThread::verticalScrollDistance, 0);
 
+	RGSSThreadData &rtData = shState->rtData();
+	p->triedExit = rtData.triedExit;
+	rtData.triedExit.clear();
+
 	p->last_update = shState->runTime();
 }
 

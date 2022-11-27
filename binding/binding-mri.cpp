@@ -1181,9 +1181,19 @@ static void mriBindingExecute() {
 
 	ruby_cleanup(0);
 
+	// Force allow exit
+	shState->rtData().allowExit.set();
+
+	// Request EventThread termination
 	shState->rtData().rqTermAck.set();
 }
 
-static void mriBindingTerminate() { rb_raise(rb_eSystemExit, " "); }
+static void mriBindingTerminate()
+{
+	rb_raise(rb_eSystemExit, " ");
+}
 
-static void mriBindingReset() { rb_raise(getRbData()->exc[Reset], " "); }
+static void mriBindingReset()
+{
+	rb_raise(getRbData()->exc[Reset], " ");
+}
