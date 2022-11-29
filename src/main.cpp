@@ -202,6 +202,51 @@ static void setupWindowIcon(const Config &conf, SDL_Window *win) {
   }
 }
 
+// Mainly doing this so Journal app knows where to load images from
+static void setGamePathInRegistry()
+{
+#if defined WIN32
+	// This logic is currently windows specific
+	char* dataDir = SDL_GetBasePath();
+	if (dataDir)
+	{
+		HKEY key;
+		long keyOpenError = RegOpenKey(HKEY_CURRENT_USER, TEXT("Software\\OneShot\\"), &key);
+
+		if (keyOpenError != ERROR_SUCCESS) {
+			// Try creating the key first
+			long keyCreateError = RegCreateKeyEx(
+				HKEY_CURRENT_USER, TEXT("Software\\OneShot\\"),
+				0L, NULL, REG_OPTION_NON_VOLATILE,
+				KEY_ALL_ACCESS, NULL, &key, NULL
+			);
+
+			if (keyCreateError != ERROR_SUCCESS)
+				showInitError("Unable to create key in Windows Registry");
+			else
+				keyOpenError = ERROR_SUCCESS;
+		}
+
+		if (keyOpenError != ERROR_SUCCESS)
+		{
+			showInitError("Unable to open Windows Registry");
+		}
+		else
+		{
+			DWORD dataSize = (strlen(dataDir) + 1) * sizeof(char);
+
+			if (RegSetValueEx(key, TEXT("GameDirectory"), 0, REG_SZ, (LPBYTE)dataDir, dataSize) != ERROR_SUCCESS)
+				showInitError("Unable to set GameDirectory Registry value");
+
+			RegCloseKey(key);
+		}
+
+		SDL_free(dataDir);
+	}
+#endif
+	// TODO: Handle this for Linux/macOS
+}
+
 int main(int argc, char *argv[]) {
     SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
     SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
@@ -235,6 +280,8 @@ int main(int argc, char *argv[]) {
     }
     mkxp_fs::setCurrentDirectory(dataDir);
 #endif
+
+	setGamePathInRegistry();
 
 	loadLanguageMetadata();
 
