@@ -94,11 +94,12 @@ void graphicsBindingInit();
 void fileIntBindingInit();
 
 void journalBindingInit();
-void oneshotBindingInit();
 void wallpaperBindingInit();
 #ifdef __linux__
 void wallpaperBindingTerminate();
 #endif
+void nikoBindingInit();
+void oneshotBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 void MiniFFIBindingInit();
@@ -181,8 +182,9 @@ static void mriBindingInit() {
 	fileIntBindingInit();
 
 	journalBindingInit();
-	oneshotBindingInit();
 	wallpaperBindingInit();
+	nikoBindingInit();
+	oneshotBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 	MiniFFIBindingInit();
