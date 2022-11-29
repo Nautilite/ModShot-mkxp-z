@@ -169,7 +169,7 @@ void Config::read(int argc, char *argv[]) {
 		{"integerScalingActive", false},
 		{"integerScalingLastMile", true},
 		{"maxTextureSize", 0},
-		{"gameFolder", ""},
+		{"gameFolder", "."},
 		{"anyAltToggleFS", false},
 		{"enableReset", false},
 		{"enableSettings", true},

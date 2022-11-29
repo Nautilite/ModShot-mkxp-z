@@ -1,4 +1,4 @@
-
+# Include Ruby dependency
 if get_option('mri_includes') == ''
     ver = get_option('mri_version')
     if ver.version_compare('<=1.8')
@@ -12,6 +12,7 @@ else
     global_dependencies += compilers['cpp'].find_library(get_option('mri_library'), dirs: get_option('mri_libpath'))
 endif
 
+# Include directory with MRI bindings
 global_include_dirs += include_directories('.')
 
 binding_source = [files(
@@ -32,6 +33,7 @@ binding_source = [files(
     'module_rpg.cpp',
     'journal-binding.cpp',
     'oneshot-binding.cpp',
+    'wallpaper-binding.cpp',
     'filesystem-binding.cpp',
     'windowvx-binding.cpp',
     'tilemapvx-binding.cpp',

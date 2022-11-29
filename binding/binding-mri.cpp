@@ -95,6 +95,10 @@ void fileIntBindingInit();
 
 void journalBindingInit();
 void oneshotBindingInit();
+void wallpaperBindingInit();
+#ifdef __linux__
+void wallpaperBindingTerminate();
+#endif
 
 #ifdef MKXPZ_MINIFFI
 void MiniFFIBindingInit();
@@ -178,6 +182,7 @@ static void mriBindingInit() {
 
 	journalBindingInit();
 	oneshotBindingInit();
+	wallpaperBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 	MiniFFIBindingInit();
@@ -1191,6 +1196,10 @@ static void mriBindingExecute() {
 static void mriBindingTerminate()
 {
 	rb_raise(rb_eSystemExit, " ");
+
+#ifdef __linux__
+	wallpaperBindingTerminate();
+#endif
 }
 
 static void mriBindingReset()
