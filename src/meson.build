@@ -94,6 +94,9 @@ global_dependencies += [openal, zlib, bz2, sdl2, sdl_sound, pixman, physfs, theo
 if host_system == 'windows'
     global_dependencies += compilers['cpp'].find_library('wsock32')
     global_dependencies += compilers['cpp'].find_library('Secur32')
+elif host_system == 'linux'
+    global_dependencies += dependency('gtk+-3.0')
+    global_dependencies += dependency('libxfconf-0')
 endif
 
 if get_option('shared_fluid') == true
@@ -178,3 +181,7 @@ main_source = files(
 )
 
 global_sources += main_source
+
+if host_system == 'linux'
+    global_sources += files('util/xdg-user-dir-lookup.c')
+endif

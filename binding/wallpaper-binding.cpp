@@ -245,12 +245,13 @@ end:
 #else
 	std::string nameFix(name);
 	std::size_t found = nameFix.find("w32");
-	if (found != std::string::npos) {
+
+	if (found != std::string::npos)
 		nameFix.replace(nameFix.end()-3, nameFix.end(), "unix");
-	}
+
 	path = "/Wallpaper/" + nameFix + ".png";
 
-	Debug() << "Setting wallpaper to " << path;
+	Debug() << "Setting wallpaper to" << path;
 
 	#ifdef __APPLE__
 		if (!isCached) {
