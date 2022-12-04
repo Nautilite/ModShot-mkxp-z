@@ -171,6 +171,20 @@ RB_METHOD(graphicsHeight)
 	return rb_fix_new(shState->graphics().height());
 }
 
+RB_METHOD(graphicsDisplayWidth)
+{
+    RB_UNUSED_PARAM;
+    
+    return rb_fix_new(shState->graphics().displayWidth());
+}
+
+RB_METHOD(graphicsDisplayHeight)
+{
+    RB_UNUSED_PARAM;
+    
+    return rb_fix_new(shState->graphics().displayHeight());
+}
+
 RB_METHOD(graphicsWait)
 {
 	RB_UNUSED_PARAM;
@@ -397,6 +411,8 @@ void graphicsBindingInit()
 
 	_rb_define_module_function(module, "width", graphicsWidth);
 	_rb_define_module_function(module, "height", graphicsHeight);
+	_rb_define_module_function(module, "display_width", graphicsDisplayWidth);
+	_rb_define_module_function(module, "display_height", graphicsDisplayHeight);
 	_rb_define_module_function(module, "wait", graphicsWait);
 	_rb_define_module_function(module, "fadeout", graphicsFadeout);
 	_rb_define_module_function(module, "fadein", graphicsFadein);
