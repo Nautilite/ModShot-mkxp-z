@@ -43,6 +43,9 @@ class Graphics;
 class Input;
 class Audio;
 class Oneshot;
+#ifdef MKXPZ_STEAM
+class Steam;
+#endif
 class GLState;
 class TexPool;
 class Font;
@@ -73,6 +76,10 @@ struct SharedState
 	Audio &audio() const;
 
 	Oneshot &oneshot() const;
+#ifdef MKXPZ_STEAM
+	Steam &steam() const;
+#endif
+
 	GLState &_glState() const;
 
 	ShaderSet &shaders() const;

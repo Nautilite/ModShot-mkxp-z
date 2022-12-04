@@ -100,6 +100,7 @@ void wallpaperBindingTerminate();
 #endif
 void nikoBindingInit();
 void oneshotBindingInit();
+void steamBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 void MiniFFIBindingInit();
@@ -185,6 +186,7 @@ static void mriBindingInit() {
 	wallpaperBindingInit();
 	nikoBindingInit();
 	oneshotBindingInit();
+	steamBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 	MiniFFIBindingInit();

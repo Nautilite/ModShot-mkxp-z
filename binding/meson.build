@@ -35,6 +35,7 @@ binding_source = [files(
     'wallpaper-binding.cpp',
     'niko-binding.cpp',
     'oneshot-binding.cpp',
+    'steam-binding.cpp',
     'filesystem-binding.cpp',
     'windowvx-binding.cpp',
     'tilemapvx-binding.cpp',

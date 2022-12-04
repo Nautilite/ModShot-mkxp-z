@@ -27,6 +27,9 @@
 #include "input.h"
 #include "audio.h"
 #include "oneshot.h"
+#ifdef MKXPZ_STEAM
+#include "steam.h"
+#endif
 #include "glstate.h"
 #include "shader.h"
 #include "texpool.h"
@@ -80,6 +83,9 @@ struct SharedStatePrivate
 	Audio audio;
 
 	Oneshot oneshot;
+#ifdef MKXPZ_STEAM
+	Steam steam;
+#endif
 
 	GLState _glState;
 
@@ -239,6 +245,9 @@ GSATT(Graphics&, graphics)
 GSATT(Input&, input)
 GSATT(Audio&, audio)
 GSATT(Oneshot&, oneshot)
+#ifdef MKXPZ_STEAM
+GSATT(Steam&, steam)
+#endif
 GSATT(GLState&, _glState)
 GSATT(ShaderSet&, shaders)
 GSATT(TexPool&, texPool)

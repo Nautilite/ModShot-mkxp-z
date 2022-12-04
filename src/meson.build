@@ -182,6 +182,10 @@ main_source = files(
 
 global_sources += main_source
 
+if steamworks == true
+    global_sources += files('oneshot/steam.cpp')
+endif
+
 if host_system == 'linux'
     global_sources += files('util/xdg-user-dir-lookup.c')
 endif
