@@ -1,16 +1,17 @@
 #!/bin/bash
+
 BINARY=$1
 ARCH=$2
 STEAM=$3
+
 function get_dep()
 {
-echo "Copying $1..."
-DEP=$(ldd $BINARY | grep $1 | sed -r 's/	\w.+ => (\/.+) .+$/\1/g')
-cp "$DEP" "${MESON_INSTALL_PREFIX}/lib$ARCH"
+  echo "Copying $1..."
+  DEP=$(ldd $BINARY | grep $1 | sed -r 's/	\w.+ => (\/.+) .+$/\1/g')
+  cp "$DEP" "${MESON_INSTALL_PREFIX}/lib$ARCH"
 }
 
 mkdir -p ${MESON_INSTALL_PREFIX}/lib$ARCH
-
 
 # Required by Ubuntu
 get_dep ruby

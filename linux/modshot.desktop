@@ -1,0 +1,20 @@
+[Desktop Entry]
+Name=modshot
+Comment=A surreal puzzle adventure game with unique mechanics / capabilities.
+Comment[fr]=Un jeu d'aventure et de puzzle surréaliste avec des mécanismes / capacités uniques.
+Comment[pt]=Um jogo surreal de aventura e quebra-cabeça com mecânicas/capacidades únicas.
+Comment[es]=Un juego de aventuras de rompecabezas surrealista con mecánicas / capacidades únicas.
+Comment[ko]=독특한 역학/기능을 갖춘 초현실적인 퍼즐 어드벤처 게임입니다.
+Comment[zh_CN]=具有独特机制/功能的超现实益智冒险游戏。
+Comment[zh_CHT]=具有獨特機制/功能的超現實益智冒險遊戲。
+Comment[jp]=ユニークなメカニズム/機能を備えたシュールなパズル アドベンチャー ゲームです。
+Comment[ru]=Сюрреалистическая приключенческая игра-головоломка с уникальной механикой / возможностями.
+Comment[it]=Un gioco di avventura rompicapo surreale con meccaniche / capacità uniche.
+Exec=modshot
+Icon=modshot
+Type=Application
+Categories=Game;
+Terminal=false
+X-AppImage-Name=modshot
+X-AppImage-Version=2.0.0
+X-AppImage-Arch=x86_64

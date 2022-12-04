@@ -1,12 +1,12 @@
 #!/bin/bash
 
 SELF_DIR="$(dirname "$(readlink -f "$0")")"
-LIBS_PATH="$SELF_DIR/usr/lib"
+LIB_PATH="$SELF_DIR/usr/lib"
 
 if [ -z "$LD_LIBRARY_PATH" ]; then
-  LD_LIBRARY_PATH="$LIBS_PATH"
+  LD_LIBRARY_PATH="$LIB_PATH"
 else
-  LD_LIBRARY_PATH="$LIBS_PATH:$LD_LIBRARY_PATH"
+  LD_LIBRARY_PATH="$LIB_PATH:$LD_LIBRARY_PATH"
 fi
 
 # If this is ChromeOS...
@@ -14,7 +14,7 @@ if [[ -f /sys/devices/virtual/dmi/id/product_name ]]; then
   if [[ $(cat /sys/devices/virtual/dmi/id/product_name) == "crosvm" ]]; then  
     # and the program needs to be scaled for a HiDPI display...
     if DISPLAY=:1 xset q &>/dev/null; then
-    # ... do it
+      # ... do it
       export DISPLAY=:1
     fi
   fi
@@ -23,4 +23,5 @@ fi
 export LD_LIBRARY_PATH
 export SRCDIR=$PWD
 
-exec "$SELF_DIR/usr/bin/mkxp-z"
+# Run exectable
+exec "$SELF_DIR/usr/bin/modshot"

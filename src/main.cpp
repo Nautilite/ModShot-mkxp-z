@@ -305,7 +305,7 @@ int main(int argc, char *argv[])
 #endif
 
 	// Print welcoming text with current ModShot build version
-	Debug() << "Starting ModShot version" << MKXPZ_VERSION;
+	Debug() << "Starting ModShot version" << MODSHOT_VERSION;
 
 	if (conf.windowTitle.empty())
 		conf.windowTitle = conf.game.title;
