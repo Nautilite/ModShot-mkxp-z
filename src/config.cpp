@@ -326,6 +326,12 @@ try { exp } catch (...) {}
 	// may not take effect
 	manualFolderSelect = getEnvironmentBool("MKXPZ_FOLDER_SELECT", false);
 
+#ifdef MKXPZ_STEAM
+	// Override fullscreen config if enabled Steam Big Picture mode
+	if (getEnvironmentBool("SteamTenfoot", false))
+		fullscreen = true;
+#endif
+
 	raw = optsJ;
 }
 
@@ -381,12 +387,6 @@ void Config::readGameINI() {
 		dataPathApp = game.title;
 
 	customDataPath = prefPath(dataPathOrg.c_str(), dataPathApp.c_str());
-
-#ifdef MKXPZ_STEAM
-	// Override fullscreen config if enabled Steam Big Picture mode
-	if (getEnvironmentBool("SteamTenfoot", false))
-		fullscreen = true;
-#endif
 
 	setupScreenSize(*this);
 }
