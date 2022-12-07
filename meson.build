@@ -148,7 +148,7 @@ global_include_dirs += include_directories('src', 'binding')
 rpath = ''
 if host_system == 'windows'
     subdir('windows')
-    global_sources += windows_resources
+    global_sources += windows_resources_main
     global_include_dirs += include_directories('windows')
 else
     subdir('linux')
@@ -181,10 +181,17 @@ if steamworks == true
         endif
     endif
 
+    shim_sources = files('steamshim/steamshim_parent.cpp')
+
     shim_args = [
         '-DGAME_LAUNCH_NAME="' + exe_name + '"',
         '-I' + steamworks_path + '/public'
     ]
+
+    # Append sources with Windows resources
+    if host_system == 'windows'
+        shim_sources += windows_resources_steamshim
+    endif
 
     if get_option('steam_appid') != ''
         shim_args += '-DSTEAM_APPID=' + get_option('steam_appid')
@@ -192,7 +199,7 @@ if steamworks == true
 
     if get_option('steamshim_debug') == true
         shim_args += '-DSTEAMSHIM_DEBUG'
-        shim_ws = 'console'
+        shim_ws = 'console,6.0'
     else
         shim_ws = 'windows,6.0'
     endif
@@ -200,7 +207,7 @@ if steamworks == true
     # Steamshim executable
     executable(
         'steamshim',
-        sources: files('steamshim/steamshim_parent.cpp'),
+        sources: shim_sources,
         dependencies: steamlib,
         cpp_args: shim_args,
         link_args: la.split(),
