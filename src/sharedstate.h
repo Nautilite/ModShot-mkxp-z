@@ -46,6 +46,7 @@ class Oneshot;
 #ifdef MKXPZ_STEAM
 class Steam;
 #endif
+class Notifications;
 class GLState;
 class TexPool;
 class Font;
@@ -79,6 +80,8 @@ struct SharedState
 #ifdef MKXPZ_STEAM
 	Steam &steam() const;
 #endif
+
+	Notifications &notifi() const;
 
 	GLState &_glState() const;
 

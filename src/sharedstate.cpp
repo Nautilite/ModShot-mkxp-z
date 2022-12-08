@@ -41,6 +41,7 @@
 #include "binding.h"
 #include "exception.h"
 #include "sharedmidistate.h"
+#include "notifications.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -87,6 +88,8 @@ struct SharedStatePrivate
 	Steam steam;
 #endif
 
+	Notifications notifi;
+
 	GLState _glState;
 
 	ShaderSet shaders;
@@ -122,6 +125,7 @@ struct SharedStatePrivate
 	      input(*threadData),
 	      audio(*threadData),
 	      oneshot(*threadData),
+		  notifi(*threadData),
 	      _glState(threadData->config),
 	      fontState(threadData->config),
 	      stampCounter(0)
@@ -248,6 +252,7 @@ GSATT(Oneshot&, oneshot)
 #ifdef MKXPZ_STEAM
 GSATT(Steam&, steam)
 #endif
+GSATT(Notifications&, notifi)
 GSATT(GLState&, _glState)
 GSATT(ShaderSet&, shaders)
 GSATT(TexPool&, texPool)

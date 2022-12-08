@@ -83,6 +83,7 @@ global_include_dirs += include_directories('.',
     'filesystem/ghc',
     'input',
     'oneshot',
+    'modshot',
     'net',
     'system',
     'util',
@@ -94,6 +95,7 @@ global_dependencies += [openal, zlib, bz2, sdl2, sdl_sound, pixman, physfs, theo
 if host_system == 'windows'
     global_dependencies += compilers['cpp'].find_library('wsock32')
     global_dependencies += compilers['cpp'].find_library('Secur32')
+    global_dependencies += compilers['cpp'].find_library('gdiplus')
 elif host_system == 'linux'
     global_dependencies += dependency('gtk+-3.0')
     global_dependencies += dependency('libxfconf-0')
@@ -173,6 +175,8 @@ main_source = files(
 
     'oneshot/i18n.cpp',
     'oneshot/oneshot.cpp',
+
+    'modshot/notifications.cpp',
 
     'net/LUrlParser.cpp',
     'net/net.cpp',
