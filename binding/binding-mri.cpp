@@ -102,6 +102,8 @@ void nikoBindingInit();
 void oneshotBindingInit();
 void steamBindingInit();
 
+void modshotBindingInit();
+
 #ifdef MKXPZ_MINIFFI
 void MiniFFIBindingInit();
 #endif
@@ -187,6 +189,8 @@ static void mriBindingInit() {
 	nikoBindingInit();
 	oneshotBindingInit();
 	steamBindingInit();
+
+	modshotBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 	MiniFFIBindingInit();
