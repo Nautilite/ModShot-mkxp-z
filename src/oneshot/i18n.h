@@ -3,13 +3,16 @@
 
 #include "trstr.h"
 
+void loadLocale(const char *locale);
 void unloadLocale();
-void loadLocale(const char* locale);
-void decodeEscapeChars(char* s);
-const char* findtext(unsigned int msgid, const char* fallback);
+
 void loadLanguageMetadata();
 void unloadLanguageMetadata();
-int getFontSize();
-char* getFontName();
 
-#endif /* end of include guard: I18N_H */
+int getFontSize();
+const char *getFontName();
+
+const char *findtext(unsigned int msgid, const char *fallback);
+void decodeEscapeChars(char *s);
+
+#endif // I18N_H
