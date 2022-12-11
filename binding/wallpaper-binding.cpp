@@ -3,8 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
-
-#include <boost/algorithm/string/replace.hpp>
+#include <algorithm>
 
 #include "etc.h"
 #include "sharedstate.h"
@@ -328,9 +327,31 @@ end:
 		} else if (desktop == "kde") {
 			std::stringstream command;
 			std::string concatPath(gameDirStr + path);
-			boost::replace_all(concatPath, "\\", "\\\\");
-			boost::replace_all(concatPath, "\"", "\\\"");
-			boost::replace_all(concatPath, "'", "\\x27");
+
+			// Escape some characters in path
+			std::string::size_type strpos = 0;
+
+			while ((strpos = concatPath.find('\\', strpos)) != std::string::npos) {
+				concatPath.replace(strpos, 1, "\\\\");
+				strpos += 2;
+			}
+
+			strpos = 0;
+
+			while ((strpos = concatPath.find('"', strpos)) != std::string::npos) {
+				concatPath.replace(strpos, 1, "\\\"");
+				strpos += 2;
+			}
+
+			strpos = 0;
+
+			while ((strpos = concatPath.find('\'', strpos)) != std::string::npos) {
+				concatPath.replace(strpos, 1, "\\x27");
+				strpos += 2;
+			}
+
+			strpos = 0;
+
 			command << "qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:" <<
 				"var allDesktops = desktops();" <<
 				"for (var i = 0, l = allDesktops.length; i < l; ++i) {" <<
