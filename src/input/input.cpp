@@ -436,37 +436,74 @@ std::unordered_map<std::string, SDL_GameControllerButton> strToGCButton {
 #undef m
 
 const char *axisNames[] {
-	"LStick X",
-	"LStick Y",
-	"RStick X",
-	"RStick Y",
-	findtext(TRSTR_KEYBIND_LTRIGGER, "Left Trigger"),
-	findtext(TRSTR_KEYBIND_RTRIGGER, "Right Trigger")
+	"Left Stick (X)",
+	"Left Stick (Y)",
+	"Right Stick (X)",
+	"Right Stick (Y)",
+	"Left Trigger",
+	"Right Trigger"
 };
 
-const char *buttonNames[] {
-	findtext(TRSTR_KEYBIND_A, "A Button"),
-	findtext(TRSTR_KEYBIND_B, "B Button"),
-	findtext(TRSTR_KEYBIND_X, "X Button"),
-	findtext(TRSTR_KEYBIND_Y, "Y Button"),
-	findtext(TRSTR_KEYBIND_BACK, "Back Button"),
-	findtext(TRSTR_KEYBIND_GUIDE, "Guide Button"),
-	findtext(TRSTR_KEYBIND_START, "Start Button"),
-	findtext(TRSTR_KEYBIND_LSTICK, "Left Stick"),
-	findtext(TRSTR_KEYBIND_RSTICK, "Right Stick"),
-	findtext(TRSTR_KEYBIND_LSHOULDER, "Left Shoulder"),
-	findtext(TRSTR_KEYBIND_RSHOULDER, "Right Shoulder"),
-	findtext(TRSTR_KEYBIND_PADU, "D-Pad (Up)"),
-	findtext(TRSTR_KEYBIND_PADD, "D-Pad (Down)"),
-	findtext(TRSTR_KEYBIND_PADL, "D-Pad (Left)"),
-	findtext(TRSTR_KEYBIND_PADR, "D-Pad (Right)"),
+const char *buttonNames[]
+{
+	"A Button",
+	"B Button",
+	"X Button",
+	"Y Button",
+	"Back Button",
+	"Guide Button",
+	"Start Button",
+	"Left Stick",
+	"Right Stick",
+	"Left Shoulder",
+	"Right Shoulder",
+	"D-Pad (Up)",
+	"D-Pad (Down)",
+	"D-Pad (Left)",
+	"D-Pad (Right)",
 	/* Below unsupported by OneShot i18n */
 	"Pad Misc",
-	"Pad Paddle1",
-	"Pad Paddle2",
-	"Pad Paddle3",
-	"Pad Paddle4",
+	"Pad Paddle 1",
+	"Pad Paddle 2",
+	"Pad Paddle 3",
+	"Pad Paddle 4",
 	"Pad Touchpad"
+};
+
+int buttonTrstrIds[]
+{
+	TRSTR_KEYBIND_A,
+	TRSTR_KEYBIND_B,
+	TRSTR_KEYBIND_X,
+	TRSTR_KEYBIND_Y,
+	TRSTR_KEYBIND_BACK,
+	TRSTR_KEYBIND_GUIDE,
+	TRSTR_KEYBIND_START,
+	TRSTR_KEYBIND_LSTICK,
+	TRSTR_KEYBIND_RSTICK,
+	TRSTR_KEYBIND_LSHOULDER,
+	TRSTR_KEYBIND_RSHOULDER,
+	TRSTR_KEYBIND_PADU,
+	TRSTR_KEYBIND_PADD,
+	TRSTR_KEYBIND_PADL,
+	TRSTR_KEYBIND_PADR,
+	/* Below unsupported by OneShot i18n */
+	0,
+	0,
+	0,
+	0,
+	0,
+	0
+};
+
+int axisTrstrIds[]
+{
+	TRSTR_KEYBIND_LSTICK,
+	TRSTR_KEYBIND_LSTICK,
+	TRSTR_KEYBIND_RSTICK,
+	TRSTR_KEYBIND_RSTICK,
+	TRSTR_KEYBIND_LTRIGGER,
+	TRSTR_KEYBIND_RTRIGGER
 };
 
 struct ButtonState
@@ -1518,14 +1555,20 @@ const char *Input::getAxisName(SDL_GameControllerAxis axis) {
 	if (axis < 0 || axis >= SDL_CONTROLLER_AXIS_MAX)
 		return "Invalid";
 
-	return axisNames[axis];
+	if (axisTrstrIds[axis] != 0)
+		return findtext(axisTrstrIds[axis], axisNames[axis]);
+	else
+		return axisNames[axis];
 }
 
 const char *Input::getButtonName(SDL_GameControllerButton button) {
 	if (button < 0 || button >= SDL_CONTROLLER_BUTTON_MAX)
 		return "Invalid";
 
-	return buttonNames[button];
+	if (buttonTrstrIds[button] != 0)
+		return findtext(buttonTrstrIds[button], buttonNames[button]);
+	else
+		return buttonNames[button];
 }
 
 bool Input::hasQuit()
