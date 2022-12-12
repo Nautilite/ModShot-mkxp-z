@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B1C235525A199370075EF5D"
-               BuildableName = "shim"
-               BlueprintName = "shim"
-               ReferencedContainer = "container:mkxp-z.xcodeproj">
+               BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
+               BuildableName = "ModShot.app"
+               BlueprintName = "ModShot"
+               ReferencedContainer = "container:ModShot.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,6 +29,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -44,12 +46,27 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B1C235525A199370075EF5D"
-            BuildableName = "shim"
-            BlueprintName = "shim"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
+            BuildableName = "ModShot.app"
+            BlueprintName = "ModShot"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "debug"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "MKXPZ_FOLDER_SELECT"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -61,10 +78,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B1C235525A199370075EF5D"
-            BuildableName = "shim"
-            BlueprintName = "shim"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
+            BuildableName = "ModShot.app"
+            BlueprintName = "ModShot"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

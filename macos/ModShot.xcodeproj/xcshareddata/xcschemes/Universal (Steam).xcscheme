@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
-               BuildableName = "Z-intel.app"
-               BlueprintName = "Z-intel"
-               ReferencedContainer = "container:mkxp-z.xcodeproj">
+               BlueprintIdentifier = "3BBE87802705A73400A574AE"
+               BuildableName = "ModShot-Steam.app"
+               BlueprintName = "ModShot-Steam-Universal"
+               ReferencedContainer = "container:ModShot.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,6 +29,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -44,18 +46,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
-            BuildableName = "Z-intel.app"
-            BlueprintName = "Z-intel"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BlueprintIdentifier = "3BBE87802705A73400A574AE"
+            BuildableName = "ModShot-Steam.app"
+            BlueprintName = "ModShot-Steam-Universal"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "debug"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "MKXPZ_FOLDER_SELECT"
@@ -63,6 +59,8 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -74,10 +72,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BD2B64B2565AEC0003DAD8A"
-            BuildableName = "Z-intel.app"
-            BlueprintName = "Z-intel"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BlueprintIdentifier = "3BBE87802705A73400A574AE"
+            BuildableName = "ModShot-Steam.app"
+            BlueprintName = "ModShot-Steam-Universal"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -211,7 +211,7 @@
 		3B1C23E525A19C600075EF5D /* libphysfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BE080FF256879FE0006849F /* libphysfs.a */; };
 		3B1C23E725A19C600075EF5D /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB23E22564546E00C4A63D /* icon.icns */; };
 		3B1C23E925A19C600075EF5D /* Assets.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA08EA4256641ED00449CFF /* Assets.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3B1C23EB25A19C600075EF5D /* mkxp.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* mkxp.json */; };
+		3B1C23EB25A19C600075EF5D /* modshot.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* modshot.json */; };
 		3B1C23ED25A19C600075EF5D /* libfluidsynth.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B522DA1259BAA13003301C4 /* libfluidsynth.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B1C23EE25A19C600075EF5D /* libruby.3.1.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B1C230A25A144A10075EF5D /* libruby.3.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B1C23FD25A19FB40075EF5D /* steamshim_mac_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B1C23FC25A19FB40075EF5D /* steamshim_mac_helpers.mm */; };
@@ -244,8 +244,8 @@
 		3B522DDD259C1E53003301C4 /* http-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B522DDB259C1E53003301C4 /* http-binding.cpp */; };
 		3B522DE5259C2039003301C4 /* LUrlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B522DE4259C2039003301C4 /* LUrlParser.cpp */; };
 		3B522DE6259C2039003301C4 /* LUrlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B522DE4259C2039003301C4 /* LUrlParser.cpp */; };
-		3B522DED259C3E97003301C4 /* mkxp.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* mkxp.json */; };
-		3B522DEF259C3E9D003301C4 /* mkxp.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* mkxp.json */; };
+		3B522DED259C3E97003301C4 /* modshot.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* modshot.json */; };
+		3B522DEF259C3E9D003301C4 /* modshot.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* modshot.json */; };
 		3B5A84062569B56F00BAF2E5 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A84052569B56F00BAF2E5 /* config.cpp */; };
 		3B5A840D2569BE7C00BAF2E5 /* filesystemImplApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A840C2569BE7C00BAF2E5 /* filesystemImplApple.mm */; };
 		3B5A8445256A0F6300BAF2E5 /* libopenal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5A8444256A0F6300BAF2E5 /* libopenal.a */; };
@@ -366,7 +366,7 @@
 		3BBE87F82705A73400A574AE /* shim in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B1C235625A199370075EF5D /* shim */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BBE87FA2705A73400A574AE /* Assets.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA08EA4256641ED00449CFF /* Assets.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3BBE87FB2705A73400A574AE /* steam_appid.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B1C243E25A1B8D20075EF5D /* steam_appid.txt */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3BBE87FD2705A73400A574AE /* mkxp.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* mkxp.json */; };
+		3BBE87FD2705A73400A574AE /* modshot.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BD2B7282565B35D003DAD8A /* modshot.json */; };
 		3BBE87FF2705A73400A574AE /* 3.1.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B251DA526DA2CFA00E5D09B /* 3.1.0 */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BBE88012705A73400A574AE /* libfluidsynth.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B522DA1259BAA13003301C4 /* libfluidsynth.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BBE88022705A73400A574AE /* libEGL.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5E1F0925A881FB0086FFDC /* libEGL.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -518,6 +518,48 @@
 		96573E83279152DC002C3E77 /* TouchBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96573E80279152DC002C3E77 /* TouchBar.xcassets */; };
 		96573E84279152DC002C3E77 /* TouchBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96573E80279152DC002C3E77 /* TouchBar.xcassets */; };
 		96D8EDD128728DCE00A331EA /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D8EDD028728DCA00A331EA /* gamecontrollerdb.txt */; };
+		B4EDB4522944A2B8009EB462 /* niko-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */; };
+		B4EDB4532944A2B8009EB462 /* niko-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */; };
+		B4EDB4542944A2B8009EB462 /* niko-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */; };
+		B4EDB4552944A2B8009EB462 /* niko-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */; };
+		B4EDB4562944A2B8009EB462 /* modshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */; };
+		B4EDB4572944A2B8009EB462 /* modshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */; };
+		B4EDB4582944A2B8009EB462 /* modshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */; };
+		B4EDB4592944A2B8009EB462 /* modshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */; };
+		B4EDB45A2944A2B8009EB462 /* oneshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */; };
+		B4EDB45B2944A2B8009EB462 /* oneshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */; };
+		B4EDB45C2944A2B8009EB462 /* oneshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */; };
+		B4EDB45D2944A2B8009EB462 /* oneshot-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */; };
+		B4EDB45E2944A2B8009EB462 /* steam-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */; };
+		B4EDB45F2944A2B8009EB462 /* steam-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */; };
+		B4EDB4602944A2B8009EB462 /* steam-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */; };
+		B4EDB4612944A2B9009EB462 /* steam-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */; };
+		B4EDB4622944A2B9009EB462 /* journal-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4502944A2B8009EB462 /* journal-binding.cpp */; };
+		B4EDB4632944A2B9009EB462 /* journal-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4502944A2B8009EB462 /* journal-binding.cpp */; };
+		B4EDB4642944A2B9009EB462 /* journal-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4502944A2B8009EB462 /* journal-binding.cpp */; };
+		B4EDB4652944A2B9009EB462 /* journal-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4502944A2B8009EB462 /* journal-binding.cpp */; };
+		B4EDB4662944A2B9009EB462 /* wallpaper-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */; };
+		B4EDB4672944A2B9009EB462 /* wallpaper-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */; };
+		B4EDB4682944A2B9009EB462 /* wallpaper-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */; };
+		B4EDB4692944A2B9009EB462 /* wallpaper-binding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */; };
+		B4EDB4762944A2EA009EB462 /* mac-desktop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */; };
+		B4EDB4772944A2EA009EB462 /* mac-desktop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */; };
+		B4EDB4782944A2EA009EB462 /* mac-desktop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */; };
+		B4EDB4792944A2EA009EB462 /* mac-desktop.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */; };
+		B4EDB47A2944A2EA009EB462 /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46D2944A2E7009EB462 /* i18n.cpp */; };
+		B4EDB47B2944A2EA009EB462 /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46D2944A2E7009EB462 /* i18n.cpp */; };
+		B4EDB47C2944A2EA009EB462 /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46D2944A2E7009EB462 /* i18n.cpp */; };
+		B4EDB47D2944A2EA009EB462 /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB46D2944A2E7009EB462 /* i18n.cpp */; };
+		B4EDB4802944A2EA009EB462 /* steam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4712944A2E8009EB462 /* steam.cpp */; };
+		B4EDB4812944A2EA009EB462 /* steam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4712944A2E8009EB462 /* steam.cpp */; };
+		B4EDB4822944A2EA009EB462 /* oneshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4752944A2E9009EB462 /* oneshot.cpp */; };
+		B4EDB4832944A2EA009EB462 /* oneshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4752944A2E9009EB462 /* oneshot.cpp */; };
+		B4EDB4842944A2EA009EB462 /* oneshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4752944A2E9009EB462 /* oneshot.cpp */; };
+		B4EDB4852944A2EA009EB462 /* oneshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4752944A2E9009EB462 /* oneshot.cpp */; };
+		B4EDB4882944A321009EB462 /* notifications.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4862944A321009EB462 /* notifications.cpp */; };
+		B4EDB4892944A321009EB462 /* notifications.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4862944A321009EB462 /* notifications.cpp */; };
+		B4EDB48A2944A321009EB462 /* notifications.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4862944A321009EB462 /* notifications.cpp */; };
+		B4EDB48B2944A321009EB462 /* notifications.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4EDB4862944A321009EB462 /* notifications.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -612,7 +654,7 @@
 			dstPath = Contents/Game;
 			dstSubfolderSpec = 1;
 			files = (
-				3B1C23EB25A19C600075EF5D /* mkxp.json in CopyFiles */,
+				3B1C23EB25A19C600075EF5D /* modshot.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,7 +747,7 @@
 			dstPath = Contents/Game;
 			dstSubfolderSpec = 1;
 			files = (
-				3B522DEF259C3E9D003301C4 /* mkxp.json in CopyFiles */,
+				3B522DEF259C3E9D003301C4 /* modshot.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,7 +822,7 @@
 			dstPath = Contents/Game;
 			dstSubfolderSpec = 1;
 			files = (
-				3BBE87FD2705A73400A574AE /* mkxp.json in CopyFiles */,
+				3BBE87FD2705A73400A574AE /* modshot.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,7 +856,7 @@
 			dstPath = Contents/Game;
 			dstSubfolderSpec = 1;
 			files = (
-				3B522DED259C3E97003301C4 /* mkxp.json in CopyFiles */,
+				3B522DED259C3E97003301C4 /* modshot.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,7 +1034,7 @@
 		3B1C236725A19B960075EF5D /* steamshim_parent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = steamshim_parent.cpp; path = ../steamshim/steamshim_parent.cpp; sourceTree = "<group>"; };
 		3B1C236825A19B960075EF5D /* steamshim_child.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = steamshim_child.h; path = ../steamshim/steamshim_child.h; sourceTree = "<group>"; };
 		3B1C236925A19B960075EF5D /* steamshim_child.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = steamshim_child.c; path = ../steamshim/steamshim_child.c; sourceTree = "<group>"; };
-		3B1C23F225A19C600075EF5D /* Z-steam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Z-steam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B1C23F225A19C600075EF5D /* ModShot-Steam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ModShot-Steam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B1C23FC25A19FB40075EF5D /* steamshim_mac_helpers.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = steamshim_mac_helpers.mm; path = ../steamshim/steamshim_mac_helpers.mm; sourceTree = "<group>"; };
 		3B1C240025A19FD60075EF5D /* steamshim_mac_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = steamshim_mac_helpers.h; path = ../steamshim/steamshim_mac_helpers.h; sourceTree = "<group>"; };
 		3B1C240C25A1A4C50075EF5D /* steamshim.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = steamshim.xcconfig; path = config/steamshim.xcconfig; sourceTree = "<group>"; };
@@ -1043,7 +1085,7 @@
 		3BA69452263DAB53004194EB /* lzw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzw.h; sourceTree = "<group>"; };
 		3BA69453263DAB53004194EB /* libnsgif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libnsgif.h; sourceTree = "<group>"; };
 		3BAEB1432673DBE700AC177B /* libuchardet.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuchardet.a; path = "Dependencies/build-macosx-universal/lib/libuchardet.a"; sourceTree = "<group>"; };
-		3BBE88092705A73400A574AE /* Z-steam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Z-steam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BBE88092705A73400A574AE /* ModShot-Steam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ModShot-Steam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BC65D7A2584F3780063AFF1 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "Dependencies/build-macosx-universal/lib/libvorbisenc.a"; sourceTree = "<group>"; };
 		3BC65D7B2584F3780063AFF1 /* libphysfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libphysfs.a; path = "Dependencies/build-macosx-universal/lib/libphysfs.a"; sourceTree = "<group>"; };
 		3BC65D7D2584F3780063AFF1 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "Dependencies/build-macosx-universal/lib/libfreetype.a"; sourceTree = "<group>"; };
@@ -1056,7 +1098,7 @@
 		3BC65D872584F3780063AFF1 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = "Dependencies/build-macosx-universal/lib/libpng16.a"; sourceTree = "<group>"; };
 		3BC65D882584F3780063AFF1 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "Dependencies/build-macosx-universal/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		3BC65D892584F3910063AFF1 /* libSDL2main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2main.a; path = "Dependencies/build-macosx-universal/lib/libSDL2main.a"; sourceTree = "<group>"; };
-		3BC65E152584F3AD0063AFF1 /* Z-universal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Z-universal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BC65E152584F3AD0063AFF1 /* ModShot-Universal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ModShot-Universal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD2B3AF25651885003DAD8A /* mkxp.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = mkxp.entitlements; sourceTree = "<group>"; };
 		3BD2B46525651BF3003DAD8A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3BD2B46625651BFC003DAD8A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1064,9 +1106,9 @@
 		3BD2B46825651C12003DAD8A /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		3BD2B46925651C1B003DAD8A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3BD2B47A256534BA003DAD8A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		3BD2B7252565AEC0003DAD8A /* Z-intel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Z-intel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BD2B7252565AEC0003DAD8A /* ModShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModShot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BD2B7272565B343003DAD8A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		3BD2B7282565B35D003DAD8A /* mkxp.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mkxp.json; path = ../mkxp.json; sourceTree = "<group>"; };
+		3BD2B7282565B35D003DAD8A /* modshot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = modshot.json; path = ../modshot.json; sourceTree = "<group>"; };
 		3BDB23E22564546E00C4A63D /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		3BDB25C52565184600C4A63D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BE080E4256879FC0006849F /* libSDL2main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2main.a; path = "Dependencies/build-macosx-x86_64/lib/libSDL2main.a"; sourceTree = "<group>"; };
@@ -1104,6 +1146,24 @@
 		96573E7B27913B46002C3E77 /* TouchBar.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; name = TouchBar.h; path = views/TouchBar.h; sourceTree = "<group>"; };
 		96573E80279152DC002C3E77 /* TouchBar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = TouchBar.xcassets; path = views/TouchBar.xcassets; sourceTree = "<group>"; };
 		96D8EDD028728DCA00A331EA /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = gamecontrollerdb.txt; path = ../assets/gamecontrollerdb.txt; sourceTree = "<group>"; };
+		B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "niko-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "modshot-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "oneshot-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "steam-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB4502944A2B8009EB462 /* journal-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "journal-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "wallpaper-binding.cpp"; sourceTree = "<group>"; };
+		B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "mac-desktop.mm"; path = "oneshot/mac-desktop.mm"; sourceTree = "<group>"; };
+		B4EDB46D2944A2E7009EB462 /* i18n.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = i18n.cpp; path = oneshot/i18n.cpp; sourceTree = "<group>"; };
+		B4EDB46E2944A2E7009EB462 /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = oneshot/i18n.h; sourceTree = "<group>"; };
+		B4EDB46F2944A2E7009EB462 /* mac-desktop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "mac-desktop.h"; path = "oneshot/mac-desktop.h"; sourceTree = "<group>"; };
+		B4EDB4702944A2E8009EB462 /* oneshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oneshot.h; path = oneshot/oneshot.h; sourceTree = "<group>"; };
+		B4EDB4712944A2E8009EB462 /* steam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = steam.cpp; path = oneshot/steam.cpp; sourceTree = "<group>"; };
+		B4EDB4722944A2E8009EB462 /* steam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = steam.h; path = oneshot/steam.h; sourceTree = "<group>"; };
+		B4EDB4732944A2E9009EB462 /* trstr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trstr.h; path = oneshot/trstr.h; sourceTree = "<group>"; };
+		B4EDB4742944A2E9009EB462 /* pipe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pipe.h; path = oneshot/pipe.h; sourceTree = "<group>"; };
+		B4EDB4752944A2E9009EB462 /* oneshot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = oneshot.cpp; path = oneshot/oneshot.cpp; sourceTree = "<group>"; };
+		B4EDB4862944A321009EB462 /* notifications.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = notifications.cpp; path = modshot/notifications.cpp; sourceTree = "<group>"; };
+		B4EDB4872944A321009EB462 /* notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = notifications.h; path = modshot/notifications.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1299,8 +1359,8 @@
 			children = (
 				3B3F7D1325B19C5A00EA5F1C /* MacOS */,
 				3B10ED342568E95D00372D13 /* src */,
-				3B1C236625A19B780075EF5D /* steamshim */,
 				3B10EDD52568E96A00372D13 /* binding */,
+				3B1C236625A19B780075EF5D /* steamshim */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -1308,11 +1368,11 @@
 		3B10EC8B2568E79800372D13 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				3B10ECA32568E7B600372D13 /* common.h */,
 				3B10EC942568E7B500372D13 /* bitmapBlit.frag */,
 				3B10EC9B2568E7B500372D13 /* blur.frag */,
 				3B10EC912568E7B500372D13 /* blurH.vert */,
 				3B10EC9A2568E7B500372D13 /* blurV.vert */,
-				3B10ECA32568E7B600372D13 /* common.h */,
 				3B10EC8E2568E7B500372D13 /* flashMap.frag */,
 				3B10EC9F2568E7B500372D13 /* flatColor.frag */,
 				3B10ECA42568E7B600372D13 /* gray.frag */,
@@ -1340,25 +1400,27 @@
 		3B10ED342568E95D00372D13 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				3B522DB1259BBFE9003301C4 /* net */,
-				3B10ED362568E95D00372D13 /* crypto */,
+				3B10ED4A2568E95D00372D13 /* etc */,
 				3B10ED392568E95D00372D13 /* util */,
 				3B10ED442568E95D00372D13 /* input */,
-				3B10ED4A2568E95D00372D13 /* etc */,
+				3B10ED6F2568E95D00372D13 /* display */,
+				3B10ED5D2568E95D00372D13 /* audio */,
 				3B10ED522568E95D00372D13 /* filesystem */,
 				3B10ED582568E95D00372D13 /* system */,
-				3B10ED5D2568E95D00372D13 /* audio */,
-				3B10ED6F2568E95D00372D13 /* display */,
+				3B10ED362568E95D00372D13 /* crypto */,
+				3B522DB1259BBFE9003301C4 /* net */,
 				9656358D279A5B74003D6A75 /* theoraplay */,
+				B4EDB46B2944A2CB009EB462 /* oneshot */,
+				B4EDB46A2944A2C3009EB462 /* modshot */,
+				3B10ED562568E95D00372D13 /* main.cpp */,
+				3B5A84052569B56F00BAF2E5 /* config.cpp */,
+				3B10ED432568E95D00372D13 /* config.h */,
 				3B10ED352568E95D00372D13 /* eventthread.cpp */,
 				3B10ED492568E95D00372D13 /* eventthread.h */,
-				3B10ED432568E95D00372D13 /* config.h */,
-				3B5A84052569B56F00BAF2E5 /* config.cpp */,
-				3B10ED502568E95D00372D13 /* settingsmenu.h */,
 				3B10ED512568E95D00372D13 /* sharedstate.cpp */,
-				3B10ED562568E95D00372D13 /* main.cpp */,
-				3B10ED6E2568E95D00372D13 /* settingsmenu.cpp */,
 				3B10EDA42568E95E00372D13 /* sharedstate.h */,
+				3B10ED6E2568E95D00372D13 /* settingsmenu.cpp */,
+				3B10ED502568E95D00372D13 /* settingsmenu.h */,
 				3B10EDA52568E95E00372D13 /* binding.h */,
 			);
 			name = src;
@@ -1535,39 +1597,45 @@
 		3B10EDD52568E96A00372D13 /* binding */ = {
 			isa = PBXGroup;
 			children = (
-				3B10EDD62568E96A00372D13 /* window-binding.cpp */,
-				3B10EDD72568E96A00372D13 /* filesystem-binding.cpp */,
-				3B10EDD82568E96A00372D13 /* viewportelement-binding.h */,
-				3B10EDD92568E96A00372D13 /* cusl-binding.cpp */,
-				3B10EDDA2568E96A00372D13 /* audio-binding.cpp */,
-				3B10EDDB2568E96A00372D13 /* serializable-binding.h */,
-				3B10EDDC2568E96A00372D13 /* input-binding.cpp */,
-				3B10EDDD2568E96A00372D13 /* windowvx-binding.cpp */,
-				3B10EDDE2568E96A00372D13 /* disposable-binding.h */,
-				3B10EDDF2568E96A00372D13 /* sprite-binding.cpp */,
-				3B10EDE02568E96A00372D13 /* sceneelement-binding.h */,
-				3B10EDE12568E96A00372D13 /* tilemapvx-binding.cpp */,
-				3B10EDE22568E96A00372D13 /* module_rpg2.rb.xxd */,
-				3B10EDE42568E96A00372D13 /* bitmap-binding.cpp */,
-				3B10EDE52568E96A00372D13 /* table-binding.cpp */,
-				3B10EDE62568E96A00372D13 /* etc-binding.cpp */,
-				3B10EDE72568E96A00372D13 /* tilemap-binding.cpp */,
-				3B10EDE82568E96A00372D13 /* miniffi-binding.cpp */,
-				3B312842259E7DC1002EAB43 /* miniffi.cpp */,
-				3B312841259E7DC1002EAB43 /* miniffi.h */,
-				3B10EDE92568E96A00372D13 /* graphics-binding.cpp */,
-				3B10EDEA2568E96A00372D13 /* plane-binding.cpp */,
 				3B10EDEB2568E96A00372D13 /* binding-types.h */,
-				3B10EDEC2568E96A00372D13 /* font-binding.cpp */,
-				3B10EDED2568E96A00372D13 /* module_rpg1.rb.xxd */,
 				3B10EDEE2568E96A00372D13 /* binding-util.h */,
 				3B10EDEF2568E96A00372D13 /* binding-util.cpp */,
 				3B10EDF02568E96A00372D13 /* binding-mri.cpp */,
+				3B10EDDB2568E96A00372D13 /* serializable-binding.h */,
+				3B10EDDE2568E96A00372D13 /* disposable-binding.h */,
 				3B10EDF12568E96A00372D13 /* flashable-binding.h */,
-				3B10EDF22568E96A00372D13 /* module_rpg3.rb.xxd */,
-				3B10EDF32568E96A00372D13 /* module_rpg.cpp */,
+				3B10EDD82568E96A00372D13 /* viewportelement-binding.h */,
+				3B10EDE02568E96A00372D13 /* sceneelement-binding.h */,
+				3B10EDE62568E96A00372D13 /* etc-binding.cpp */,
+				3B10EDE52568E96A00372D13 /* table-binding.cpp */,
+				3B10EDDC2568E96A00372D13 /* input-binding.cpp */,
+				3B10EDE92568E96A00372D13 /* graphics-binding.cpp */,
+				3B10EDE42568E96A00372D13 /* bitmap-binding.cpp */,
 				3B10EDF42568E96A00372D13 /* viewport-binding.cpp */,
+				3B10EDEA2568E96A00372D13 /* plane-binding.cpp */,
+				3B10EDDF2568E96A00372D13 /* sprite-binding.cpp */,
+				3B10EDEC2568E96A00372D13 /* font-binding.cpp */,
+				3B10EDE72568E96A00372D13 /* tilemap-binding.cpp */,
+				3B10EDE12568E96A00372D13 /* tilemapvx-binding.cpp */,
+				3B10EDD62568E96A00372D13 /* window-binding.cpp */,
+				3B10EDDD2568E96A00372D13 /* windowvx-binding.cpp */,
+				3B10EDDA2568E96A00372D13 /* audio-binding.cpp */,
+				3B10EDD72568E96A00372D13 /* filesystem-binding.cpp */,
+				B4EDB44E2944A2B7009EB462 /* oneshot-binding.cpp */,
+				B4EDB44D2944A2B7009EB462 /* modshot-binding.cpp */,
+				B4EDB44F2944A2B8009EB462 /* steam-binding.cpp */,
+				B4EDB4502944A2B8009EB462 /* journal-binding.cpp */,
+				B4EDB44C2944A2B7009EB462 /* niko-binding.cpp */,
+				B4EDB4512944A2B8009EB462 /* wallpaper-binding.cpp */,
+				3B10EDD92568E96A00372D13 /* cusl-binding.cpp */,
 				3B522DDB259C1E53003301C4 /* http-binding.cpp */,
+				3B312842259E7DC1002EAB43 /* miniffi.cpp */,
+				3B312841259E7DC1002EAB43 /* miniffi.h */,
+				3B10EDE82568E96A00372D13 /* miniffi-binding.cpp */,
+				3B10EDF32568E96A00372D13 /* module_rpg.cpp */,
+				3B10EDED2568E96A00372D13 /* module_rpg1.rb.xxd */,
+				3B10EDE22568E96A00372D13 /* module_rpg2.rb.xxd */,
+				3B10EDF22568E96A00372D13 /* module_rpg3.rb.xxd */,
 			);
 			name = binding;
 			path = ../binding;
@@ -1584,9 +1652,9 @@
 		3B1C231D25A15F8F0075EF5D /* mkxp */ = {
 			isa = PBXGroup;
 			children = (
+				3B1C231E25A15FB20075EF5D /* mkxp.xcconfig */,
 				3B1C231F25A15FB20075EF5D /* mkxp.Intel.xcconfig */,
 				3B1C232025A15FB20075EF5D /* mkxp.Universal.xcconfig */,
-				3B1C231E25A15FB20075EF5D /* mkxp.xcconfig */,
 			);
 			name = mkxp;
 			sourceTree = "<group>";
@@ -1631,12 +1699,12 @@
 		3B3F7D1325B19C5A00EA5F1C /* MacOS */ = {
 			isa = PBXGroup;
 			children = (
-				3B3F7D1725B19DEC00EA5F1C /* settingsmenu.xib */,
+				3B480E9325DCBDD6001686B4 /* sdl_codes.h */,
 				3B3F7D2925B1A73A00EA5F1C /* SettingsMenuController.mm */,
 				3B3F7D3025B1A79F00EA5F1C /* SettingsMenuController.h */,
-				3B480E9325DCBDD6001686B4 /* sdl_codes.h */,
 				96573E7A27913B46002C3E77 /* TouchBar.mm */,
 				96573E7B27913B46002C3E77 /* TouchBar.h */,
+				3B3F7D1725B19DEC00EA5F1C /* settingsmenu.xib */,
 				96573E80279152DC002C3E77 /* TouchBar.xcassets */,
 			);
 			name = MacOS;
@@ -1737,10 +1805,10 @@
 			children = (
 				3B1C240B25A1A43B0075EF5D /* steam */,
 				3B1C231D25A15F8F0075EF5D /* mkxp */,
-				3BD2B7282565B35D003DAD8A /* mkxp.json */,
 				3BD2B3AF25651885003DAD8A /* mkxp.entitlements */,
 				3B58E90F26293A9D001F9031 /* shim.entitlements */,
 				3BDB25C52565184600C4A63D /* Info.plist */,
+				3BD2B7282565B35D003DAD8A /* modshot.json */,
 			);
 			name = Configuration;
 			sourceTree = "<group>";
@@ -1771,27 +1839,27 @@
 		3BDB22EB25644FBF00C4A63D = {
 			isa = PBXGroup;
 			children = (
-				3B251DA226DA2C8600E5D09B /* Ruby Standard Library */,
-				3B1BC0E5266F8E2A00794D22 /* Makefiles */,
 				3BD2B7272565B343003DAD8A /* README.md */,
 				3BDB23E22564546E00C4A63D /* icon.icns */,
 				3BDB2409256470AE00C4A63D /* Player */,
 				3BDB23E12564545F00C4A63D /* Assets */,
+				3B1BC0E5266F8E2A00794D22 /* Makefiles */,
 				3BA08EA5256641ED00449CFF /* misc */,
 				3BDB22F72564501400C4A63D /* Products */,
 				3BDB23E5256455A400C4A63D /* Frameworks */,
+				3B251DA226DA2C8600E5D09B /* Ruby Standard Library */,
 			);
 			sourceTree = "<group>";
 		};
 		3BDB22F72564501400C4A63D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3BD2B7252565AEC0003DAD8A /* Z-intel.app */,
+				3BD2B7252565AEC0003DAD8A /* ModShot.app */,
 				3BA08EA4256641ED00449CFF /* Assets.bundle */,
-				3BC65E152584F3AD0063AFF1 /* Z-universal.app */,
+				3BC65E152584F3AD0063AFF1 /* ModShot-Universal.app */,
 				3B1C235625A199370075EF5D /* shim */,
-				3B1C23F225A19C600075EF5D /* Z-steam.app */,
-				3BBE88092705A73400A574AE /* Z-steam.app */,
+				3B1C23F225A19C600075EF5D /* ModShot-Steam.app */,
+				3BBE88092705A73400A574AE /* ModShot-Steam.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1801,8 +1869,8 @@
 			children = (
 				3B10EC8B2568E79800372D13 /* Shaders */,
 				3B10EC832568E78400372D13 /* icon.png */,
-				3B10EC842568E78400372D13 /* liberation.ttf */,
 				96D8EDD028728DCA00A331EA /* gamecontrollerdb.txt */,
+				3B10EC842568E78400372D13 /* liberation.ttf */,
 				3B10EC852568E78400372D13 /* wqymicrohei.ttf */,
 			);
 			name = Assets;
@@ -1811,9 +1879,9 @@
 		3BDB23E5256455A400C4A63D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3B1C241F25A1A84D0075EF5D /* Steam */,
 				3BC65D792584F3030063AFF1 /* Universal */,
 				3BE080CA256829FE0006849F /* Intel */,
+				3B1C241F25A1A84D0075EF5D /* Steam */,
 				3BD2B46425651BEB003DAD8A /* System */,
 			);
 			name = Frameworks;
@@ -1865,6 +1933,32 @@
 			path = theoraplay;
 			sourceTree = "<group>";
 		};
+		B4EDB46A2944A2C3009EB462 /* modshot */ = {
+			isa = PBXGroup;
+			children = (
+				B4EDB4862944A321009EB462 /* notifications.cpp */,
+				B4EDB4872944A321009EB462 /* notifications.h */,
+			);
+			name = modshot;
+			sourceTree = "<group>";
+		};
+		B4EDB46B2944A2CB009EB462 /* oneshot */ = {
+			isa = PBXGroup;
+			children = (
+				B4EDB4732944A2E9009EB462 /* trstr.h */,
+				B4EDB4742944A2E9009EB462 /* pipe.h */,
+				B4EDB46D2944A2E7009EB462 /* i18n.cpp */,
+				B4EDB46E2944A2E7009EB462 /* i18n.h */,
+				B4EDB4752944A2E9009EB462 /* oneshot.cpp */,
+				B4EDB4702944A2E8009EB462 /* oneshot.h */,
+				B4EDB46C2944A2E7009EB462 /* mac-desktop.mm */,
+				B4EDB46F2944A2E7009EB462 /* mac-desktop.h */,
+				B4EDB4712944A2E8009EB462 /* steam.cpp */,
+				B4EDB4722944A2E8009EB462 /* steam.h */,
+			);
+			name = oneshot;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1885,9 +1979,9 @@
 			productReference = 3B1C235625A199370075EF5D /* shim */;
 			productType = "com.apple.product-type.tool";
 		};
-		3B1C236D25A19C600075EF5D /* Z-steam */ = {
+		3B1C236D25A19C600075EF5D /* ModShot-Steam */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3B1C23EF25A19C600075EF5D /* Build configuration list for PBXNativeTarget "Z-steam" */;
+			buildConfigurationList = 3B1C23EF25A19C600075EF5D /* Build configuration list for PBXNativeTarget "ModShot-Steam" */;
 			buildPhases = (
 				3B1C237025A19C600075EF5D /* Sources */,
 				3B1C23C225A19C600075EF5D /* Frameworks */,
@@ -1904,9 +1998,9 @@
 				3B1C243325A1B1290075EF5D /* PBXTargetDependency */,
 				3B1C236E25A19C600075EF5D /* PBXTargetDependency */,
 			);
-			name = "Z-steam";
+			name = "ModShot-Steam";
 			productName = PlayerLegacy;
-			productReference = 3B1C23F225A19C600075EF5D /* Z-steam.app */;
+			productReference = 3B1C23F225A19C600075EF5D /* ModShot-Steam.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3BA08EA3256641ED00449CFF /* Assets */ = {
@@ -1928,9 +2022,9 @@
 			productReference = 3BA08EA4256641ED00449CFF /* Assets.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
-		3BBE87802705A73400A574AE /* Z-steam-universal */ = {
+		3BBE87802705A73400A574AE /* ModShot-Steam-Universal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3BBE88062705A73400A574AE /* Build configuration list for PBXNativeTarget "Z-steam-universal" */;
+			buildConfigurationList = 3BBE88062705A73400A574AE /* Build configuration list for PBXNativeTarget "ModShot-Steam-Universal" */;
 			buildPhases = (
 				3BBE87852705A73400A574AE /* Sources */,
 				3BBE87CE2705A73400A574AE /* Frameworks */,
@@ -1947,14 +2041,14 @@
 				3BBE87812705A73400A574AE /* PBXTargetDependency */,
 				3BBE87832705A73400A574AE /* PBXTargetDependency */,
 			);
-			name = "Z-steam-universal";
+			name = "ModShot-Steam-Universal";
 			productName = PlayerLegacy;
-			productReference = 3BBE88092705A73400A574AE /* Z-steam.app */;
+			productReference = 3BBE88092705A73400A574AE /* ModShot-Steam.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3BC65D8A2584F3AD0063AFF1 /* Z-universal */ = {
+		3BC65D8A2584F3AD0063AFF1 /* ModShot-Universal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3BC65E122584F3AD0063AFF1 /* Build configuration list for PBXNativeTarget "Z-universal" */;
+			buildConfigurationList = 3BC65E122584F3AD0063AFF1 /* Build configuration list for PBXNativeTarget "ModShot-Universal" */;
 			buildPhases = (
 				3BC65D8D2584F3AD0063AFF1 /* Sources */,
 				3BC65DDB2584F3AD0063AFF1 /* Frameworks */,
@@ -1969,14 +2063,14 @@
 			dependencies = (
 				3BC65D8B2584F3AD0063AFF1 /* PBXTargetDependency */,
 			);
-			name = "Z-universal";
+			name = "ModShot-Universal";
 			productName = PlayerLegacy;
-			productReference = 3BC65E152584F3AD0063AFF1 /* Z-universal.app */;
+			productReference = 3BC65E152584F3AD0063AFF1 /* ModShot-Universal.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3BD2B64B2565AEC0003DAD8A /* Z-intel */ = {
+		3BD2B64B2565AEC0003DAD8A /* ModShot */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3BD2B7222565AEC0003DAD8A /* Build configuration list for PBXNativeTarget "Z-intel" */;
+			buildConfigurationList = 3BD2B7222565AEC0003DAD8A /* Build configuration list for PBXNativeTarget "ModShot" */;
 			buildPhases = (
 				3BD2B64C2565AEC0003DAD8A /* Sources */,
 				3BD2B6E12565AEC0003DAD8A /* Frameworks */,
@@ -1991,9 +2085,9 @@
 			dependencies = (
 				3BA08ED3256643AD00449CFF /* PBXTargetDependency */,
 			);
-			name = "Z-intel";
+			name = ModShot;
 			productName = PlayerLegacy;
-			productReference = 3BD2B7252565AEC0003DAD8A /* Z-intel.app */;
+			productReference = 3BD2B7252565AEC0003DAD8A /* ModShot.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2012,7 +2106,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3BDB22EF25644FBF00C4A63D /* Build configuration list for PBXProject "mkxp-z" */;
+			buildConfigurationList = 3BDB22EF25644FBF00C4A63D /* Build configuration list for PBXProject "ModShot" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -2026,10 +2120,10 @@
 			projectRoot = "";
 			targets = (
 				3BA08EA3256641ED00449CFF /* Assets */,
-				3BC65D8A2584F3AD0063AFF1 /* Z-universal */,
-				3BD2B64B2565AEC0003DAD8A /* Z-intel */,
-				3BBE87802705A73400A574AE /* Z-steam-universal */,
-				3B1C236D25A19C600075EF5D /* Z-steam */,
+				3BD2B64B2565AEC0003DAD8A /* ModShot */,
+				3BC65D8A2584F3AD0063AFF1 /* ModShot-Universal */,
+				3B1C236D25A19C600075EF5D /* ModShot-Steam */,
+				3BBE87802705A73400A574AE /* ModShot-Steam-Universal */,
 				3B1C235525A199370075EF5D /* shim */,
 			);
 		};
@@ -2103,6 +2197,7 @@
 			files = (
 				3B1C237125A19C600075EF5D /* http-binding.cpp in Sources */,
 				3B1C237225A19C600075EF5D /* tilemapvx.cpp in Sources */,
+				B4EDB4812944A2EA009EB462 /* steam.cpp in Sources */,
 				3B1C237425A19C600075EF5D /* rgssad.cpp in Sources */,
 				3B1C237525A19C600075EF5D /* input.cpp in Sources */,
 				3B1C237625A19C600075EF5D /* tilemap-binding.cpp in Sources */,
@@ -2110,6 +2205,7 @@
 				3B1C237825A19C600075EF5D /* main.cpp in Sources */,
 				3B1C237925A19C600075EF5D /* alstream.cpp in Sources */,
 				3B1C237A25A19C600075EF5D /* table.cpp in Sources */,
+				B4EDB4552944A2B8009EB462 /* niko-binding.cpp in Sources */,
 				3B1C237B25A19C600075EF5D /* net.cpp in Sources */,
 				3B1C237C25A19C600075EF5D /* table-binding.cpp in Sources */,
 				3B1C237D25A19C600075EF5D /* config.cpp in Sources */,
@@ -2122,10 +2218,12 @@
 				3B1C238625A19C600075EF5D /* sprite.cpp in Sources */,
 				3B1C238725A19C600075EF5D /* cusl-binding.cpp in Sources */,
 				3B1C238825A19C600075EF5D /* sdlsoundsource.cpp in Sources */,
+				B4EDB4792944A2EA009EB462 /* mac-desktop.mm in Sources */,
 				3B1C238925A19C600075EF5D /* viewport-binding.cpp in Sources */,
 				3B1C238A25A19C600075EF5D /* windowvx-binding.cpp in Sources */,
 				3B1C238B25A19C600075EF5D /* windowvx.cpp in Sources */,
 				3B1C238C25A19C600075EF5D /* LUrlParser.cpp in Sources */,
+				B4EDB4652944A2B9009EB462 /* journal-binding.cpp in Sources */,
 				3B1C238D25A19C600075EF5D /* module_rpg.cpp in Sources */,
 				9656359E279A5B74003D6A75 /* theoraplay.c in Sources */,
 				3B1C238E25A19C600075EF5D /* miniffi.cpp in Sources */,
@@ -2137,11 +2235,14 @@
 				3B1C239425A19C600075EF5D /* etc.cpp in Sources */,
 				3B1C239525A19C600075EF5D /* shader.cpp in Sources */,
 				3B1C239625A19C600075EF5D /* tilemap.cpp in Sources */,
+				B4EDB4852944A2EA009EB462 /* oneshot.cpp in Sources */,
 				3BA6945B263DAB53004194EB /* lzw.c in Sources */,
 				3B1C239825A19C600075EF5D /* window.cpp in Sources */,
 				3B1C239A25A19C600075EF5D /* input-binding.cpp in Sources */,
 				3B1C239B25A19C600075EF5D /* keybindings.cpp in Sources */,
 				3B1C239C25A19C600075EF5D /* filesystem.cpp in Sources */,
+				B4EDB4592944A2B8009EB462 /* modshot-binding.cpp in Sources */,
+				B4EDB45D2944A2B8009EB462 /* oneshot-binding.cpp in Sources */,
 				3B1C239D25A19C600075EF5D /* binding-mri.cpp in Sources */,
 				3B1C239F25A19C600075EF5D /* eventthread.cpp in Sources */,
 				3B1C23A025A19C600075EF5D /* viewport.cpp in Sources */,
@@ -2151,7 +2252,10 @@
 				3B1C23A425A19C600075EF5D /* bitmap.cpp in Sources */,
 				3B1C23A525A19C600075EF5D /* tilemapvx-binding.cpp in Sources */,
 				3B1C23A625A19C600075EF5D /* window-binding.cpp in Sources */,
+				B4EDB4692944A2B9009EB462 /* wallpaper-binding.cpp in Sources */,
 				3B1C23A725A19C600075EF5D /* midisource.cpp in Sources */,
+				B4EDB48B2944A321009EB462 /* notifications.cpp in Sources */,
+				B4EDB47D2944A2EA009EB462 /* i18n.cpp in Sources */,
 				3BA69457263DAB53004194EB /* libnsgif.c in Sources */,
 				3B1C23A825A19C600075EF5D /* graphics-binding.cpp in Sources */,
 				3B1C23A925A19C600075EF5D /* plane.cpp in Sources */,
@@ -2160,6 +2264,7 @@
 				3B1C23AE25A19C600075EF5D /* fluid-fun.cpp in Sources */,
 				3B1C23AF25A19C600075EF5D /* scene.cpp in Sources */,
 				3B1C23B025A19C600075EF5D /* texpool.cpp in Sources */,
+				B4EDB4612944A2B9009EB462 /* steam-binding.cpp in Sources */,
 				3B1C23B125A19C600075EF5D /* font-binding.cpp in Sources */,
 				3B1C23B325A19C600075EF5D /* audio-binding.cpp in Sources */,
 				3B1C23B425A19C600075EF5D /* autotilesvx.cpp in Sources */,
@@ -2191,6 +2296,7 @@
 			files = (
 				3BBE87862705A73400A574AE /* http-binding.cpp in Sources */,
 				3BBE87872705A73400A574AE /* tilemapvx.cpp in Sources */,
+				B4EDB4802944A2EA009EB462 /* steam.cpp in Sources */,
 				3BBE87882705A73400A574AE /* rgssad.cpp in Sources */,
 				3BBE87892705A73400A574AE /* input.cpp in Sources */,
 				3BBE878A2705A73400A574AE /* tilemap-binding.cpp in Sources */,
@@ -2198,6 +2304,7 @@
 				3BBE878C2705A73400A574AE /* main.cpp in Sources */,
 				3BBE878D2705A73400A574AE /* alstream.cpp in Sources */,
 				3BBE878E2705A73400A574AE /* table.cpp in Sources */,
+				B4EDB4542944A2B8009EB462 /* niko-binding.cpp in Sources */,
 				3BBE878F2705A73400A574AE /* net.cpp in Sources */,
 				3BBE87902705A73400A574AE /* table-binding.cpp in Sources */,
 				3BBE87912705A73400A574AE /* config.cpp in Sources */,
@@ -2210,10 +2317,12 @@
 				3BBE87982705A73400A574AE /* sprite.cpp in Sources */,
 				3BBE87992705A73400A574AE /* cusl-binding.cpp in Sources */,
 				3BBE879A2705A73400A574AE /* sdlsoundsource.cpp in Sources */,
+				B4EDB4782944A2EA009EB462 /* mac-desktop.mm in Sources */,
 				3BBE879B2705A73400A574AE /* viewport-binding.cpp in Sources */,
 				3BBE879C2705A73400A574AE /* windowvx-binding.cpp in Sources */,
 				3BBE879D2705A73400A574AE /* windowvx.cpp in Sources */,
 				3BBE879E2705A73400A574AE /* LUrlParser.cpp in Sources */,
+				B4EDB4642944A2B9009EB462 /* journal-binding.cpp in Sources */,
 				3BBE879F2705A73400A574AE /* module_rpg.cpp in Sources */,
 				9656359D279A5B74003D6A75 /* theoraplay.c in Sources */,
 				3BBE87A02705A73400A574AE /* miniffi.cpp in Sources */,
@@ -2225,11 +2334,14 @@
 				3BBE87A62705A73400A574AE /* etc.cpp in Sources */,
 				3BBE87A72705A73400A574AE /* shader.cpp in Sources */,
 				3BBE87A82705A73400A574AE /* tilemap.cpp in Sources */,
+				B4EDB4842944A2EA009EB462 /* oneshot.cpp in Sources */,
 				3BBE87A92705A73400A574AE /* lzw.c in Sources */,
 				3BBE87AA2705A73400A574AE /* window.cpp in Sources */,
 				3BBE87AB2705A73400A574AE /* input-binding.cpp in Sources */,
 				3BBE87AC2705A73400A574AE /* keybindings.cpp in Sources */,
 				3BBE87AD2705A73400A574AE /* filesystem.cpp in Sources */,
+				B4EDB4582944A2B8009EB462 /* modshot-binding.cpp in Sources */,
+				B4EDB45C2944A2B8009EB462 /* oneshot-binding.cpp in Sources */,
 				3BBE87AE2705A73400A574AE /* binding-mri.cpp in Sources */,
 				3BBE87AF2705A73400A574AE /* eventthread.cpp in Sources */,
 				3BBE87B02705A73400A574AE /* viewport.cpp in Sources */,
@@ -2239,7 +2351,10 @@
 				3BBE87B32705A73400A574AE /* bitmap.cpp in Sources */,
 				3BBE87B42705A73400A574AE /* tilemapvx-binding.cpp in Sources */,
 				3BBE87B52705A73400A574AE /* window-binding.cpp in Sources */,
+				B4EDB4682944A2B9009EB462 /* wallpaper-binding.cpp in Sources */,
 				3BBE87B62705A73400A574AE /* midisource.cpp in Sources */,
+				B4EDB48A2944A321009EB462 /* notifications.cpp in Sources */,
+				B4EDB47C2944A2EA009EB462 /* i18n.cpp in Sources */,
 				3BBE87B72705A73400A574AE /* libnsgif.c in Sources */,
 				3BBE87B82705A73400A574AE /* graphics-binding.cpp in Sources */,
 				3BBE87B92705A73400A574AE /* plane.cpp in Sources */,
@@ -2248,6 +2363,7 @@
 				3BBE87BC2705A73400A574AE /* fluid-fun.cpp in Sources */,
 				3BBE87BD2705A73400A574AE /* scene.cpp in Sources */,
 				3BBE87BE2705A73400A574AE /* texpool.cpp in Sources */,
+				B4EDB4602944A2B8009EB462 /* steam-binding.cpp in Sources */,
 				3BBE87BF2705A73400A574AE /* font-binding.cpp in Sources */,
 				3BBE87C02705A73400A574AE /* audio-binding.cpp in Sources */,
 				3BBE87C12705A73400A574AE /* autotilesvx.cpp in Sources */,
@@ -2273,11 +2389,14 @@
 				3B522DDC259C1E53003301C4 /* http-binding.cpp in Sources */,
 				3BC65D8E2584F3AD0063AFF1 /* tilemapvx.cpp in Sources */,
 				3BC65D902584F3AD0063AFF1 /* rgssad.cpp in Sources */,
+				B4EDB4822944A2EA009EB462 /* oneshot.cpp in Sources */,
 				3BA69458263DAB53004194EB /* lzw.c in Sources */,
 				3BC65D912584F3AD0063AFF1 /* input.cpp in Sources */,
 				3BC65D922584F3AD0063AFF1 /* tilemap-binding.cpp in Sources */,
 				3BC65D932584F3AD0063AFF1 /* audio.cpp in Sources */,
+				B4EDB45E2944A2B8009EB462 /* steam-binding.cpp in Sources */,
 				3BC65D942584F3AD0063AFF1 /* main.cpp in Sources */,
+				B4EDB45A2944A2B8009EB462 /* oneshot-binding.cpp in Sources */,
 				3BC65D952584F3AD0063AFF1 /* alstream.cpp in Sources */,
 				3BC65D962584F3AD0063AFF1 /* table.cpp in Sources */,
 				3B522DC0259BD072003301C4 /* net.cpp in Sources */,
@@ -2291,6 +2410,7 @@
 				3BC65D9F2584F3AD0063AFF1 /* gl-fun.cpp in Sources */,
 				3BC65DA02584F3AD0063AFF1 /* sprite-binding.cpp in Sources */,
 				3BC65DA12584F3AD0063AFF1 /* sprite.cpp in Sources */,
+				B4EDB4562944A2B8009EB462 /* modshot-binding.cpp in Sources */,
 				3BC65DA22584F3AD0063AFF1 /* cusl-binding.cpp in Sources */,
 				3BC65DA32584F3AD0063AFF1 /* sdlsoundsource.cpp in Sources */,
 				3BC65DA42584F3AD0063AFF1 /* viewport-binding.cpp in Sources */,
@@ -2302,6 +2422,7 @@
 				3BC65DA82584F3AD0063AFF1 /* autotiles.cpp in Sources */,
 				3BC65DA92584F3AD0063AFF1 /* audiostream.cpp in Sources */,
 				3BC65DAA2584F3AD0063AFF1 /* binding-util.cpp in Sources */,
+				B4EDB4622944A2B9009EB462 /* journal-binding.cpp in Sources */,
 				3BC65DAB2584F3AD0063AFF1 /* plane-binding.cpp in Sources */,
 				3BC65DAC2584F3AD0063AFF1 /* gl-meta.cpp in Sources */,
 				3BC65DAD2584F3AD0063AFF1 /* etc.cpp in Sources */,
@@ -2322,20 +2443,25 @@
 				3BC65DBF2584F3AD0063AFF1 /* window-binding.cpp in Sources */,
 				3BC65DC02584F3AD0063AFF1 /* midisource.cpp in Sources */,
 				3B3F7D2A25B1A73A00EA5F1C /* SettingsMenuController.mm in Sources */,
+				B4EDB47A2944A2EA009EB462 /* i18n.cpp in Sources */,
 				3BC65DC12584F3AD0063AFF1 /* graphics-binding.cpp in Sources */,
 				3BC65DC22584F3AD0063AFF1 /* plane.cpp in Sources */,
 				3BC65DC32584F3AD0063AFF1 /* tilequad.cpp in Sources */,
 				9656359B279A5B74003D6A75 /* theoraplay.c in Sources */,
 				3BC65DC62584F3AD0063AFF1 /* tileatlas.cpp in Sources */,
 				3BC65DC72584F3AD0063AFF1 /* fluid-fun.cpp in Sources */,
+				B4EDB4762944A2EA009EB462 /* mac-desktop.mm in Sources */,
 				3BC65DC82584F3AD0063AFF1 /* scene.cpp in Sources */,
 				3BC65DC92584F3AD0063AFF1 /* texpool.cpp in Sources */,
+				B4EDB4522944A2B8009EB462 /* niko-binding.cpp in Sources */,
 				3BC65DCA2584F3AD0063AFF1 /* font-binding.cpp in Sources */,
 				3BC65DCC2584F3AD0063AFF1 /* audio-binding.cpp in Sources */,
 				3BC65DCD2584F3AD0063AFF1 /* autotilesvx.cpp in Sources */,
 				3BC65DCF2584F3AD0063AFF1 /* vertex.cpp in Sources */,
 				3BC65DD02584F3AD0063AFF1 /* miniffi-binding.cpp in Sources */,
+				B4EDB4662944A2B9009EB462 /* wallpaper-binding.cpp in Sources */,
 				3BC65DD12584F3AD0063AFF1 /* soundemitter.cpp in Sources */,
+				B4EDB4882944A321009EB462 /* notifications.cpp in Sources */,
 				3BC65DD22584F3AD0063AFF1 /* etc-binding.cpp in Sources */,
 				3BC65DD32584F3AD0063AFF1 /* systemImplApple.mm in Sources */,
 				3BC65DD42584F3AD0063AFF1 /* graphics.cpp in Sources */,
@@ -2353,11 +2479,14 @@
 				3B522DDD259C1E53003301C4 /* http-binding.cpp in Sources */,
 				3B10EDC22568E95E00372D13 /* tilemapvx.cpp in Sources */,
 				3B10EDA72568E95E00372D13 /* rgssad.cpp in Sources */,
+				B4EDB4832944A2EA009EB462 /* oneshot.cpp in Sources */,
 				3BA69459263DAB53004194EB /* lzw.c in Sources */,
 				3B10EDA82568E95E00372D13 /* input.cpp in Sources */,
 				3B10EE022568E96A00372D13 /* tilemap-binding.cpp in Sources */,
 				3B10EDB72568E95E00372D13 /* audio.cpp in Sources */,
+				B4EDB45F2944A2B8009EB462 /* steam-binding.cpp in Sources */,
 				3B10EDAF2568E95E00372D13 /* main.cpp in Sources */,
+				B4EDB45B2944A2B8009EB462 /* oneshot-binding.cpp in Sources */,
 				3B10EDB42568E95E00372D13 /* alstream.cpp in Sources */,
 				3B10EDAA2568E95E00372D13 /* table.cpp in Sources */,
 				3B522DC1259BD072003301C4 /* net.cpp in Sources */,
@@ -2371,6 +2500,7 @@
 				3B10EDCC2568E95E00372D13 /* gl-fun.cpp in Sources */,
 				3B10EDFB2568E96A00372D13 /* sprite-binding.cpp in Sources */,
 				3B10EDBF2568E95E00372D13 /* sprite.cpp in Sources */,
+				B4EDB4572944A2B8009EB462 /* modshot-binding.cpp in Sources */,
 				3B10EDF72568E96A00372D13 /* cusl-binding.cpp in Sources */,
 				3B10EDB62568E95E00372D13 /* sdlsoundsource.cpp in Sources */,
 				3B10EE0C2568E96A00372D13 /* viewport-binding.cpp in Sources */,
@@ -2382,6 +2512,7 @@
 				3B10EDD22568E95E00372D13 /* autotiles.cpp in Sources */,
 				3B10EDB92568E95E00372D13 /* audiostream.cpp in Sources */,
 				3B10EE082568E96A00372D13 /* binding-util.cpp in Sources */,
+				B4EDB4632944A2B9009EB462 /* journal-binding.cpp in Sources */,
 				3B10EE052568E96A00372D13 /* plane-binding.cpp in Sources */,
 				3B10EDC72568E95E00372D13 /* gl-meta.cpp in Sources */,
 				3B10EDAB2568E95E00372D13 /* etc.cpp in Sources */,
@@ -2402,20 +2533,25 @@
 				3B10EDF52568E96A00372D13 /* window-binding.cpp in Sources */,
 				3B10EDB32568E95E00372D13 /* midisource.cpp in Sources */,
 				3B3F7D2B25B1A73A00EA5F1C /* SettingsMenuController.mm in Sources */,
+				B4EDB47B2944A2EA009EB462 /* i18n.cpp in Sources */,
 				3B10EE042568E96A00372D13 /* graphics-binding.cpp in Sources */,
 				3B10EDD12568E95E00372D13 /* plane.cpp in Sources */,
 				3B10EDC32568E95E00372D13 /* tilequad.cpp in Sources */,
 				9656359C279A5B74003D6A75 /* theoraplay.c in Sources */,
 				3B10EDCB2568E95E00372D13 /* tileatlas.cpp in Sources */,
 				3B10EDB52568E95E00372D13 /* fluid-fun.cpp in Sources */,
+				B4EDB4772944A2EA009EB462 /* mac-desktop.mm in Sources */,
 				3B10EDC62568E95E00372D13 /* scene.cpp in Sources */,
 				3B10EDC42568E95E00372D13 /* texpool.cpp in Sources */,
+				B4EDB4532944A2B8009EB462 /* niko-binding.cpp in Sources */,
 				3B10EE062568E96A00372D13 /* font-binding.cpp in Sources */,
 				3B10EDF82568E96A00372D13 /* audio-binding.cpp in Sources */,
 				3B10EDCF2568E95E00372D13 /* autotilesvx.cpp in Sources */,
 				3B10EDCD2568E95E00372D13 /* vertex.cpp in Sources */,
 				3B10EE032568E96A00372D13 /* miniffi-binding.cpp in Sources */,
+				B4EDB4672944A2B9009EB462 /* wallpaper-binding.cpp in Sources */,
 				3B10EDB82568E95E00372D13 /* soundemitter.cpp in Sources */,
+				B4EDB4892944A321009EB462 /* notifications.cpp in Sources */,
 				3B10EE012568E96A00372D13 /* etc-binding.cpp in Sources */,
 				3B5A8464256A46B200BAF2E5 /* systemImplApple.mm in Sources */,
 				3B10EDC12568E95E00372D13 /* graphics.cpp in Sources */,
@@ -2523,7 +2659,7 @@
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Dependencies/Frameworks/steam/sdk/redistributable_bin/osx";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.hatkid.modshot-shim";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -2589,7 +2725,7 @@
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Dependencies/Frameworks/steam/sdk/redistributable_bin/osx";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.hatkid.modshot-shim";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -2666,7 +2802,7 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -2739,7 +2875,7 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -2803,10 +2939,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = misc/Assets.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Dependencies/Frameworks/steam/sdk/redistributable_bin/osx",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.struma.mkxpz-resources";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.hatkid.modshot-assets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -2868,10 +3008,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = misc/Assets.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Dependencies/Frameworks/steam/sdk/redistributable_bin/osx",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.struma.mkxpz-resources";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.hatkid.modshot-assets";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -2963,8 +3107,8 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
-				PRODUCT_NAME = "Z-steam";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
+				PRODUCT_NAME = "ModShot-Steam";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -3050,8 +3194,8 @@
 				MTL_FAST_MATH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
-				PRODUCT_NAME = "Z-steam";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
+				PRODUCT_NAME = "ModShot-Steam";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -3134,7 +3278,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -3215,7 +3359,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -3280,11 +3424,11 @@
 					"$(PROJECT_DIR)/Dependencies/Frameworks/ANGLE",
 					"$(PROJECT_DIR)/Dependencies/build-macosx-x86_64/lib",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -3347,11 +3491,11 @@
 					"$(PROJECT_DIR)/Dependencies/Frameworks/ANGLE",
 					"$(PROJECT_DIR)/Dependencies/build-macosx-x86_64/lib",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.struma.mkxp-z";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hatkid.modshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -3509,7 +3653,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3B1C23EF25A19C600075EF5D /* Build configuration list for PBXNativeTarget "Z-steam" */ = {
+		3B1C23EF25A19C600075EF5D /* Build configuration list for PBXNativeTarget "ModShot-Steam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3B1C23F025A19C600075EF5D /* Debug */,
@@ -3527,7 +3671,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3BBE88062705A73400A574AE /* Build configuration list for PBXNativeTarget "Z-steam-universal" */ = {
+		3BBE88062705A73400A574AE /* Build configuration list for PBXNativeTarget "ModShot-Steam-Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3BBE88072705A73400A574AE /* Debug */,
@@ -3536,7 +3680,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3BC65E122584F3AD0063AFF1 /* Build configuration list for PBXNativeTarget "Z-universal" */ = {
+		3BC65E122584F3AD0063AFF1 /* Build configuration list for PBXNativeTarget "ModShot-Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3BC65E132584F3AD0063AFF1 /* Debug */,
@@ -3545,7 +3689,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3BD2B7222565AEC0003DAD8A /* Build configuration list for PBXNativeTarget "Z-intel" */ = {
+		3BD2B7222565AEC0003DAD8A /* Build configuration list for PBXNativeTarget "ModShot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3BD2B7232565AEC0003DAD8A /* Debug */,
@@ -3554,7 +3698,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3BDB22EF25644FBF00C4A63D /* Build configuration list for PBXProject "mkxp-z" */ = {
+		3BDB22EF25644FBF00C4A63D /* Build configuration list for PBXProject "ModShot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3BDB22F025644FBF00C4A63D /* Debug */,

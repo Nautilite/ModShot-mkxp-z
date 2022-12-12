@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B1C236D25A19C600075EF5D"
-               BuildableName = "Z-steam.app"
-               BlueprintName = "Z-steam"
-               ReferencedContainer = "container:mkxp-z.xcodeproj">
+               BuildableName = "ModShot-Steam.app"
+               BlueprintName = "ModShot-Steam"
+               ReferencedContainer = "container:ModShot.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,6 +29,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -45,9 +47,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B1C236D25A19C600075EF5D"
-            BuildableName = "Z-steam.app"
-            BlueprintName = "Z-steam"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BuildableName = "ModShot-Steam.app"
+            BlueprintName = "ModShot-Steam"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -63,6 +65,8 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -75,9 +79,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B1C236D25A19C600075EF5D"
-            BuildableName = "Z-steam.app"
-            BlueprintName = "Z-steam"
-            ReferencedContainer = "container:mkxp-z.xcodeproj">
+            BuildableName = "ModShot-Steam.app"
+            BlueprintName = "ModShot-Steam"
+            ReferencedContainer = "container:ModShot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

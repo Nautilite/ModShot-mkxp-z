@@ -294,5 +294,7 @@ bool Notifications::send(const char *title, const char *body, const int iconId, 
 	g_application_send_notification(p->gApp, "oneshot-notification", gioNotify);
 
 	return true;
+#else
+    return false;
 #endif
 }
