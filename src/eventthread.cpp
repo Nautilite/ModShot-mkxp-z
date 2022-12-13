@@ -35,6 +35,7 @@
 
 #include "sharedstate.h"
 #include "graphics.h"
+#include "oneshot.h"
 
 #ifndef MKXPZ_BUILD_XCODE
 #include "settingsmenu.h"
@@ -304,6 +305,13 @@ void EventThread::process(RGSSThreadData &rtData)
 					textInputBuffer += event.text.text;
 				lockText(false);
 				break;
+
+#ifdef __APPLE__
+			case SDL_WINDOWEVENT_MOVED:
+				if (shState != NULL && event.window.data1 && event.window.data2)
+					shState->oneshot().setWindowPos(event.window.data1, event.window.data2);
+				break;
+#endif
 
 			case SDL_QUIT:
 				if (rtData.allowExit) {
@@ -648,6 +656,17 @@ int EventThread::eventFilter(void *data, SDL_Event *event)
 			Debug() << "****** SDL_RENDER_DEVICE_RESET";
 			return 0;
 		*/
+
+		case SDL_WINDOWEVENT:
+			if (event->window.event == SDL_WINDOWEVENT_MOVED) {
+				if (shState != NULL && shState->rgssVersion > 0) {
+					shState->oneshot().setWindowPos(event->window.data1, event->window.data2);
+					/* Workaround for Windows pausing on drag */
+					//shState->graphics().update(false, false);
+				}
+				return 0;
+			}
+			return 1;
 	}
 	return 1;
 }

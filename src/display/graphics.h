@@ -23,6 +23,7 @@
 #define GRAPHICS_H
 
 #include "util.h"
+#include "gl-util.h"
 
 class Scene;
 class Bitmap;
@@ -36,10 +37,10 @@ struct Movie;
 class Graphics
 {
 public:
-    unsigned long long getDelta();
-    unsigned long long lastUpdate();
-    
-	void update(bool checkForShutdown = true);
+	unsigned long long getDelta();
+	unsigned long long lastUpdate();
+
+	void update(bool checkForShutdown = true, bool limitFps = true);
 	void freeze();
 	void transition(int duration = 8,
 	                const char *filename = "",
@@ -58,29 +59,29 @@ public:
 
 	int width() const;
 	int height() const;
-    int displayWidth() const;
-    int displayHeight() const;
+	int displayWidth() const;
+	int displayHeight() const;
 	void resizeScreen(int width, int height);
-    void resizeWindow(int width, int height, bool center=false);
+	void resizeWindow(int width, int height, bool center=false);
 	void drawMovieFrame(const THEORAPLAY_VideoFrame* video, Bitmap *videoBitmap);
 	bool updateMovieInput(Movie *movie);
 	void playMovie(const char *filename, int volume, bool skippable);
 	void screenshot(const char *filename);
 
 	void reset();
-    void center();
+	void center();
 
-    /* Non-standard extension */
-    DECL_ATTR( Fullscreen, bool )
-    DECL_ATTR( ShowCursor, bool )
-    DECL_ATTR( Scale,    double )
-    DECL_ATTR( Frameskip, bool )
-    DECL_ATTR( FixedAspectRatio, bool )
-    DECL_ATTR( SmoothScaling, bool )
-    DECL_ATTR( IntegerScaling, bool )
-    DECL_ATTR( LastMileScaling, bool )
-    DECL_ATTR( Threadsafe, bool )
-    double averageFrameRate();
+	/* Non-standard extension */
+	DECL_ATTR( Fullscreen, bool )
+	DECL_ATTR( ShowCursor, bool )
+	DECL_ATTR( Scale,    double )
+	DECL_ATTR( Frameskip, bool )
+	DECL_ATTR( FixedAspectRatio, bool )
+	DECL_ATTR( SmoothScaling, bool )
+	DECL_ATTR( IntegerScaling, bool )
+	DECL_ATTR( LastMileScaling, bool )
+	DECL_ATTR( Threadsafe, bool )
+	double averageFrameRate();
 
 	/* <internal> */
 	Scene *getScreen() const;
@@ -89,9 +90,11 @@ public:
 	 * if "checkReset" */
 	void repaintWait(const AtomicFlag &exitCond,
 	                 bool checkReset = true);
-    
-    void lock(bool force = false);
-    void unlock(bool force = false);
+
+	void lock(bool force = false);
+	void unlock(bool force = false);
+
+	const TEX::ID &obscuredTex() const;
 
 private:
 	Graphics(RGSSThreadData *data);

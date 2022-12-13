@@ -76,6 +76,8 @@ struct SpritePrivate
 	/* Would this sprite be visible on the screen if drawn? */
 	bool isVisible;
 
+	bool obscured;
+
 	Color *color;
 	Tone *tone;
 
@@ -111,6 +113,7 @@ struct SpritePrivate
 	      patternTile(true),
 	      patternOpacity(255),
 	      invert(false),
+	      obscured(false),
 	      isVisible(false),
 	      color(&tmp.color),
 	      tone(&tmp.tone)
@@ -355,6 +358,7 @@ DEF_ATTR_SIMPLE(Sprite, Opacity,     int,     p->opacity)
 DEF_ATTR_SIMPLE(Sprite, SrcRect,     Rect&,  *p->srcRect)
 DEF_ATTR_SIMPLE(Sprite, Color,       Color&, *p->color)
 DEF_ATTR_SIMPLE(Sprite, Tone,        Tone&,  *p->tone)
+DEF_ATTR_SIMPLE(Sprite, Obscured,    bool,    p->obscured)
 DEF_ATTR_SIMPLE(Sprite, PatternTile, bool, p->patternTile)
 DEF_ATTR_SIMPLE(Sprite, PatternOpacity, int, p->patternOpacity)
 DEF_ATTR_SIMPLE(Sprite, PatternScrollX, int, p->patternScroll.x)
@@ -602,7 +606,13 @@ void Sprite::draw()
 	                    p->invert             ||
 	                    (p->pattern && !p->pattern->isDisposed());
 
-	if (renderEffect) {
+	if (p->obscured) {
+		ObscuredShader &shader = shState->shaders().obscured;
+		shader.bind();
+		shader.applyViewportProj();
+		shader.setObscured(shState->graphics().obscuredTex());
+		base = &shader;
+	} else if (renderEffect) {
 		SpriteShader &shader = shState->shaders().sprite;
 
 		shader.bind();

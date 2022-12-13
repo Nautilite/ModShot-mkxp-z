@@ -85,6 +85,7 @@ DEF_GFX_PROP_F(Sprite, PatternZoomY)
 
 DEF_GFX_PROP_B(Sprite, Mirror)
 DEF_GFX_PROP_B(Sprite, VMirror)
+DEF_GFX_PROP_B(Sprite, Obscured)
 DEF_GFX_PROP_B(Sprite, PatternTile)
 DEF_GFX_PROP_B(Sprite, Invert)
 
@@ -143,6 +144,7 @@ void spriteBindingInit()
 	INIT_PROP_BIND(Sprite, BlendType, "blend_type");
 	INIT_PROP_BIND(Sprite, Color, "color");
 	INIT_PROP_BIND(Sprite, Tone, "tone");
+	INIT_PROP_BIND(Sprite, Obscured, "obscured");
 
 	_rb_define_method(klass, "width", spriteWidth);
 	_rb_define_method(klass, "height", spriteHeight);

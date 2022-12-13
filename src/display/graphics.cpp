@@ -1,23 +1,23 @@
 /*
- ** graphics.cpp
- **
- ** This file is part of mkxp.
- **
- ** Copyright (C) 2013 Jonas Kulla <Nyocurio@gmail.com>
- **
- ** mkxp is free software: you can redistribute it and/or modify
- ** it under the terms of the GNU General Public License as published by
- ** the Free Software Foundation, either version 2 of the License, or
- ** (at your option) any later version.
- **
- ** mkxp is distributed in the hope that it will be useful,
- ** but WITHOUT ANY WARRANTY; without even the implied warranty of
- ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- ** GNU General Public License for more details.
- **
- ** You should have received a copy of the GNU General Public License
- ** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
- */
+** graphics.cpp
+**
+** This file is part of mkxp.
+**
+** Copyright (C) 2013 Jonas Kulla <Nyocurio@gmail.com>
+**
+** mkxp is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 2 of the License, or
+** (at your option) any later version.
+**
+** mkxp is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "graphics.h"
 
@@ -43,6 +43,7 @@
 #include "util.h"
 #include "input.h"
 #include "sprite.h"
+#include "oneshot.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -84,9 +85,9 @@
 
 typedef struct AudioQueue
 {
-    const THEORAPLAY_AudioPacket *audio;
-    int offset;
-    struct AudioQueue *next;
+	const THEORAPLAY_AudioPacket *audio;
+	int offset;
+	struct AudioQueue *next;
 } AudioQueue;
 
 static volatile AudioQueue *movieAudioQueue;
@@ -95,16 +96,16 @@ static volatile AudioQueue *movieAudioQueueTail;
 
 static long readMovie(THEORAPLAY_Io *io, void *buf, long buflen)
 {
-    SDL_RWops *f = (SDL_RWops *) io->userdata;
-    return (long) SDL_RWread(f, buf, 1, buflen);
+	SDL_RWops *f = (SDL_RWops *) io->userdata;
+	return (long) SDL_RWread(f, buf, 1, buflen);
 } // IoFopenRead
 
 
 static void closeMovie(THEORAPLAY_Io *io)
 {
-    SDL_RWops *f = (SDL_RWops *) io->userdata;
-    SDL_RWclose(f);
-    free(io);
+	SDL_RWops *f = (SDL_RWops *) io->userdata;
+	SDL_RWclose(f);
+	free(io);
 } // IoFopenClose
 
 
@@ -775,7 +776,9 @@ struct GraphicsPrivate {
     /* Global list of all live Disposables
      * (disposed on reset) */
     IntruList<Disposable> dispList;
-    
+
+	TEX::ID obscuredTex;
+
     GraphicsPrivate(RGSSThreadData *rtData)
     : scRes(DEF_SCREEN_W, DEF_SCREEN_H), scSize(scRes),
     winSize(rtData->config.defScreenW, rtData->config.defScreenH),
@@ -806,6 +809,12 @@ struct GraphicsPrivate {
         screenQuad.setTexPosRect(screenRect, screenRect);
         
         fpsLimiter.resetFrameAdjust();
+
+		obscuredTex = TEX::gen();
+		TEX::bind(obscuredTex);
+		TEX::setRepeat(false);
+		TEX::setSmooth(false);
+		gl.TexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE8, 640, 480, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, 0);
     }
     
     ~GraphicsPrivate() {
@@ -970,70 +979,72 @@ struct GraphicsPrivate {
                               IntRect(scOffset.x, scSize.y+scOffset.y, scSize.x, -scSize.y),
                               !forceNearestNeighbor && threadData->config.smoothScaling);
     }
-    
-    void redrawScreen() {
-        screen.composite();
-        
-        // maybe unspaghetti this later
-        if (integerScaleStepApplicable() && !integerLastMileScaling)
-        {
-            GLMeta::blitBeginScreen(winSize);
-            GLMeta::blitSource(screen.getPP().frontBuffer());
-            
-            FBO::clear();
-            metaBlitBufferFlippedScaled(scRes, true);
-            GLMeta::blitEnd();
-            
-            swapGLBuffer();
-            return;
-        }
-        
-        if (integerScaleStepApplicable())
-        {
-            assert(integerScaleBuffer.tex != TEX::ID(0));
-            GLMeta::blitBegin(integerScaleBuffer);
-            GLMeta::blitSource(screen.getPP().frontBuffer());
-            
-            GLMeta::blitRectangle(IntRect(0, 0, scRes.x, scRes.y),
-                                  IntRect(0, 0, integerScaleBuffer.width, integerScaleBuffer.height),
-                                  false);
-            
-            GLMeta::blitEnd();
-        }
-        
-        GLMeta::blitBeginScreen(winSize);
-        //GLMeta::blitSource(screen.getPP().frontBuffer());
-        
-        Vec2i sourceSize;
-        
-        if (integerScaleActive)
-        {
-            GLMeta::blitSource(integerScaleBuffer);
-            sourceSize = Vec2i(integerScaleBuffer.width, integerScaleBuffer.height);
-        }
-        else
-        {
-            GLMeta::blitSource(screen.getPP().frontBuffer());
-            sourceSize = scRes;
-        }
-        
-        FBO::clear();
-        metaBlitBufferFlippedScaled(sourceSize);
-        
-        GLMeta::blitEnd();
-        
-        swapGLBuffer();
-        
-        SDL_LockMutex(avgFPSLock);
-        if (avgFPSData.size() > 40)
-            avgFPSData.erase(avgFPSData.begin());
-        
-        unsigned long long time = shState->runTime();
-        avgFPSData.push_back(time - last_avg_update);
-        last_avg_update = time;
-        SDL_UnlockMutex(avgFPSLock);
-    }
-    
+
+	void redrawScreen()
+	{
+		if (shState->oneshot().obscuredDirty) {
+			TEX::bind(obscuredTex);
+			TEX::uploadSubImage(0, 0, 640, 480, shState->oneshot().obscuredMap().data(), GL_LUMINANCE);
+			shState->oneshot().obscuredDirty = false;
+		}
+
+		screen.composite();
+
+		// maybe unspaghetti this later
+		if (integerScaleStepApplicable() && !integerLastMileScaling) {
+			GLMeta::blitBeginScreen(winSize);
+			GLMeta::blitSource(screen.getPP().frontBuffer());
+
+			FBO::clear();
+			metaBlitBufferFlippedScaled(scRes, true);
+			GLMeta::blitEnd();
+
+			swapGLBuffer();
+			return;
+		}
+
+		if (integerScaleStepApplicable()) {
+			assert(integerScaleBuffer.tex != TEX::ID(0));
+			GLMeta::blitBegin(integerScaleBuffer);
+			GLMeta::blitSource(screen.getPP().frontBuffer());
+
+			GLMeta::blitRectangle(IntRect(0, 0, scRes.x, scRes.y),
+			                      IntRect(0, 0, integerScaleBuffer.width, integerScaleBuffer.height),
+			                      false);
+
+			GLMeta::blitEnd();
+		}
+
+		GLMeta::blitBeginScreen(winSize);
+		//GLMeta::blitSource(screen.getPP().frontBuffer());
+
+		Vec2i sourceSize;
+
+		if (integerScaleActive) {
+			GLMeta::blitSource(integerScaleBuffer);
+			sourceSize = Vec2i(integerScaleBuffer.width, integerScaleBuffer.height);
+		} else {
+			GLMeta::blitSource(screen.getPP().frontBuffer());
+			sourceSize = scRes;
+		}
+
+		FBO::clear();
+		metaBlitBufferFlippedScaled(sourceSize);
+
+		GLMeta::blitEnd();
+
+		swapGLBuffer();
+
+		SDL_LockMutex(avgFPSLock);
+		if (avgFPSData.size() > 40)
+			avgFPSData.erase(avgFPSData.begin());
+
+		unsigned long long time = shState->runTime();
+		avgFPSData.push_back(time - last_avg_update);
+		last_avg_update = time;
+		SDL_UnlockMutex(avgFPSLock);
+	}
+
     void checkSyncLock() {
         if (!threadData->syncPoint.mainSyncLocked())
             return;
@@ -1095,7 +1106,7 @@ unsigned long long Graphics::lastUpdate() {
     return p->last_update;
 }
 
-void Graphics::update(bool checkForShutdown) {
+void Graphics::update(bool checkForShutdown, bool limitFps) {
     p->threadData->rqWindowAdjust.wait();
     p->last_update = shState->runTime();
     
@@ -1109,26 +1120,33 @@ void Graphics::update(bool checkForShutdown) {
     if (STEAMSHIM_alive())
         STEAMSHIM_pump();
 #endif
-    
-    if (p->frozen)
-        return;
-    
-    if (p->fpsLimiter.frameSkipRequired()) {
-        if (p->useFrameSkip) {
-            /* Skip frame */
-            p->fpsLimiter.delay();
-            ++p->frameCount;
-            p->threadData->ethread->notifyFrame();
-            
-            return;
-        } else {
-            /* Just reset frame adjust counter */
-            p->fpsLimiter.resetFrameAdjust();
-        }
-    }
-    
-    p->checkResize();
-    p->redrawScreen();
+
+	if (p->frozen)
+		return;
+
+	if (limitFps) {
+		if (p->fpsLimiter.frameSkipRequired()) {
+			if (p->useFrameSkip) {
+				// Skip frame
+				p->fpsLimiter.delay();
+				++p->frameCount;
+				p->threadData->ethread->notifyFrame();
+				
+				return;
+			} else {
+				// Just reset frame adjust counter
+				p->fpsLimiter.resetFrameAdjust();
+			}
+		}
+	} else {
+		if (!p->fpsLimiter.frameSkipRequired())
+			return;
+	}
+
+	shState->oneshot().update();
+
+	p->checkResize();
+	p->redrawScreen();
 }
 
 void Graphics::freeze() {
@@ -1629,6 +1647,11 @@ void Graphics::lock(bool force) {
 
 void Graphics::unlock(bool force) {
     p->releaseLock(force);
+}
+
+const TEX::ID &Graphics::obscuredTex() const
+{
+	return p->obscuredTex;
 }
 
 void Graphics::addDisposable(Disposable *d) { p->dispList.append(d->link); }
