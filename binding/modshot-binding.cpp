@@ -121,6 +121,18 @@ RB_METHOD(modwindowSetIcon)
 	return Qnil;
 }
 
+RB_METHOD(modwindowSetOpacity)
+{
+	VALUE opacityVal;
+	rb_get_args(argc, argv, "o", &opacityVal);
+
+	float opacity = RFLOAT_VALUE(opacityVal);
+
+	SDL_SetWindowOpacity(shState->sdlWindow(), opacity);
+
+	return Qnil;
+}
+
 void modshotBindingInit()
 {
 	VALUE modshot_mod = rb_define_module("ModShot");
@@ -131,9 +143,10 @@ void modshotBindingInit()
 	_rb_define_module_function(modshot_mod, "notify_cleanup", modshotNotifyCleanup);
 
 	// ModWindow module
-	_rb_define_module_function(modwindow_mod, "get_position", modwindowGetPosition);
-	_rb_define_module_function(modwindow_mod, "set_position", modwindowSetPosition);
-	_rb_define_module_function(modwindow_mod, "title", modwindowGetTitle);
-	_rb_define_module_function(modwindow_mod, "title=", modwindowSetTitle);
-	_rb_define_module_function(modwindow_mod, "set_icon", modwindowSetIcon);
+	_rb_define_module_function(modwindow_mod, "GetWindowPosition", modwindowGetPosition);
+	_rb_define_module_function(modwindow_mod, "SetWindowPosition", modwindowSetPosition);
+	_rb_define_module_function(modwindow_mod, "SetWindowOpacity", modwindowSetOpacity);
+	_rb_define_module_function(modwindow_mod, "GetTitle", modwindowGetTitle);
+	_rb_define_module_function(modwindow_mod, "SetTitle", modwindowSetTitle);
+	_rb_define_module_function(modwindow_mod, "SetIcon", modwindowSetIcon);
 }
