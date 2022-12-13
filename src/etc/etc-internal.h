@@ -217,8 +217,8 @@ struct IntRect : SDL_Rect
 	{
 		return (x   <= o.x &&
 		        y   <= o.y &&
-		        x+w >= o.x+o.w &&
-		        y+h >= o.y+o.h);
+		        x+w >= o.x + o.w &&
+		        y+h >= o.y + o.h);
 	}
 };
 
@@ -244,20 +244,16 @@ struct FloatRect
 	    : x(r.x), y(r.y), w(r.w), h(r.h)
 	{}
 
-	operator IntRect() const
-	{
-		return IntRect(x, y, w, h);
-	}
+	operator IntRect() const { return IntRect(x, y, w, h); }
 
 	Vec2 topLeft() const { return Vec2(x, y); }
-	Vec2 bottomLeft() const { return Vec2(x, y+h); }
-	Vec2 topRight() const { return Vec2(x+w, y); }
-	Vec2 bottomRight() const { return Vec2(x+w, y+h); }
+	Vec2 bottomLeft() const { return Vec2(x, y + h); }
+	Vec2 topRight() const { return Vec2(x + w, y); }
+	Vec2 bottomRight() const { return Vec2(x + w, y + h); }
 
-	FloatRect hFlipped() const
-	{
-		return FloatRect(x+w, y, -w, h);
-	}
+	FloatRect hFlipped() const { return FloatRect(x + w, y, -w, h); }
+	FloatRect vFlipped() const { return FloatRect(x, y + h, w, -h); }
+	FloatRect hvFlipped() const { return FloatRect(x + w, y + h, -w, -h); }
 };
 
 /* Value between 0 and 255 with internal
