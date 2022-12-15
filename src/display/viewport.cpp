@@ -27,6 +27,7 @@
 #include "quad.h"
 #include "glstate.h"
 #include "graphics.h"
+#include "binding-util.h"
 
 #include <SDL_rect.h>
 
@@ -48,6 +49,8 @@ struct ViewportPrivate
 
 	EtcTemps tmp;
 
+	VALUE shaderArr;
+
 	ViewportPrivate(int x, int y, int width, int height, Viewport *self)
 	    : self(self),
 	      rect(&tmp.rect),
@@ -56,6 +59,7 @@ struct ViewportPrivate
 	      isOnScreen(false)
 	{
 		rect->set(x, y, width, height);
+		shaderArr = 0;
 		updateRectCon();
 	}
 
@@ -92,6 +96,10 @@ struct ViewportPrivate
 
 	bool needsEffectRender(bool flashing)
 	{
+		if (shaderArr)
+			if (rb_array_len(shaderArr) > 0)
+				return true;
+
 		bool rectEffective = !rect->isEmpty();
 		bool colorToneEffective = color->hasEffect() || tone->hasEffect() || flashing;
 
@@ -147,9 +155,10 @@ void Viewport::update()
 DEF_ATTR_RD_SIMPLE(Viewport, OX,   int,   geometry.orig.x)
 DEF_ATTR_RD_SIMPLE(Viewport, OY,   int,   geometry.orig.y)
 
-DEF_ATTR_SIMPLE(Viewport, Rect,  Rect&,  *p->rect)
-DEF_ATTR_SIMPLE(Viewport, Color, Color&, *p->color)
-DEF_ATTR_SIMPLE(Viewport, Tone,  Tone&,  *p->tone)
+DEF_ATTR_SIMPLE(Viewport, Rect,      Rect&,  *p->rect)
+DEF_ATTR_SIMPLE(Viewport, Color,     Color&, *p->color)
+DEF_ATTR_SIMPLE(Viewport, Tone,      Tone&,  *p->tone)
+DEF_ATTR_SIMPLE(Viewport, ShaderArr, VALUE,   p->shaderArr)
 
 void Viewport::setOX(int value)
 {
@@ -203,7 +212,7 @@ void Viewport::composite()
 	 * render them. */
 	if (renderEffect)
 		scene->requestViewportRender
-		        (p->color->norm, flashColor, p->tone->norm);
+		        (p->color->norm, flashColor, p->tone->norm, p->shaderArr);
 
 	glState.scissorBox.pop();
 	glState.scissorTest.pop();

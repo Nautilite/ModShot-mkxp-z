@@ -26,6 +26,10 @@
 #include "etc.h"
 #include "util.h"
 
+#include "binding-util.h"
+#include "binding-types.h"
+#include "rb_shader.h"
+
 #include "gl-util.h"
 #include "quad.h"
 #include "quadarray.h"
@@ -62,6 +66,8 @@ struct PlanePrivate
 
 	EtcTemps tmp;
 
+	VALUE shaderArr;
+
 	sigslot::connection prepareCon;
 
 	PlanePrivate()
@@ -72,7 +78,8 @@ struct PlanePrivate
 	      tone(&tmp.tone),
 	      ox(0), oy(0),
 	      zoomX(1), zoomY(1),
-	      quadSourceDirty(false)
+	      quadSourceDirty(false),
+	      shaderArr(0)
 	{
 		prepareCon = shState->prepareDraw.connect
 		        (&PlanePrivate::prepare, this);
@@ -164,6 +171,7 @@ DEF_ATTR_RD_SIMPLE(Plane, BlendType, int,     p->blendType)
 DEF_ATTR_SIMPLE(Plane, Opacity,   int,     p->opacity)
 DEF_ATTR_SIMPLE(Plane, Color,     Color&, *p->color)
 DEF_ATTR_SIMPLE(Plane, Tone,      Tone&,  *p->tone)
+DEF_ATTR_SIMPLE(Plane, ShaderArr, VALUE,   p->shaderArr)
 
 Plane::~Plane()
 {
@@ -283,6 +291,23 @@ void Plane::draw()
 		shader.setTranslation(Vec2i());
 
 		base = &shader;
+	}
+
+	if (p->shaderArr) {
+		long size = rb_array_len(p->shaderArr);
+
+		for (long i = 0; i < size; i++) {
+			VALUE value = rb_ary_entry(p->shaderArr, i);
+
+			CustomShader* shader = getPrivateDataCheck<CustomShader>(value, CustomShaderType);
+			CompiledShader* compiled = shader->getShader();
+
+			compiled->bind();
+			compiled->applyViewportProj();
+			shader->applyArgs();
+
+			base = compiled;
+		}
 	}
 
 	glState.blendMode.pushSet(p->blendType);

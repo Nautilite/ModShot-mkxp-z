@@ -145,6 +145,7 @@ main_source = files(
     'display/viewport.cpp',
     'display/window.cpp',
     'display/windowvx.cpp',
+    'display/rb_shader.cpp',
 
     'display/libnsgif/libnsgif.c',
     'display/libnsgif/lzw.c',

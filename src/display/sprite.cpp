@@ -27,6 +27,10 @@
 #include "etc-internal.h"
 #include "util.h"
 
+#include "binding-util.h"
+#include "binding-types.h"
+#include "rb_shader.h"
+
 #include "gl-util.h"
 #include "quad.h"
 #include "transform.h"
@@ -81,6 +85,8 @@ struct SpritePrivate
 	Color *color;
 	Tone *tone;
 
+	VALUE shaderArr;
+
 	struct
 	{
 		int amp;
@@ -116,7 +122,8 @@ struct SpritePrivate
 	      obscured(false),
 	      isVisible(false),
 	      color(&tmp.color),
-	      tone(&tmp.tone)
+	      tone(&tmp.tone),
+	      shaderArr(0)
 	{
 		sceneRect.x = sceneRect.y = 0;
 
@@ -359,13 +366,14 @@ DEF_ATTR_SIMPLE(Sprite, SrcRect,     Rect&,  *p->srcRect)
 DEF_ATTR_SIMPLE(Sprite, Color,       Color&, *p->color)
 DEF_ATTR_SIMPLE(Sprite, Tone,        Tone&,  *p->tone)
 DEF_ATTR_SIMPLE(Sprite, Obscured,    bool,    p->obscured)
-DEF_ATTR_SIMPLE(Sprite, PatternTile, bool, p->patternTile)
-DEF_ATTR_SIMPLE(Sprite, PatternOpacity, int, p->patternOpacity)
-DEF_ATTR_SIMPLE(Sprite, PatternScrollX, int, p->patternScroll.x)
-DEF_ATTR_SIMPLE(Sprite, PatternScrollY, int, p->patternScroll.y)
-DEF_ATTR_SIMPLE(Sprite, PatternZoomX, float, p->patternZoom.x)
-DEF_ATTR_SIMPLE(Sprite, PatternZoomY, float, p->patternZoom.y)
+DEF_ATTR_SIMPLE(Sprite, PatternTile, bool,    p->patternTile)
+DEF_ATTR_SIMPLE(Sprite, PatternOpacity, int,  p->patternOpacity)
+DEF_ATTR_SIMPLE(Sprite, PatternScrollX, int,  p->patternScroll.x)
+DEF_ATTR_SIMPLE(Sprite, PatternScrollY, int,  p->patternScroll.y)
+DEF_ATTR_SIMPLE(Sprite, PatternZoomX, float,  p->patternZoom.x)
+DEF_ATTR_SIMPLE(Sprite, PatternZoomY, float,  p->patternZoom.y)
 DEF_ATTR_SIMPLE(Sprite, Invert,      bool,    p->invert)
+DEF_ATTR_SIMPLE(Sprite, ShaderArr,   VALUE,   p->shaderArr)
 
 void Sprite::setBitmap(Bitmap *bitmap)
 {
@@ -661,6 +669,26 @@ void Sprite::draw()
 		shader.setSpriteMat(p->trans.getMatrix());
 		shader.applyViewportProj();
 		base = &shader;
+	}
+
+	if (p->shaderArr) {
+		long size = rb_array_len(p->shaderArr);
+
+		for (long i = 0; i < size; i++) {
+			VALUE value = rb_ary_entry(p->shaderArr, i);
+
+			CustomShader* shader = getPrivateDataCheck<CustomShader>(value, CustomShaderType);
+			CompiledShader* compiled = shader->getShader();
+
+			compiled->bind();
+			compiled->applyViewportProj();
+			shader->applyArgs();
+
+			if (shader->supportsSpriteMat()) 
+				shader->setSpriteMat(p->trans.getMatrix());
+
+			base = compiled;
+		}
 	}
 
 	glState.blendMode.pushSet(p->blendType);

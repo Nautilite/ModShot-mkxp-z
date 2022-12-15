@@ -25,6 +25,7 @@
 #include "disposable.h"
 #include "etc-internal.h"
 #include "etc.h"
+#include "rb_shader.h"
 
 #include "sigslot/signal.hpp"
 
@@ -81,6 +82,8 @@ public:
 
 	void blur();
 	void radialBlur(int angle, int divisions);
+
+	void shade(CustomShader* shader);
 
 	void clear();
 

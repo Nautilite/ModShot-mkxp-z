@@ -104,6 +104,11 @@ void steamBindingInit();
 
 void modshotBindingInit();
 
+void compiledShaderBindingInit();
+void shaderBindingInit();
+
+void etc_internalBindingInit();
+
 #ifdef MKXPZ_MINIFFI
 void MiniFFIBindingInit();
 #endif
@@ -191,6 +196,11 @@ static void mriBindingInit() {
 	steamBindingInit();
 
 	modshotBindingInit();
+
+	shaderBindingInit();
+	compiledShaderBindingInit();
+
+	etc_internalBindingInit();
 
 #ifdef MKXPZ_MINIFFI
 	MiniFFIBindingInit();

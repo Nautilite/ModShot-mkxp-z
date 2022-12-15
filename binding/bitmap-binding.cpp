@@ -1,23 +1,23 @@
 /*
- ** bitmap-binding.cpp
- **
- ** This file is part of mkxp.
- **
- ** Copyright (C) 2013 Jonas Kulla <Nyocurio@gmail.com>
- **
- ** mkxp is free software: you can redistribute it and/or modify
- ** it under the terms of the GNU General Public License as published by
- ** the Free Software Foundation, either version 2 of the License, or
- ** (at your option) any later version.
- **
- ** mkxp is distributed in the hope that it will be useful,
- ** but WITHOUT ANY WARRANTY; without even the implied warranty of
- ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- ** GNU General Public License for more details.
- **
- ** You should have received a copy of the GNU General Public License
- ** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
- */
+** bitmap-binding.cpp
+**
+** This file is part of mkxp.
+**
+** Copyright (C) 2013 Jonas Kulla <Nyocurio@gmail.com>
+**
+** mkxp is free software: you can redistribute it and/or modify
+** it under the terms of the GNU General Public License as published by
+** the Free Software Foundation, either version 2 of the License, or
+** (at your option) any later version.
+**
+** mkxp is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "binding-types.h"
 #include "binding-util.h"
@@ -27,6 +27,7 @@
 #include "font.h"
 #include "sharedstate.h"
 #include "graphics.h"
+#include "rb_shader.h"
 
 #if RAPI_FULL > 187
 DEF_TYPE(Bitmap);
@@ -34,67 +35,73 @@ DEF_TYPE(Bitmap);
 DEF_ALLOCFUNC(Bitmap);
 #endif
 
-static const char *objAsStringPtr(VALUE obj) {
-    VALUE str = rb_obj_as_string(obj);
-    return RSTRING_PTR(str);
+static const char *objAsStringPtr(VALUE obj)
+{
+	VALUE str = rb_obj_as_string(obj);
+	return RSTRING_PTR(str);
 }
 
-void bitmapInitProps(Bitmap *b, VALUE self) {
-    /* Wrap properties */
-    VALUE fontKlass = rb_const_get(rb_cObject, rb_intern("Font"));
-    VALUE fontObj = rb_obj_alloc(fontKlass);
-    rb_obj_call_init(fontObj, 0, 0);
-    
-    Font *font = getPrivateData<Font>(fontObj);
-    b->setInitFont(font);
-    
-    rb_iv_set(self, "font", fontObj);
+void bitmapInitProps(Bitmap *b, VALUE self)
+{
+	/* Wrap properties */
+	VALUE fontKlass = rb_const_get(rb_cObject, rb_intern("Font"));
+	VALUE fontObj = rb_obj_alloc(fontKlass);
+	rb_obj_call_init(fontObj, 0, 0);
+
+	Font *font = getPrivateData<Font>(fontObj);
+	b->setInitFont(font);
+
+	rb_iv_set(self, "font", fontObj);
 }
 
-RB_METHOD(bitmapInitialize) {
-    Bitmap *b = 0;
-    
-    if (argc == 1) {
-        char *filename;
-        rb_get_args(argc, argv, "z", &filename RB_ARG_END);
-        
-        GFX_GUARD_EXC(b = new Bitmap(filename);)
-    } else {
-        int width, height;
-        rb_get_args(argc, argv, "ii", &width, &height RB_ARG_END);
-        
-        GFX_GUARD_EXC(b = new Bitmap(width, height);)
-    }
-    
-    setPrivateData(self, b);
-    bitmapInitProps(b, self);
-    
-    return self;
+RB_METHOD(bitmapInitialize)
+{
+	Bitmap *b = 0;
+
+	if (argc == 1) {
+		char *filename;
+		rb_get_args(argc, argv, "z", &filename RB_ARG_END);
+
+		GFX_GUARD_EXC(b = new Bitmap(filename);)
+	} else {
+		int width, height;
+		rb_get_args(argc, argv, "ii", &width, &height RB_ARG_END);
+
+		GFX_GUARD_EXC(b = new Bitmap(width, height);)
+	}
+
+	setPrivateData(self, b);
+	bitmapInitProps(b, self);
+
+	return self;
 }
 
-RB_METHOD(bitmapWidth) {
-    RB_UNUSED_PARAM;
-    
-    Bitmap *b = getPrivateData<Bitmap>(self);
-    
-    int value = 0;
-    GUARD_EXC(value = b->width(););
-    
-    return INT2FIX(value);
+RB_METHOD(bitmapWidth)
+{
+	RB_UNUSED_PARAM;
+
+	Bitmap *b = getPrivateData<Bitmap>(self);
+
+	int value = 0;
+	GUARD_EXC(value = b->width(););
+
+	return INT2FIX(value);
 }
 
-RB_METHOD(bitmapHeight) {
-    RB_UNUSED_PARAM;
-    
-    Bitmap *b = getPrivateData<Bitmap>(self);
-    
-    int value = 0;
-    GUARD_EXC(value = b->height(););
-    
-    return INT2FIX(value);
+RB_METHOD(bitmapHeight)
+{
+	RB_UNUSED_PARAM;
+
+	Bitmap *b = getPrivateData<Bitmap>(self);
+
+	int value = 0;
+	GUARD_EXC(value = b->height(););
+
+	return INT2FIX(value);
 }
 
-RB_METHOD(bitmapRect) {
+RB_METHOD(bitmapRect)
+{
     RB_UNUSED_PARAM;
     
     Bitmap *b = getPrivateData<Bitmap>(self);
@@ -107,7 +114,8 @@ RB_METHOD(bitmapRect) {
     return wrapObject(r, RectType);
 }
 
-RB_METHOD(bitmapBlt) {
+RB_METHOD(bitmapBlt)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     int x, y;
@@ -129,7 +137,8 @@ RB_METHOD(bitmapBlt) {
     return self;
 }
 
-RB_METHOD(bitmapStretchBlt) {
+RB_METHOD(bitmapStretchBlt)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     VALUE destRectObj;
@@ -153,7 +162,8 @@ RB_METHOD(bitmapStretchBlt) {
     return self;
 }
 
-RB_METHOD(bitmapFillRect) {
+RB_METHOD(bitmapFillRect)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     VALUE colorObj;
@@ -183,7 +193,8 @@ RB_METHOD(bitmapFillRect) {
     return self;
 }
 
-RB_METHOD(bitmapClear) {
+RB_METHOD(bitmapClear)
+{
     RB_UNUSED_PARAM;
     
     Bitmap *b = getPrivateData<Bitmap>(self);
@@ -193,7 +204,8 @@ RB_METHOD(bitmapClear) {
     return self;
 }
 
-RB_METHOD(bitmapGetPixel) {
+RB_METHOD(bitmapGetPixel)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     int x, y;
@@ -208,7 +220,8 @@ RB_METHOD(bitmapGetPixel) {
     return wrapObject(color, ColorType);
 }
 
-RB_METHOD(bitmapSetPixel) {
+RB_METHOD(bitmapSetPixel)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     int x, y;
@@ -225,7 +238,8 @@ RB_METHOD(bitmapSetPixel) {
     return self;
 }
 
-RB_METHOD(bitmapHueChange) {
+RB_METHOD(bitmapHueChange)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     int hue;
@@ -237,7 +251,8 @@ RB_METHOD(bitmapHueChange) {
     return self;
 }
 
-RB_METHOD(bitmapDrawText) {
+RB_METHOD(bitmapDrawText)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     const char *str;
@@ -279,7 +294,8 @@ RB_METHOD(bitmapDrawText) {
     return self;
 }
 
-RB_METHOD(bitmapTextSize) {
+RB_METHOD(bitmapTextSize)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     const char *str;
@@ -303,7 +319,8 @@ RB_METHOD(bitmapTextSize) {
 
 DEF_GFX_PROP_OBJ_VAL(Bitmap, Font, Font, "font")
 
-RB_METHOD(bitmapGradientFillRect) {
+RB_METHOD(bitmapGradientFillRect)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     VALUE color1Obj, color2Obj;
@@ -339,7 +356,8 @@ RB_METHOD(bitmapGradientFillRect) {
     return self;
 }
 
-RB_METHOD(bitmapClearRect) {
+RB_METHOD(bitmapClearRect)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     if (argc == 1) {
@@ -362,7 +380,8 @@ RB_METHOD(bitmapClearRect) {
     return self;
 }
 
-RB_METHOD(bitmapBlur) {
+RB_METHOD(bitmapBlur)
+{
     RB_UNUSED_PARAM;
     
     Bitmap *b = getPrivateData<Bitmap>(self);
@@ -374,7 +393,8 @@ RB_METHOD(bitmapBlur) {
     return Qnil;
 }
 
-RB_METHOD(bitmapRadialBlur) {
+RB_METHOD(bitmapRadialBlur)
+{
     Bitmap *b = getPrivateData<Bitmap>(self);
     
     int angle, divisions;
@@ -387,7 +407,8 @@ RB_METHOD(bitmapRadialBlur) {
     return Qnil;
 }
 
-RB_METHOD(bitmapGetRawData) {
+RB_METHOD(bitmapGetRawData)
+{
     RB_UNUSED_PARAM;
     
     Bitmap *b = getPrivateData<Bitmap>(self);
@@ -399,7 +420,8 @@ RB_METHOD(bitmapGetRawData) {
     return ret;
 }
 
-RB_METHOD(bitmapSetRawData) {
+RB_METHOD(bitmapSetRawData)
+{
     RB_UNUSED_PARAM;
     
     VALUE str;
@@ -413,7 +435,8 @@ RB_METHOD(bitmapSetRawData) {
     return self;
 }
 
-RB_METHOD(bitmapSaveToFile) {
+RB_METHOD(bitmapSaveToFile)
+{
     RB_UNUSED_PARAM;
     
     VALUE str;
@@ -427,7 +450,8 @@ RB_METHOD(bitmapSaveToFile) {
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapGetMega){
+RB_METHOD(bitmapGetMega)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -437,7 +461,8 @@ RB_METHOD(bitmapGetMega){
     return rb_bool_new(b->isMega());
 }
 
-RB_METHOD(bitmapGetAnimated){
+RB_METHOD(bitmapGetAnimated)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -447,7 +472,8 @@ RB_METHOD(bitmapGetAnimated){
     return rb_bool_new(b->isAnimated());
 }
 
-RB_METHOD(bitmapGetPlaying){
+RB_METHOD(bitmapGetPlaying)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -457,7 +483,8 @@ RB_METHOD(bitmapGetPlaying){
     return rb_bool_new(b->isPlaying());
 }
 
-RB_METHOD(bitmapSetPlaying){
+RB_METHOD(bitmapSetPlaying)
+{
     RB_UNUSED_PARAM;
     
     bool play;
@@ -471,7 +498,8 @@ RB_METHOD(bitmapSetPlaying){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapPlay){
+RB_METHOD(bitmapPlay)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -482,7 +510,8 @@ RB_METHOD(bitmapPlay){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapStop){
+RB_METHOD(bitmapStop)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -493,7 +522,8 @@ RB_METHOD(bitmapStop){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapGotoStop){
+RB_METHOD(bitmapGotoStop)
+{
     RB_UNUSED_PARAM;
     
     int frame;
@@ -507,7 +537,8 @@ RB_METHOD(bitmapGotoStop){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapGotoPlay){
+RB_METHOD(bitmapGotoPlay)
+{
     RB_UNUSED_PARAM;
     
     int frame;
@@ -521,7 +552,8 @@ RB_METHOD(bitmapGotoPlay){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapFrames){
+RB_METHOD(bitmapFrames)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -531,7 +563,8 @@ RB_METHOD(bitmapFrames){
     return INT2NUM(b->numFrames());
 }
 
-RB_METHOD(bitmapCurrentFrame){
+RB_METHOD(bitmapCurrentFrame)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -541,7 +574,8 @@ RB_METHOD(bitmapCurrentFrame){
     return INT2NUM(b->currentFrameI());
 }
 
-RB_METHOD(bitmapAddFrame){
+RB_METHOD(bitmapAddFrame)
+{
     RB_UNUSED_PARAM;
     
     VALUE srcBitmap;
@@ -566,7 +600,8 @@ RB_METHOD(bitmapAddFrame){
     return INT2NUM(ret);
 }
 
-RB_METHOD(bitmapRemoveFrame){
+RB_METHOD(bitmapRemoveFrame)
+{
     RB_UNUSED_PARAM;
     
     VALUE position;
@@ -586,7 +621,8 @@ RB_METHOD(bitmapRemoveFrame){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapNextFrame){
+RB_METHOD(bitmapNextFrame)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -598,7 +634,8 @@ RB_METHOD(bitmapNextFrame){
     return INT2NUM(b->currentFrameI());
 }
 
-RB_METHOD(bitmapPreviousFrame){
+RB_METHOD(bitmapPreviousFrame)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -610,7 +647,8 @@ RB_METHOD(bitmapPreviousFrame){
     return INT2NUM(b->currentFrameI());
 }
 
-RB_METHOD(bitmapSetFPS){
+RB_METHOD(bitmapSetFPS)
+{
     RB_UNUSED_PARAM;
     
     VALUE fps;
@@ -630,7 +668,8 @@ RB_METHOD(bitmapSetFPS){
     return RUBY_Qnil;
 }
 
-RB_METHOD(bitmapGetFPS){
+RB_METHOD(bitmapGetFPS)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -644,7 +683,8 @@ RB_METHOD(bitmapGetFPS){
     return rb_float_new(ret);
 }
 
-RB_METHOD(bitmapSetLooping){
+RB_METHOD(bitmapSetLooping)
+{
     RB_UNUSED_PARAM;
     
     bool loop;
@@ -657,7 +697,8 @@ RB_METHOD(bitmapSetLooping){
     return rb_bool_new(loop);
 }
 
-RB_METHOD(bitmapGetLooping){
+RB_METHOD(bitmapGetLooping)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -670,7 +711,8 @@ RB_METHOD(bitmapGetLooping){
 }
 
 // Captures the Bitmap's current frame data to a new Bitmap
-RB_METHOD(bitmapSnapToBitmap) {
+RB_METHOD(bitmapSnapToBitmap)
+{
     RB_UNUSED_PARAM;
     
     VALUE position;
@@ -691,7 +733,8 @@ RB_METHOD(bitmapSnapToBitmap) {
     return ret;
 }
 
-RB_METHOD(bitmapGetMaxSize){
+RB_METHOD(bitmapGetMaxSize)
+{
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -699,7 +742,8 @@ RB_METHOD(bitmapGetMaxSize){
     return INT2NUM(Bitmap::maxSize());
 }
 
-RB_METHOD(bitmapInitializeCopy) {
+RB_METHOD(bitmapInitializeCopy)
+{
     rb_check_argc(argc, 1);
     VALUE origObj = argv[0];
     
@@ -718,62 +762,79 @@ RB_METHOD(bitmapInitializeCopy) {
     return self;
 }
 
-void bitmapBindingInit() {
-    VALUE klass = rb_define_class("Bitmap", rb_cObject);
+RB_METHOD(bitmapShade)
+{
+	Bitmap *b = getPrivateData<Bitmap>(self);
+
+	VALUE shaderObj;
+	rb_get_args(argc, argv, "o", &shaderObj RB_ARG_END);
+
+	CustomShader *shader = getPrivateDataCheck<CustomShader>(shaderObj, CustomShaderType);
+
+	b->shade(shader);
+
+	return Qnil;
+}
+
+void bitmapBindingInit()
+{
+	VALUE klass = rb_define_class("Bitmap", rb_cObject);
 #if RAPI_FULL > 187
-    rb_define_alloc_func(klass, classAllocate<&BitmapType>);
+	rb_define_alloc_func(klass, classAllocate<&BitmapType>);
 #else
-    rb_define_alloc_func(klass, BitmapAllocate);
+	rb_define_alloc_func(klass, BitmapAllocate);
 #endif
-    
-    disposableBindingInit<Bitmap>(klass);
-    
-    _rb_define_method(klass, "initialize", bitmapInitialize);
-    _rb_define_method(klass, "initialize_copy", bitmapInitializeCopy);
-    
-    _rb_define_method(klass, "width", bitmapWidth);
-    _rb_define_method(klass, "height", bitmapHeight);
-    _rb_define_method(klass, "rect", bitmapRect);
-    _rb_define_method(klass, "blt", bitmapBlt);
-    _rb_define_method(klass, "stretch_blt", bitmapStretchBlt);
-    _rb_define_method(klass, "fill_rect", bitmapFillRect);
-    _rb_define_method(klass, "clear", bitmapClear);
-    _rb_define_method(klass, "get_pixel", bitmapGetPixel);
-    _rb_define_method(klass, "set_pixel", bitmapSetPixel);
-    _rb_define_method(klass, "hue_change", bitmapHueChange);
-    _rb_define_method(klass, "draw_text", bitmapDrawText);
-    _rb_define_method(klass, "text_size", bitmapTextSize);
-    
-    _rb_define_method(klass, "raw_data", bitmapGetRawData);
-    _rb_define_method(klass, "raw_data=", bitmapSetRawData);
-    _rb_define_method(klass, "to_file", bitmapSaveToFile);
-    
-    _rb_define_method(klass, "gradient_fill_rect", bitmapGradientFillRect);
-    _rb_define_method(klass, "clear_rect", bitmapClearRect);
-    _rb_define_method(klass, "blur", bitmapBlur);
-    _rb_define_method(klass, "radial_blur", bitmapRadialBlur);
-    
-    _rb_define_method(klass, "mega?", bitmapGetMega);
-    rb_define_singleton_method(klass, "max_size", RUBY_METHOD_FUNC(bitmapGetMaxSize), -1);
-    
-    _rb_define_method(klass, "animated?", bitmapGetAnimated);
-    _rb_define_method(klass, "playing", bitmapGetPlaying);
-    _rb_define_method(klass, "playing=", bitmapSetPlaying);
-    _rb_define_method(klass, "play", bitmapPlay);
-    _rb_define_method(klass, "stop", bitmapStop);
-    _rb_define_method(klass, "goto_and_stop", bitmapGotoStop);
-    _rb_define_method(klass, "goto_and_play", bitmapGotoPlay);
-    _rb_define_method(klass, "frame_count", bitmapFrames);
-    _rb_define_method(klass, "current_frame", bitmapCurrentFrame);
-    _rb_define_method(klass, "add_frame", bitmapAddFrame);
-    _rb_define_method(klass, "remove_frame", bitmapRemoveFrame);
-    _rb_define_method(klass, "next_frame", bitmapNextFrame);
-    _rb_define_method(klass, "previous_frame", bitmapPreviousFrame);
-    _rb_define_method(klass, "frame_rate", bitmapGetFPS);
-    _rb_define_method(klass, "frame_rate=", bitmapSetFPS);
-    _rb_define_method(klass, "looping", bitmapGetLooping);
-    _rb_define_method(klass, "looping=", bitmapSetLooping);
-    _rb_define_method(klass, "snap_to_bitmap", bitmapSnapToBitmap);
-    
-    INIT_PROP_BIND(Bitmap, Font, "font");
+
+	disposableBindingInit<Bitmap>(klass);
+
+	_rb_define_method(klass, "initialize", bitmapInitialize);
+	_rb_define_method(klass, "initialize_copy", bitmapInitializeCopy);
+
+	_rb_define_method(klass, "width", bitmapWidth);
+	_rb_define_method(klass, "height", bitmapHeight);
+	_rb_define_method(klass, "rect", bitmapRect);
+	_rb_define_method(klass, "blt", bitmapBlt);
+	_rb_define_method(klass, "stretch_blt", bitmapStretchBlt);
+	_rb_define_method(klass, "fill_rect", bitmapFillRect);
+	_rb_define_method(klass, "clear", bitmapClear);
+	_rb_define_method(klass, "get_pixel", bitmapGetPixel);
+	_rb_define_method(klass, "set_pixel", bitmapSetPixel);
+	_rb_define_method(klass, "hue_change", bitmapHueChange);
+	_rb_define_method(klass, "draw_text", bitmapDrawText);
+	_rb_define_method(klass, "text_size", bitmapTextSize);
+
+	_rb_define_method(klass, "raw_data", bitmapGetRawData);
+	_rb_define_method(klass, "raw_data=", bitmapSetRawData);
+	_rb_define_method(klass, "to_file", bitmapSaveToFile);
+
+	_rb_define_method(klass, "gradient_fill_rect", bitmapGradientFillRect);
+	_rb_define_method(klass, "clear_rect", bitmapClearRect);
+	_rb_define_method(klass, "blur", bitmapBlur);
+	_rb_define_method(klass, "radial_blur", bitmapRadialBlur);
+
+	_rb_define_method(klass, "mega?", bitmapGetMega);
+	rb_define_singleton_method(klass, "max_size", RUBY_METHOD_FUNC(bitmapGetMaxSize), -1);
+
+	_rb_define_method(klass, "animated?", bitmapGetAnimated);
+	_rb_define_method(klass, "playing", bitmapGetPlaying);
+	_rb_define_method(klass, "playing=", bitmapSetPlaying);
+	_rb_define_method(klass, "play", bitmapPlay);
+	_rb_define_method(klass, "stop", bitmapStop);
+	_rb_define_method(klass, "goto_and_stop", bitmapGotoStop);
+	_rb_define_method(klass, "goto_and_play", bitmapGotoPlay);
+	_rb_define_method(klass, "frame_count", bitmapFrames);
+	_rb_define_method(klass, "current_frame", bitmapCurrentFrame);
+	_rb_define_method(klass, "add_frame", bitmapAddFrame);
+	_rb_define_method(klass, "remove_frame", bitmapRemoveFrame);
+	_rb_define_method(klass, "next_frame", bitmapNextFrame);
+	_rb_define_method(klass, "previous_frame", bitmapPreviousFrame);
+	_rb_define_method(klass, "frame_rate", bitmapGetFPS);
+	_rb_define_method(klass, "frame_rate=", bitmapSetFPS);
+	_rb_define_method(klass, "looping", bitmapGetLooping);
+	_rb_define_method(klass, "looping=", bitmapSetLooping);
+	_rb_define_method(klass, "snap_to_bitmap", bitmapSnapToBitmap);
+
+	_rb_define_method(klass, "shade", bitmapShade);
+
+	INIT_PROP_BIND(Bitmap, Font, "font");
 }

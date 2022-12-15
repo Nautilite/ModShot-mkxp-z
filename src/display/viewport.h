@@ -26,6 +26,7 @@
 #include "flashable.h"
 #include "disposable.h"
 #include "util.h"
+#include "binding-util.h"
 
 struct ViewportPrivate;
 
@@ -39,11 +40,12 @@ public:
 
 	void update();
 
-	DECL_ATTR( Rect,  Rect&  )
-	DECL_ATTR( OX,    int    )
-	DECL_ATTR( OY,    int    )
-	DECL_ATTR( Color, Color& )
-	DECL_ATTR( Tone,  Tone&  )
+	DECL_ATTR( Rect,      Rect&  )
+	DECL_ATTR( OX,        int    )
+	DECL_ATTR( OY,        int    )
+	DECL_ATTR( Color,     Color& )
+	DECL_ATTR( Tone,      Tone&  )
+	DECL_ATTR( ShaderArr, VALUE  )
 
 	void initDynAttribs();
 
