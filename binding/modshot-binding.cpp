@@ -110,11 +110,8 @@ RB_METHOD(modwindowSetIcon)
 	rb_get_args(argc, argv, "z", &path);
 	SDL_Surface *icon = IMG_Load(path);
 
-	if (!icon) {
-		std::string excText("Setting icon failed: ");
-		excText.append(IMG_GetError());
-		rb_raise(rb_eRuntimeError, excText.c_str());
-	}
+	if (!icon)
+		rb_raise(rb_eRuntimeError, "Setting icon failed: %s", IMG_GetError());
 
 	SDL_SetWindowIcon(shState->sdlWindow(), icon);
 

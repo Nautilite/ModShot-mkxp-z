@@ -457,9 +457,31 @@ RB_METHOD(wallpaperReset)
 						<< "plugin: \"" << x.second << "\"";
 				if (defPictures.find(x.first) != defPictures.end()) {
 					std::string picture = defPictures[x.first];
-					boost::replace_all(picture, "\\", "\\\\");
-					boost::replace_all(picture, "\"", "\\\"");
-					boost::replace_all(picture, "'", "\\x27");
+
+					// Escape some characters in path
+					std::string::size_type strpos = 0;
+
+					while ((strpos = picture.find('\\', strpos)) != std::string::npos) {
+						picture.replace(strpos, 1, "\\\\");
+						strpos += 2;
+					}
+
+					strpos = 0;
+
+					while ((strpos = picture.find('"', strpos)) != std::string::npos) {
+						picture.replace(strpos, 1, "\\\"");
+						strpos += 2;
+					}
+
+					strpos = 0;
+
+					while ((strpos = picture.find('\'', strpos)) != std::string::npos) {
+						picture.replace(strpos, 1, "\\x27");
+						strpos += 2;
+					}
+
+					strpos = 0;
+
 					command << ", picture: \"" << picture << "\"";
 				}
 				if (defColors.find(x.first) != defColors.end()) {
