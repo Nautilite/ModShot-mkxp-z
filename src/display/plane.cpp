@@ -50,6 +50,8 @@ struct PlanePrivate
 {
 	Bitmap *bitmap;
 
+	Rect *srcRect;
+
 	NormValue opacity;
 	BlendType blendType;
 	Color *color;
@@ -69,9 +71,11 @@ struct PlanePrivate
 	VALUE shaderArr;
 
 	sigslot::connection prepareCon;
+	sigslot::connection srcRectCon;
 
 	PlanePrivate()
 	    : bitmap(0),
+	      srcRect(&tmp.rect),
 	      opacity(255),
 	      blendType(BlendNormal),
 	      color(&tmp.color),
@@ -81,6 +85,7 @@ struct PlanePrivate
 	      quadSourceDirty(false),
 	      shaderArr(0)
 	{
+		updateSrcRectCon();
 		prepareCon = shState->prepareDraw.connect
 		        (&PlanePrivate::prepare, this);
 
@@ -89,12 +94,30 @@ struct PlanePrivate
 
 	~PlanePrivate()
 	{
+		srcRectCon.disconnect();
 		prepareCon.disconnect();
+	}
+
+	void onSrcRectChange()
+	{
+		quadSourceDirty = true;
+	}
+
+	void updateSrcRectCon()
+	{
+		/* Cut old connection */
+		srcRectCon.disconnect();
+		/* Create new one */
+		srcRectCon = srcRect->valueChanged.connect
+				(&PlanePrivate::onSrcRectChange, this);
 	}
 
 	void updateQuadSource()
 	{
-		if (gl.npot_repeat)
+		if (nullOrDisposed(bitmap))
+			return;
+
+		if (gl.npot_repeat && srcRect->toIntRect() == bitmap->rect())
 		{
 			FloatRect srcRect;
 			srcRect.x = (sceneGeo.orig.x + ox) / zoomX;
@@ -108,12 +131,9 @@ struct PlanePrivate
 			return;
 		}
 
-		if (nullOrDisposed(bitmap))
-			return;
-
 		/* Scaled (zoomed) bitmap dimensions */
-		float sw = bitmap->width()  * zoomX;
-		float sh = bitmap->height() * zoomY;
+		float sw = srcRect->width * zoomX;
+		float sh = srcRect->height * zoomY;
 
 		/* Plane offset wrapped by scaled bitmap dims */
 		float wox = fwrap(ox, sw);
@@ -127,7 +147,7 @@ struct PlanePrivate
 		size_t tilesX = ceil((vpw - sw + wox) / sw) + 1;
 		size_t tilesY = ceil((vph - sh + woy) / sh) + 1;
 
-		FloatRect tex = bitmap->rect();
+		FloatRect tex = srcRect->toFloatRect();
 
 		qArray.resize(tilesX * tilesY);
 
@@ -168,6 +188,7 @@ DEF_ATTR_RD_SIMPLE(Plane, ZoomX,     float,   p->zoomX)
 DEF_ATTR_RD_SIMPLE(Plane, ZoomY,     float,   p->zoomY)
 DEF_ATTR_RD_SIMPLE(Plane, BlendType, int,     p->blendType)
 
+DEF_ATTR_SIMPLE(Plane, SrcRect,   Rect&,  *p->srcRect)
 DEF_ATTR_SIMPLE(Plane, Opacity,   int,     p->opacity)
 DEF_ATTR_SIMPLE(Plane, Color,     Color&, *p->color)
 DEF_ATTR_SIMPLE(Plane, Tone,      Tone&,  *p->tone)
@@ -188,6 +209,9 @@ void Plane::setBitmap(Bitmap *value)
 		return;
 
 	value->ensureNonMega();
+
+	*p->srcRect = value->rect();
+	p->onSrcRectChange();
 }
 
 void Plane::setOX(int value)
@@ -195,7 +219,7 @@ void Plane::setOX(int value)
 	guardDisposed();
 
 	if (p->ox == value)
-	        return;
+		return;
 
 	p->ox = value;
 	p->quadSourceDirty = true;
@@ -206,7 +230,7 @@ void Plane::setOY(int value)
 	guardDisposed();
 
 	if (p->oy == value)
-	        return;
+		return;
 
 	p->oy = value;
 	p->quadSourceDirty = true;
@@ -217,7 +241,7 @@ void Plane::setZoomX(float value)
 	guardDisposed();
 
 	if (p->zoomX == value)
-	        return;
+		return;
 
 	p->zoomX = value;
 	p->quadSourceDirty = true;
@@ -228,7 +252,7 @@ void Plane::setZoomY(float value)
 	guardDisposed();
 
 	if (p->zoomY == value)
-	        return;
+		return;
 
 	p->zoomY = value;
 	p->quadSourceDirty = true;
@@ -240,23 +264,26 @@ void Plane::setBlendType(int value)
 
 	switch (value)
 	{
-	default :
-	case BlendNormal :
-		p->blendType = BlendNormal;
-		return;
-	case BlendAddition :
-		p->blendType = BlendAddition;
-		return;
-	case BlendSubstraction :
-		p->blendType = BlendSubstraction;
-		return;
+		default:
+		case BlendNormal:
+			p->blendType = BlendNormal;
+			return;
+		case BlendAddition :
+			p->blendType = BlendAddition;
+			return;
+		case BlendSubstraction :
+			p->blendType = BlendSubstraction;
+			return;
 	}
 }
 
 void Plane::initDynAttribs()
 {
+	p->srcRect = new Rect;
 	p->color = new Color;
 	p->tone = new Tone;
+
+	p->updateSrcRectCon();
 }
 
 void Plane::draw()

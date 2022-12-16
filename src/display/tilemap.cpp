@@ -718,8 +718,13 @@ struct TilemapPrivate
 
 	void handleTile(int x, int y, int z)
 	{
-		int tileInd =
-			tableGetWrapped(*mapData, x + viewpPos.x, y + viewpPos.y, z);
+		int ox = x + viewpPos.x;
+		int oy = y + viewpPos.y;
+
+		if (!wrapping && (ox < 0 || oy < 0 || ox >= mapData->xSize() || oy >= mapData->ySize()))
+			return;
+
+		int tileInd = tableGetWrapped(*mapData, ox, oy, z);
 
 		/* Check for empty space */
 		if (tileInd < 48)
@@ -779,7 +784,7 @@ struct TilemapPrivate
 	void buildQuadArray()
 	{
 		clearQuadArrays();
-
+		/*
 		int ox = viewpPos.x;
 		int oy = viewpPos.y;
 		int mapW = mapData->xSize();
@@ -804,6 +809,11 @@ struct TilemapPrivate
 			return;
 		for (int x = minX; x <= maxX; ++x)
 			for (int y = minY; y <= maxY; ++y)
+				for (int z = 0; z < mapData->zSize(); ++z)
+					handleTile(x, y, z);
+		*/
+		for (int x = 0; x < viewpW; ++x)
+			for (int y = 0; y < viewpH; ++y)
 				for (int z = 0; z < mapData->zSize(); ++z)
 					handleTile(x, y, z);
 	}

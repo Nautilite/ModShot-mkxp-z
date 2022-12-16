@@ -42,6 +42,7 @@ RB_METHOD(planeInitialize)
 	GFX_LOCK;
 	p->initDynAttribs();
 
+	wrapProperty(self, &p->getSrcRect(), "src_rect", RectType);
 	wrapProperty(self, &p->getColor(), "color", ColorType);
 	wrapProperty(self, &p->getTone(), "tone", ToneType);
 	GFX_UNLOCK;
@@ -50,6 +51,7 @@ RB_METHOD(planeInitialize)
 }
 
 DEF_GFX_PROP_OBJ_REF(Plane, Bitmap, Bitmap, "bitmap")
+DEF_GFX_PROP_OBJ_VAL(Plane, Rect, SrcRect, "src_rect")
 DEF_GFX_PROP_OBJ_VAL(Plane, Color, Color, "color")
 DEF_GFX_PROP_OBJ_VAL(Plane, Tone, Tone, "tone")
 
@@ -83,6 +85,7 @@ void planeBindingInit()
 	INIT_PROP_BIND(Plane, ZoomY, "zoom_y");
 	INIT_PROP_BIND(Plane, Opacity, "opacity");
 	INIT_PROP_BIND(Plane, BlendType, "blend_type");
+	INIT_PROP_BIND(Plane, SrcRect, "src_rect");
 	INIT_PROP_BIND(Plane, Color, "color");
 	INIT_PROP_BIND(Plane, Tone, "tone");
 }
