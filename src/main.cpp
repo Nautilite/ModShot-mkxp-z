@@ -119,10 +119,12 @@ int rgssThreadFun(void *userdata) {
   RGSSThreadData *threadData = static_cast<RGSSThreadData *>(userdata);
 
 #ifdef MKXPZ_INIT_GL_LATER
-  threadData->glContext =
-      initGL(threadData->window, threadData->config, threadData);
+  threadData->glContext = initGL(threadData->window, threadData->config, threadData);
+
   if (!threadData->glContext)
     return 0;
+
+  GLDebugLogger glLogger;
 #else
   SDL_GL_MakeCurrent(threadData->window, threadData->glContext);
 #endif
@@ -579,6 +581,9 @@ static SDL_GLContext initGL(SDL_Window *win, Config &conf,
   bool vsync = conf.vsync || conf.syncToRefreshrate;
   SDL_GL_SetSwapInterval(vsync ? 1 : 0);
 
-  // GLDebugLogger dLogger;
+#ifndef MKXPZ_INIT_GL_LATER
+  GLDebugLogger glLogger;
+#endif
+
   return glCtx;
 }

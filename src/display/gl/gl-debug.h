@@ -19,8 +19,8 @@
 ** along with mkxp.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEBUGLOGGER_H
-#define DEBUGLOGGER_H
+#ifndef GLDEBUG_H
+#define GLDEBUG_H
 
 #include "gl-fun.h"
 
@@ -48,4 +48,4 @@ private:
 	}
 
 
-#endif // DEBUGLOGGER_H
+#endif // GLDEBUG_H

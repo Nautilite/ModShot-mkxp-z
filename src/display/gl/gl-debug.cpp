@@ -20,37 +20,31 @@
 */
 
 #include "gl-debug.h"
+#include "gl-fun.h"
 #include "debugwriter.h"
 
 #include <iostream>
 
-#include "gl-fun.h"
-
 struct GLDebugLoggerPrivate
 {
-	std::ostream *stream;
+	std::ostream *logStream;
 
-	GLDebugLoggerPrivate(const char *logFilename)
+	GLDebugLoggerPrivate(const char *filename)
 	{
-		(void) logFilename;
+		(void)filename;
 
-		stream = &std::clog;
+		logStream = &std::clog;
 	}
 
 	~GLDebugLoggerPrivate()
 	{
 	}
 
-	void writeTimestamp()
+	void output(std::string line)
 	{
-		// FIXME reintroduce proper time stamps (is this even necessary??)
-		*stream << "[GLDEBUG] ";
-	}
+		*logStream << "[GLDEBUG] " << line << std::endl;
 
-	void writeLine(const char *line)
-	{
-		*stream << line << "\n";
-		stream->flush();
+		logStream->flush();
 	}
 };
 
@@ -59,20 +53,95 @@ static void APIENTRY arbDebugFunc(GLenum source,
                                   GLuint id,
                                   GLenum severity,
                                   GLsizei length,
-                                  const GLchar* message,
-                                  const void* userParam)
+                                  const GLchar *message,
+                                  const void *userParam)
 {
-	GLDebugLoggerPrivate *p =
-		static_cast<GLDebugLoggerPrivate*>(const_cast<void*>(userParam));
+	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		return;
 
-	(void) source;
-	(void) type;
-	(void) id;
-	(void) severity;
-	(void) length;
+	GLDebugLoggerPrivate *p = static_cast<GLDebugLoggerPrivate *>(const_cast<void *>(userParam));
 
-	p->writeTimestamp();
-	p->writeLine(message);
+	std::stringstream logMessage;
+
+	logMessage << "[";
+
+	switch (source)
+	{
+		case GL_DEBUG_SOURCE_API:
+			logMessage << "GL API";
+			break;
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			logMessage << "Window System";
+			break;
+		case GL_DEBUG_SOURCE_SHADER_COMPILER:
+			logMessage << "Shader Compiler";
+			break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			logMessage << "Third Party";
+			break;
+		case GL_DEBUG_SOURCE_APPLICATION:
+			logMessage << "Application";
+			break;
+		case GL_DEBUG_SOURCE_OTHER:
+			logMessage << "Other";
+			break;
+	}
+
+	logMessage << " | ";
+
+	switch (type)
+	{
+		case GL_DEBUG_TYPE_ERROR:
+			logMessage << "API Error";
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			logMessage << "Deprecated Behavior";
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			logMessage << "Undefined Behavior";
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			logMessage << "Portability";
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			logMessage << "Performance";
+			break;
+		case GL_DEBUG_TYPE_MARKER:
+			logMessage << "Marker";
+			break;
+		case GL_DEBUG_TYPE_PUSH_GROUP:
+			logMessage << "Push Group";
+			break;
+		case GL_DEBUG_TYPE_POP_GROUP:
+			logMessage << "Pop Group";
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			logMessage << "Other";
+			break;
+	}
+
+	logMessage << " | ";
+
+	switch (severity)
+	{
+		case GL_DEBUG_SEVERITY_NOTIFICATION:
+			logMessage << "Notice";
+			break;
+		case GL_DEBUG_SEVERITY_LOW:
+			logMessage << "Low";
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			logMessage << "Medium";
+			break;
+		case GL_DEBUG_SEVERITY_HIGH:
+			logMessage << "High";
+			break;
+	}
+
+	logMessage << "] [" << id << "] ";
+	logMessage << std::string(message, length);
+
+	p->output(logMessage.str());
 }
 
 GLDebugLogger::GLDebugLogger(const char *filename)
@@ -82,7 +151,7 @@ GLDebugLogger::GLDebugLogger(const char *filename)
 	if (gl.DebugMessageCallback)
 		gl.DebugMessageCallback(arbDebugFunc, p);
 	else
-		Debug() << "DebugLogger: no debug extensions found";
+		Debug() << "[GLDEBUG] No debug extensions found";
 }
 
 GLDebugLogger::~GLDebugLogger()
