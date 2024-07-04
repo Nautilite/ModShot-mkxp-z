@@ -330,71 +330,91 @@ private:
 	GLint u_source, u_destination, u_subRect, u_opacity;
 };
 
-class Lanczos3Shader : public SimpleShader
+class Lanczos3Shader : public ShaderBase
 {
 public:
 	Lanczos3Shader();
 
+	void setTexOffsetX(int value);
 	void setTexSize(const Vec2i &value);
 
 protected:
+	GLint u_texOffsetX;
 	GLint u_sourceSize;
 };
 
-class BicubicShader : public Lanczos3Shader
+class BicubicShader : public ShaderBase
 {
 public:
 	BicubicShader();
 
+	void setTexOffsetX(int value);
+	void setTexSize(const Vec2i &value);
 	void setSharpness(int sharpness);
 
 protected:
+	GLint u_texOffsetX;
+	GLint u_sourceSize;
 	GLint u_bc;
 };
 
 #ifdef MKXPZ_SSL
-class XbrzShader : public Lanczos3Shader
+class XbrzShader : public ShaderBase
 {
 public:
 	XbrzShader();
 
+	void setTexOffsetX(int value);
+	void setTexSize(const Vec2i &value);
 	void setTargetScale(const Vec2 &value);
 
 protected:
+	GLint u_texOffsetX;
+	GLint u_sourceSize;
 	GLint u_targetScale;
 };
 #endif
 
-class Lanczos3SpriteShader : public SimpleSpriteShader
+class Lanczos3SpriteShader : public ShaderBase
 {
 public:
 	Lanczos3SpriteShader();
 
+	void setSpriteMat(const float value[16]);
 	void setTexSize(const Vec2i &value);
 
 protected:
+	GLint u_spriteMat;
 	GLint u_sourceSize;
 };
 
-class BicubicSpriteShader : public Lanczos3SpriteShader
+class BicubicSpriteShader : public ShaderBase
 {
 public:
 	BicubicSpriteShader();
 
+	void setSpriteMat(const float value[16]);
+	void setTexSize(const Vec2i &value);
 	void setSharpness(int sharpness);
 
 protected:
+	GLint u_spriteMat;
+	GLint u_sourceSize;
 	GLint u_bc;
 };
 
-class XbrzSpriteShader : public Lanczos3SpriteShader
+class XbrzSpriteShader : public ShaderBase
 {
 public:
 	XbrzSpriteShader();
 
+	void setSpriteMat(const float value[16]);
+	void setTexSize(const Vec2i &value);
 	void setTargetScale(const Vec2 &value);
 
 protected:
+	GLint u_sourceSize;
+	GLint u_spriteMat;
 	GLint u_targetScale;
 };
 

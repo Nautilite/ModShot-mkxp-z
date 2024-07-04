@@ -396,6 +396,17 @@ BicubicSpriteShader::BicubicSpriteShader()
 	GET_U(bc);
 }
 
+void BicubicSpriteShader::setSpriteMat(const float value[16])
+{
+	gl.UniformMatrix4fv(u_spriteMat, 1, GL_FALSE, value);
+}
+
+void BicubicSpriteShader::setTexSize(const Vec2i &value)
+{
+	ShaderBase::setTexSize(value);
+	gl.Uniform2f(u_sourceSize, (float)value.x, (float)value.y);
+}
+
 void BicubicSpriteShader::setSharpness(int sharpness)
 {
 	gl.Uniform2f(u_bc, 1.f - sharpness * 0.01f, sharpness * 0.005f);
@@ -409,6 +420,11 @@ Lanczos3SpriteShader::Lanczos3SpriteShader()
 
 	GET_U(spriteMat);
 	GET_U(sourceSize);
+}
+
+void Lanczos3SpriteShader::setSpriteMat(const float value[16])
+{
+	gl.UniformMatrix4fv(u_spriteMat, 1, GL_FALSE, value);
 }
 
 void Lanczos3SpriteShader::setTexSize(const Vec2i &value)
@@ -427,6 +443,17 @@ XbrzSpriteShader::XbrzSpriteShader()
 	GET_U(spriteMat);
 	GET_U(sourceSize);
 	GET_U(targetScale);
+}
+
+void XbrzSpriteShader::setSpriteMat(const float value[16])
+{
+	gl.UniformMatrix4fv(u_spriteMat, 1, GL_FALSE, value);
+}
+
+void XbrzSpriteShader::setTexSize(const Vec2i &value)
+{
+	ShaderBase::setTexSize(value);
+	gl.Uniform2f(u_sourceSize, (float)value.x, (float)value.y);
 }
 
 void XbrzSpriteShader::setTargetScale(const Vec2 &value)
@@ -831,6 +858,17 @@ BicubicShader::BicubicShader()
 	GET_U(bc);
 }
 
+void BicubicShader::setTexOffsetX(int value)
+{
+	gl.Uniform1f(u_texOffsetX, value);
+}
+
+void BicubicShader::setTexSize(const Vec2i &value)
+{
+	ShaderBase::setTexSize(value);
+	gl.Uniform2f(u_sourceSize, (float)value.x, (float)value.y);
+}
+
 void BicubicShader::setSharpness(int sharpness)
 {
 	gl.Uniform2f(u_bc, 1.f - sharpness * 0.01f, sharpness * 0.005f);
@@ -844,6 +882,11 @@ Lanczos3Shader::Lanczos3Shader()
 
 	GET_U(texOffsetX);
 	GET_U(sourceSize);
+}
+
+void Lanczos3Shader::setTexOffsetX(int value)
+{
+	gl.Uniform1f(u_texOffsetX, value);
 }
 
 void Lanczos3Shader::setTexSize(const Vec2i &value)
@@ -862,6 +905,17 @@ XbrzShader::XbrzShader()
 	GET_U(texOffsetX);
 	GET_U(sourceSize);
 	GET_U(targetScale);
+}
+
+void XbrzShader::setTexOffsetX(int value)
+{
+	gl.Uniform1f(u_texOffsetX, value);
+}
+
+void XbrzShader::setTexSize(const Vec2i &value)
+{
+	ShaderBase::setTexSize(value);
+	gl.Uniform2f(u_sourceSize, (float)value.x, (float)value.y);
 }
 
 void XbrzShader::setTargetScale(const Vec2 &value)
