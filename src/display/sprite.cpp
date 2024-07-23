@@ -316,18 +316,21 @@ struct SpritePrivate
         int lastLength = (visibleLength - firstLength) % 8;
         
         wave.qArray.resize(!!firstLength + chunks + !!lastLength);
-        SVertex *vert = &wave.qArray.vertices[0];
         
-        float phase = (wave.phase * (float) M_PI) / 180.0f;
-        
-        if (firstLength > 0)
-            emitWaveChunk(vert, phase, width, zoomY, 0, firstLength);
-        
-        for (int i = 0; i < chunks; ++i)
-            emitWaveChunk(vert, phase, width, zoomY, firstLength + i * 8, 8);
-        
-        if (lastLength > 0)
-            emitWaveChunk(vert, phase, width, zoomY, firstLength + chunks * 8, lastLength);
+        if (wave.qArray.count() > 0) {
+            SVertex *vert = &wave.qArray.vertices[0];
+            
+            float phase = (wave.phase * (float) M_PI) / 180.0f;
+            
+            if (firstLength > 0)
+                emitWaveChunk(vert, phase, width, zoomY, 0, firstLength);
+            
+            for (int i = 0; i < chunks; ++i)
+                emitWaveChunk(vert, phase, width, zoomY, firstLength + i * 8, 8);
+            
+            if (lastLength > 0)
+                emitWaveChunk(vert, phase, width, zoomY, firstLength + chunks * 8, lastLength);
+        }
         
         wave.qArray.commit();
     }
