@@ -279,7 +279,7 @@ try { exp } catch (...) {}
     SET_OPT(smoothScalingMipmaps, boolean);
     SET_OPT(bicubicSharpness, integer);
 #ifdef MKXPZ_SSL
-    SET_OPT(xbrzScalingFactor, integer);
+    SET_OPT(xbrzScalingFactor, number);
 #endif
     SET_OPT(enableHires, boolean);
     SET_OPT(textureScalingFactor, number);

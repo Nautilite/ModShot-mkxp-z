@@ -385,7 +385,8 @@ void blitRectangle(const IntRect &src, const IntRect &dst, bool smooth)
 		if (shState->config().smoothScaling == xBRZ)
 		{
 			XbrzShader &shader = shState->shaders().xbrz;
-			shader.setTargetScale(Vec2((float)(shState->config().xbrzScalingFactor), (float)(shState->config().xbrzScalingFactor)));
+			float scalingFactor = (float)shState->config().xbrzScalingFactor;
+			shader.setTargetScale(Vec2(scalingFactor, scalingFactor));
 		}
 #endif
 		if (smooth)
