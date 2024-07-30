@@ -377,8 +377,8 @@ $(DLDIR)/zlib-ng/$(BDIR)/Makefile: $(DLDIR)/zlib-ng/CMakeLists.txt
 	@cd $(DLDIR)/zlib-ng; $(CMAKE) $(OPTS_ZLIB)
 
 $(DLDIR)/zlib-ng/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading zlib-ng 2.1.6...\e[0m\n"
-	@$(GIT) -b 2.1.6 https://github.com/zlib-ng/zlib-ng $(DLDIR)/zlib-ng
+	@printf "\e[94m=>\e[0m \e[36mDownloading zlib-ng 2.2.1...\e[0m\n"
+	@$(GIT) -b 2.2.1 https://github.com/zlib-ng/zlib-ng $(DLDIR)/zlib-ng
 
 # ----------------------------------- PhysFS -----------------------------------
 physfs: init $(LIBDIR)/libphysfs.a
@@ -460,8 +460,8 @@ $(DLDIR)/libjpeg/$(BDIR)/Makefile: $(DLDIR)/libjpeg/CMakeLists.txt
 	@cd $(DLDIR)/libjpeg; $(CMAKE) $(OPTS_LIBJPEG)
 
 $(DLDIR)/libjpeg/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading libjpeg-turbo 3.0.2...\e[0m\n"
-	@$(GIT) -b 3.0.2 https://github.com/libjpeg-turbo/libjpeg-turbo $(DLDIR)/libjpeg
+	@printf "\e[94m=>\e[0m \e[36mDownloading libjpeg-turbo 3.0.3...\e[0m\n"
+	@$(GIT) -b 3.0.3 https://github.com/libjpeg-turbo/libjpeg-turbo $(DLDIR)/libjpeg
 
 # ----------------------------------- Pixman -----------------------------------
 pixman: init libpng $(LIBDIR)/libpixman-1.a
@@ -502,8 +502,8 @@ $(DLDIR)/harfbuzz/$(BDIR)/Makefile: $(DLDIR)/harfbuzz/CMakeLists.txt
 	@cd $(DLDIR)/harfbuzz; $(CMAKE) -DHB_BUILD_SUBSET=NO
 
 $(DLDIR)/harfbuzz/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading HarfBuzz 8.4.0...\e[0m\n"
-	@$(GIT) -b 8.4.0 https://github.com/harfbuzz/harfbuzz $(DLDIR)/harfbuzz
+	@printf "\e[94m=>\e[0m \e[36mDownloading HarfBuzz 9.0.0...\e[0m\n"
+	@$(GIT) -b 9.0.0 https://github.com/harfbuzz/harfbuzz $(DLDIR)/harfbuzz
 
 # ---------------------------------- FreeType ----------------------------------
 freetype: init zlib libpng harfbuzz $(LIBDIR)/libfreetype.a
@@ -557,8 +557,8 @@ $(DLDIR)/sdl2/$(BDIR)/Makefile: $(DLDIR)/sdl2/CMakeLists.txt
 	@cd $(DLDIR)/sdl2; $(CMAKE) $(OPTS_SDL)
 
 $(DLDIR)/sdl2/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.30.3...\e[0m\n"
-	@$(GIT) -b release-2.30.3 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
+	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.30.5...\e[0m\n"
+	@$(GIT) -b release-2.30.5 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
 
 # --------------------------------- SDL2_image ---------------------------------
 sdl2_image: init sdl2 libpng libjpeg $(LIBDIR)/libSDL2_image.a
@@ -715,8 +715,8 @@ $(DLDIR)/$(DLARCH)/openssl/Makefile: $(DLDIR)/$(DLARCH)/openssl/Configure
 	perl ./Configure $(OPTS_OPENSSL)
 
 $(DLDIR)/$(DLARCH)/openssl/Configure:
-	@printf "\e[94m=>\e[0m \e[36mDownloading OpenSSL 3.0.13...\e[0m\n"
-	@$(GIT) -b openssl-3.0.13 https://github.com/openssl/openssl $(DLDIR)/$(DLARCH)/openssl
+	@printf "\e[94m=>\e[0m \e[36mDownloading OpenSSL 3.0.14...\e[0m\n"
+	@$(GIT) -b openssl-3.0.14 https://github.com/openssl/openssl $(DLDIR)/$(DLARCH)/openssl
 
 # ---------------------------------- Ruby 3.1 ----------------------------------
 ruby: init zlib libyaml libffi openssl $(LIBDIR)/libruby.3.1.dylib
@@ -750,5 +750,5 @@ $(DLDIR)/$(DLARCH)/ruby/configure: $(DLDIR)/$(DLARCH)/ruby/configure.ac
 	@cd $(DLDIR)/$(DLARCH)/ruby; autoreconf -fi
 
 $(DLDIR)/$(DLARCH)/ruby/configure.ac:
-	@printf "\e[94m=>\e[0m \e[36mDownloading Ruby 3.1.5...\e[0m\n"
-	@$(GIT) -b v3_1_5 https://github.com/ruby/ruby $(DLDIR)/$(DLARCH)/ruby
+	@printf "\e[94m=>\e[0m \e[36mDownloading Ruby 3.1.6...\e[0m\n"
+	@$(GIT) -b v3_1_6 https://github.com/ruby/ruby $(DLDIR)/$(DLARCH)/ruby
