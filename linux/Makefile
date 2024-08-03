@@ -602,8 +602,8 @@ $(DLDIR)/sdl2/$(BDIR)/Makefile: $(DLDIR)/sdl2/CMakeLists.txt
 	@cd $(DLDIR)/sdl2; $(CMAKE) $(OPTS_SDL)
 
 $(DLDIR)/sdl2/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.30.5...\e[0m\n"
-	@$(GIT) -b release-2.30.5 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
+	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.30.6...\e[0m\n"
+	@$(GIT) -b release-2.30.6 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
 
 # --------------------------------- SDL2_image ---------------------------------
 sdl2_image: init sdl2 libpng libjpeg $(LIBDIR)/libSDL2_image.a
