@@ -448,6 +448,7 @@ int main(int argc, char *argv[]) {
 
 #ifndef MKXPZ_INIT_GL_LATER
     SDL_GLContext glCtx = initGL(win, conf, 0);
+    GLDebugLogger glLogger;
 #else
     SDL_GLContext glCtx = NULL;
 #endif
@@ -580,10 +581,6 @@ static SDL_GLContext initGL(SDL_Window *win, Config &conf,
 
   bool vsync = conf.vsync || conf.syncToRefreshrate;
   SDL_GL_SetSwapInterval(vsync ? 1 : 0);
-
-#ifndef MKXPZ_INIT_GL_LATER
-  GLDebugLogger glLogger;
-#endif
 
   return glCtx;
 }
