@@ -42,6 +42,11 @@ static std::string convertString(std::string &str) {
     
     iconv_t cd = iconv_open("UTF-8", charset.c_str());
     
+    if (cd == (iconv_t)(-1)) {
+        std::cerr << "Guessed encoding '" << charset << "' is not supported by iconv" << std::endl;
+        return str;
+    }
+    
     size_t inLen = str.size();
     size_t outLen = inLen * 4;
     std::string buf(outLen, '\0');
